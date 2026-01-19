@@ -3,7 +3,7 @@ const emit = defineEmits(["openPageCreator", "openSettings"]);
 
 const mainStore = useMainStore();
 
-const menuItems = computed(() => mainStore.menuItems);
+const pages = computed(() => mainStore.pages);
 const mainTheme = computed(() => mainStore.mainTheme);
 const contrastColor = computed(() => mainStore.contrastColor);
 </script>
@@ -12,26 +12,26 @@ const contrastColor = computed(() => mainStore.contrastColor);
   <aside class="menu">
     <section class="menu__items">
       <AppMenuItem
-        iconName="home"
-        label="Домой"
+        icon="home"
+        name="Домой"
         link="/"
         :theme="mainTheme"
         :contrastColor="contrastColor"
       />
 
-      <template v-for="item of menuItems">
+      <template v-for="page of pages">
         <AppMenuItem
-          :iconName="item.iconName"
-          :label="item.label"
-          :link="item.link"
+          :icon="page.icon"
+          :name="page.name"
+          :link="page.link"
           :theme="mainTheme"
           :contrastColor="contrastColor"
         />
       </template>
 
       <AppMenuItem
-        iconName="plus"
-        label="Добавить"
+        icon="plus"
+        name="Добавить"
         @click="emit('openPageCreator')"
         class="menu__add-button"
         :theme="mainTheme"
@@ -41,8 +41,8 @@ const contrastColor = computed(() => mainStore.contrastColor);
 
     <section class="menu__settings">
       <AppMenuItem
-        iconName="settings"
-        label="Настройки"
+        icon="settings"
+        name="Настройки"
         @click="emit('openSettings')"
         :theme="mainTheme"
         :contrastColor="contrastColor"
@@ -64,7 +64,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
   justify-content: space-between;
 
   &:hover {
-    width: 200px;
+    width: 250px;
 
     :deep(.menu-item__label) {
       opacity: 1;
@@ -72,7 +72,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
   }
 
   &__items {
-    > *:not(:last-child) {
+    > * {
       margin-bottom: 20px;
     }
   }
@@ -82,7 +82,6 @@ const contrastColor = computed(() => mainStore.contrastColor);
   }
 
   &__settings {
-    margin-top: 20px;
   }
 }
 </style>

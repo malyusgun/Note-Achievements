@@ -5,47 +5,58 @@ import type {
   IPageBlockListItemSettingsModalProps,
 } from "~/types";
 import { Button, Modal, ToggleSwitch } from "@featherui";
+import { v4 as uuidv4 } from "uuid";
 
 const props = defineProps<IPageBlockListItemSettingsModalProps>();
 
 const settingsModal = defineModel();
-defineEmits(["saveItemChanges"]);
+const emits = defineEmits(["saveChanges"]);
 
 const newItemData = ref<IPageBlockListItem | null>(null);
-const itemChildren = ref<IPageBlockListItemData[]>([
-  {
-    label: "",
-    checked: false,
-    points: 1,
-  },
-]);
-
-const toggleItemChildren = () => {
-  if (!newItemData.value) return;
-
-  if (newItemData.value.children) {
-    delete newItemData.value.children;
-  } else {
-    newItemData.value.children = itemChildren.value;
-  }
-};
 
 const addChild = () => {
-  newItemData.value!.children!.push({
+  newItemData.value!.children.push({
+    itemId: uuidv4(),
     label: "",
     checked: false,
     points: 1,
   });
 };
 
+const deleteChild = (child: IPageBlockListItemData) => {
+  newItemData.value!.children = newItemData.value!.children.filter((i) => i.itemId !== child.itemId);
+};
+
+const onChangeShowChildren = (newValue: boolean) => {
+  if (!newItemData.value) return;
+
+  newItemData.value.showChildren = newValue;
+  newItemData.value.points = newItemData.value.children.reduce((acc, child) => acc + child.points, 0);
+};
+
+const onSave = () => {
+  emits("saveChanges", newItemData.value);
+  settingsModal.value = false;
+};
+
 watch(
   () => props.item,
   (item) => {
     if (item) {
-      newItemData.value = { ...item };
+      newItemData.value = structuredClone(toRaw(item));
     }
   },
-  { immediate: true }
+  { immediate: true },
+);
+
+watch(
+  () => newItemData.value?.children,
+  (children) => {
+    if (!children || !newItemData.value) return;
+
+    newItemData.value.points = children.reduce((acc, child) => acc + child.points, 0);
+  },
+  { deep: true },
 );
 </script>
 
@@ -57,7 +68,7 @@ watch(
     dismissible
     paddingRightOnActive="8px"
   >
-    <template #header> Пункт "{{ item.label }}" </template>
+    <template #header> Пункт "{{ item.label }}"</template>
     <div class="settings">
       <section class="settings__children children">
         <div class="children__toggle">
@@ -65,30 +76,57 @@ watch(
           <ToggleSwitch
             negativeTheme="grey"
             :theme="mainTheme"
-            :modelValue="item.children"
-            @click="toggleItemChildren"
+            :modelValue="newItemData.showChildren"
+            @update:modelValue="onChangeShowChildren"
           />
         </div>
 
-        <div v-show="newItemData?.children">
-          <ul class="children__list">
+        <div>
+          <ul v-show="newItemData?.showChildren" class="children__list">
             <li
-              v-for="(child, index) of itemChildren"
-              :key="child.label"
+              v-for="(child, index) of newItemData.children"
+              :key="child.itemId"
               class="children__item"
             >
               <div class="children__item-number">{{ index + 1 }}).</div>
-              <AppInputBordered label="Название:" />
-              <AppInputBordered label="Вес:" type="number" />
+              <AppInputBordered
+                label="Название:"
+                :modelValue="child.label"
+                @update:modelValue="child.label = $event"
+              />
+              <AppInputBordered
+                label="Вес:"
+                type="number"
+                :modelValue="child.points"
+                @update:modelValue="child.points = $event"
+              />
+              <Button
+                iconOnly
+                :theme="mainTheme"
+                size="small"
+                @click="deleteChild(child)"
+              >
+                <AppIcon name="basket" :size="18" />
+              </Button>
             </li>
           </ul>
 
-          <Button
-            class="children__add-button"
-            label="Добавить"
-            :theme="mainTheme"
-            @click="addChild"
-          />
+          <div class="children__buttons">
+            <Button
+              class="children__save-button"
+              label="Сохранить"
+              :theme="mainTheme === 'green' ? 'sky' : 'green'"
+              @click="onSave"
+            />
+
+            <Button
+              v-show="newItemData?.showChildren"
+              class="children__add-button"
+              label="Добавить"
+              :theme="mainTheme"
+              @click="addChild"
+            />
+          </div>
         </div>
       </section>
       <section class="settings__points">
@@ -96,6 +134,7 @@ watch(
           v-model="newItemData.points"
           label="Вес:"
           type="number"
+          :disabled="newItemData.showChildren"
         />
       </section>
     </div>
@@ -108,6 +147,7 @@ watch(
   justify-content: space-between;
 
   &__children {
+    flex: 1;
   }
 
   .children {
@@ -125,7 +165,7 @@ watch(
     &__item {
       display: flex;
       gap: 15px;
-      align-items: center;
+      align-items: end;
       padding-left: 30px;
       margin-bottom: 10px;
       position: relative;
@@ -138,7 +178,9 @@ watch(
       transform: translateY(-50%);
     }
 
-    &__add-button {
+    &__buttons {
+      display: flex;
+      justify-content: space-between;
     }
   }
 }

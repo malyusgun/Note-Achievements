@@ -22,6 +22,8 @@ const mainTheme = computed(() => mainStore.mainTheme);
     />
 
     <DetailPageBlockList
+      :pageId="pageId"
+      :blockId="block.blockId"
       :list="block.list"
       :mainTheme="mainTheme"
       class="page-block__list"

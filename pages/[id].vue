@@ -5,21 +5,24 @@ import { v4 as uuidv4 } from "uuid";
 const mainStore = useMainStore();
 const route = useRoute();
 
-const pageData = ref(mainStore.getPage(route.params.id as string));
-
+const pageData = computed(() => mainStore.getPage(route.params.id as string));
 const mainTheme = computed(() => mainStore.mainTheme);
 const contrastColor = computed(() => mainStore.contrastColor);
 
 const addBlock = () => {
+  if (!pageData.value) return;
+
   pageData.value.blocks.push({
     blockId: uuidv4(),
     label: "Название блока",
     progress: 0,
     list: [
       {
+        itemId: uuidv4(),
         label: "Покушать кашу",
         checked: false,
         points: 1,
+        showChildren: false,
         children: [],
       },
     ],
@@ -28,11 +31,11 @@ const addBlock = () => {
 </script>
 
 <template>
-  <article class="detail-page">
+  <article v-if="pageData" class="detail-page">
     <h1 class="detail-page__title">{{ pageData.name }}</h1>
 
     <template v-for="block of pageData.blocks">
-      <DetailPageBlock :block="block" :contrastColor="contrastColor" />
+      <DetailPageBlock :pageId="pageData.pageId" :block="block" :contrastColor="contrastColor" />
     </template>
 
     <Button label="Добавить блок" @click="addBlock" :theme="mainTheme" />
@@ -43,6 +46,10 @@ const addBlock = () => {
 
 <style scoped lang="scss">
 .detail-page {
+  height: 100vh;
+  overflow-y: auto;
+  padding: 20px 40px;
+
   &__title {
     font-size: 40px;
     text-align: center;

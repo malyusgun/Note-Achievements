@@ -2,6 +2,7 @@
 import type { IInputProps } from "~/types";
 
 defineProps<IInputProps>();
+defineEmits(["change"]);
 
 const value = defineModel();
 </script>
@@ -13,6 +14,8 @@ const value = defineModel();
     :label="label"
     :placeholder="placeholder"
     :type="type"
+    :disabled="disabled"
+    @change="$emit('change', value)"
   />
 </template>
 

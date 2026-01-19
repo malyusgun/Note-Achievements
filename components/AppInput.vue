@@ -4,6 +4,7 @@ import type { IInputProps } from "~/types";
 const value = defineModel();
 
 defineProps<IInputProps>();
+defineEmits(["change"]);
 </script>
 
 <template>
@@ -19,6 +20,8 @@ defineProps<IInputProps>();
         },
       ]"
       :placeholder="placeholder"
+      :disabled="disabled"
+      @input="$emit('change', value)"
     />
   </div>
 </template>

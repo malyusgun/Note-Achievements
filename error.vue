@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { Button } from "@featherui";
+
+import type { NuxtError } from "#app";
+
+const props = defineProps<{ error: NuxtError }>();
 </script>
 
 <template>
   <section class="error">
     <img class="error__image" src="/okak.jpg" alt="" />
-    <h2 class="error__title">Бл*ть. Ошибка</h2>
+    <h2 class="error__title">Ошибка {{ error.statusCode }}</h2>
     <p class="error__text">Попробуйте покумекать, почему</p>
-    <p class="error__text --small">Если до Вас не дойдёт - кликните ниже</p>
+    <p class="error__text --small">(Шучу, просто кликните ниже)</p>
     <NuxtLink to="/">
       <Button
         label="Вернуться домой. Дома всё же лучше, чем болтаться х*й пойми где"

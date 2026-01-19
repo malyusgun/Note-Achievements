@@ -8,10 +8,10 @@ defineProps<IMenuItemProps>();
 <template>
   <NuxtLink class="menu-item" :to="link">
     <Button iconOnly :theme="theme">
-      <AppIcon :name="iconName" :size="32" class="menu-item__icon" />
+      <AppIcon :name="icon" :size="32" class="menu-item__icon" />
     </Button>
     <p :class="`menu-item__label color-${theme}`">
-      {{ label }}
+      {{ name }}
     </p>
   </NuxtLink>
 </template>

@@ -41,7 +41,6 @@ const openSettings = () => {
 
   &__content {
     flex: 1;
-    padding: 20px 40px;
   }
 }
 </style>

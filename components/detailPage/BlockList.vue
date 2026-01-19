@@ -2,11 +2,13 @@
 import type { IPageBlockListItem, IPageBlockListProps } from "~/types";
 import { Button } from "@featherui";
 
+const mainStore = useMainStore();
+
 const props = defineProps<IPageBlockListProps>();
 let timerId: number;
 
 const activeSettingsItem = ref<IPageBlockListItem | null>(
-  props.list[0] || null
+  props.list[0] || null,
 );
 const settingsActive = ref<boolean>(false);
 
@@ -16,7 +18,20 @@ const openItemSettings = (item: IPageBlockListItem) => {
 };
 
 const saveItemChanges = (newData: IPageBlockListItem) => {
-  console.log("item changes: ", newData);
+  const page = mainStore.pages.find((item) => item.pageId === props.pageId);
+
+  if (page) {
+    const blocks = page.blocks.map((block) => {
+      if (block.blockId !== props.blockId) return block;
+      const list = block.list.map((item) => {
+        if (item.itemId !== newData.itemId) return item;
+        return newData;
+      });
+      return { ...block, list };
+    });
+    console.log("item changes: ", newData);
+    mainStore.editPage({ pageId: page.pageId, blocks });
+  }
 };
 
 watch(
@@ -28,7 +43,7 @@ watch(
       console.log("changes");
     }, 500);
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 

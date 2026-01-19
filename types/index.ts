@@ -16,15 +16,9 @@ export type TMainTheme =
 
 export type TSecondTheme = "white" | "black";
 
-export interface IMenuItem {
-  iconName: string;
-  label: string;
-  link?: string;
-}
-
 export interface IMenuItemProps {
-  iconName: string;
-  label: string;
+  icon: string;
+  name: string;
   link?: string;
   theme: TMainTheme;
   contrastColor: TSecondTheme;
@@ -34,12 +28,14 @@ export interface IInputProps {
   label?: string;
   placeholder?: string;
   type?: string;
+  disabled?: boolean;
 }
 
 export interface IPageData {
   pageId: string;
   name: string;
   icon: string;
+  link?: string;
   blocks: IPageBlock[];
 }
 
@@ -51,20 +47,25 @@ export interface IPageBlock {
 }
 
 export interface IPageBlockProps {
+  pageId: string;
   block: IPageBlock;
   contrastColor: TSecondTheme;
 }
 
 export interface IPageBlockListProps {
+  pageId: string;
+  blockId: string;
   list: IPageBlockListItem[];
   mainTheme: TMainTheme;
 }
 
 export interface IPageBlockListItem extends IPageBlockListItemData {
-  children?: IPageBlockListItemData[];
+  showChildren: boolean;
+  children: IPageBlockListItemData[];
 }
 
 export interface IPageBlockListItemData {
+  itemId: string;
   label: string;
   checked: boolean;
   points: number;

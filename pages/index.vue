@@ -3,11 +3,19 @@ import { Knob, Button } from "@featherui";
 </script>
 
 <template>
-  <h1 class="main__title">Hello World!</h1>
-  <Knob />
-  <Button iconOnly theme="blue">
-    <AppIcon name="home" />
-  </Button>
+  <article class="home">
+    <h1 class="home__title">Hello World!</h1>
+    <Knob />
+    <Button iconOnly theme="blue">
+      <AppIcon name="home" />
+    </Button>
+  </article>
 </template>
 
-<style lang="scss"></style>
+<style scoped lang="scss">
+.home {
+  height: 100vh;
+  overflow-y: auto;
+  padding: 20px 40px;
+}
+</style>

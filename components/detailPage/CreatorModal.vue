@@ -17,8 +17,11 @@ const setPageIconName = (iconName: string) => {
 };
 
 const createPage = () => {
+  const pageId = uuidv4();
+
   const pageData: IPageData = {
-    pageId: uuidv4(),
+    pageId,
+    link: pageId,
     name: pageName.value,
     icon: pageIconName.value,
     blocks: [
@@ -28,10 +31,19 @@ const createPage = () => {
         progress: 0,
         list: [
           {
+            itemId: uuidv4(),
             label: "Покушать кашу",
             checked: false,
             points: 1,
-            children: [],
+            showChildren: false,
+            children: [
+              {
+                itemId: uuidv4(),
+                label: "",
+                checked: false,
+                points: 1,
+              },
+            ],
           },
         ],
       },
@@ -51,7 +63,7 @@ const createPage = () => {
     dismissible
     paddingRightOnActive="0"
   >
-    <template #header> Создать страницу </template>
+    <template #header> Создать страницу</template>
 
     <div class="page-creator__content">
       <AppInputBordered
