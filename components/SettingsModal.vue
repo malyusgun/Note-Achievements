@@ -3,23 +3,40 @@ import { Modal, ToggleSwitch } from "@featherui";
 import type { TMainTheme } from "~/types";
 
 const mainStore = useMainStore();
+
 const { mainTheme, colorMode, contrastColor } = storeToRefs(mainStore);
 
 const settingsModal = defineModel();
-const colors: TMainTheme[] = ["blue", "sky", "pink", "purple", "teal", "green", "red", "orange", "yellow"];
+const colors: TMainTheme[] = [
+  "blue",
+  "sky",
+  "pink",
+  "purple",
+  "teal",
+  "green",
+  "red",
+  "orange",
+  "yellow",
+];
 </script>
 
 <template>
-  <Modal v-model:visible="settingsModal" width="40%" dismissible paddingRightOnActive="0">
-    <template #header>
-      Настройки
-    </template>
+  <Modal
+    v-model:visible="settingsModal"
+    width="40%"
+    dismissible
+    paddingRightOnActive="0"
+  >
+    <template #header> Настройки </template>
     <div class="settings__sections">
       <section class="settings__colors">
-        <button v-for="color of colors" :key="color"
-                :class="`settings__color bg-${color}`"
-                :style="`${mainTheme === color ? `border-color: ${contrastColor}` : ''}`"
-                @click="mainStore.setMainTheme(color)"></button>
+        <button
+          v-for="color of colors"
+          :key="color"
+          :class="`settings__color bg-${color}`"
+          :style="`${mainTheme === color ? `border-color: ${contrastColor}` : ''}`"
+          @click="mainStore.setMainTheme(color)"
+        ></button>
         <div class="settings__dark-theme">
           <span>Тёмная тема:</span>
           <ToggleSwitch
@@ -31,6 +48,8 @@ const colors: TMainTheme[] = ["blue", "sky", "pink", "purple", "teal", "green", 
         </div>
       </section>
       <section class="settings__pages">
+        <h3>Список страниц:</h3>
+        <template v-for="page of "></template>
       </section>
     </div>
   </Modal>

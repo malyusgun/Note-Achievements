@@ -9,10 +9,17 @@ defineProps<IInputProps>();
 <template>
   <div class="input">
     <p v-if="label" class="input__label">{{ label }}</p>
-    <input v-model="value" :type="type || 'text'" :class="['input__input', {
-      '--small': type === 'number',
-    }]"
-           :placeholder="placeholder" />
+    <input
+      v-model="value"
+      :type="type || 'text'"
+      :class="[
+        'input__input',
+        {
+          '--small': type === 'number',
+        },
+      ]"
+      :placeholder="placeholder"
+    />
   </div>
 </template>
 
@@ -23,7 +30,6 @@ defineProps<IInputProps>();
   &__label {
     margin-bottom: 5px;
   }
-
 
   &__input {
     width: 100%;

@@ -4,7 +4,7 @@ import { Button } from "@featherui";
 
 <template>
   <section class="error">
-    <img class="error__image" src="/okak.jpg" alt="">
+    <img class="error__image" src="/okak.jpg" alt="" />
     <h2 class="error__title">Бл*ть. Ошибка</h2>
     <p class="error__text">Попробуйте покумекать, почему</p>
     <p class="error__text --small">Если до Вас не дойдёт - кликните ниже</p>

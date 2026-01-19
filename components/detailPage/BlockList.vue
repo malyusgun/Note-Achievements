@@ -5,7 +5,9 @@ import { Button } from "@featherui";
 const props = defineProps<IPageBlockListProps>();
 let timerId: number;
 
-const activeSettingsItem = ref<IPageBlockListItem | null>(props.list[0] || null);
+const activeSettingsItem = ref<IPageBlockListItem | null>(
+  props.list[0] || null
+);
 const settingsActive = ref<boolean>(false);
 
 const openItemSettings = (item: IPageBlockListItem) => {
@@ -17,13 +19,17 @@ const saveItemChanges = (newData: IPageBlockListItem) => {
   console.log("item changes: ", newData);
 };
 
-watch(() => props.list, () => {
-  clearTimeout(timerId);
+watch(
+  () => props.list,
+  () => {
+    clearTimeout(timerId);
 
-  timerId = setTimeout(() => {
-    console.log("changes");
-  }, 500);
-}, { deep: true });
+    timerId = setTimeout(() => {
+      console.log("changes");
+    }, 500);
+  },
+  { deep: true }
+);
 </script>
 
 <template>

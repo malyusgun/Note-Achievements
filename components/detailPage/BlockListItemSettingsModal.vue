@@ -12,11 +12,13 @@ const settingsModal = defineModel();
 defineEmits(["saveItemChanges"]);
 
 const newItemData = ref<IPageBlockListItem | null>(null);
-const itemChildren = ref<IPageBlockListItemData[]>([{
-  label: "",
-  checked: false,
-  points: 1,
-}]);
+const itemChildren = ref<IPageBlockListItemData[]>([
+  {
+    label: "",
+    checked: false,
+    points: 1,
+  },
+]);
 
 const toggleItemChildren = () => {
   if (!newItemData.value) return;
@@ -36,11 +38,15 @@ const addChild = () => {
   });
 };
 
-watch(() => props.item, (item) => {
-  if (item) {
-    newItemData.value = { ...item };
-  }
-}, { immediate: true });
+watch(
+  () => props.item,
+  (item) => {
+    if (item) {
+      newItemData.value = { ...item };
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -51,9 +57,7 @@ watch(() => props.item, (item) => {
     dismissible
     paddingRightOnActive="8px"
   >
-    <template #header>
-      Пункт "{{ item.label }}"
-    </template>
+    <template #header> Пункт "{{ item.label }}" </template>
     <div class="settings">
       <section class="settings__children children">
         <div class="children__toggle">
@@ -68,8 +72,11 @@ watch(() => props.item, (item) => {
 
         <div v-show="newItemData?.children">
           <ul class="children__list">
-            <li v-for="(child, index) of itemChildren" :key="child.label"
-                class="children__item">
+            <li
+              v-for="(child, index) of itemChildren"
+              :key="child.label"
+              class="children__item"
+            >
               <div class="children__item-number">{{ index + 1 }}).</div>
               <AppInputBordered label="Название:" />
               <AppInputBordered label="Вес:" type="number" />
@@ -85,7 +92,11 @@ watch(() => props.item, (item) => {
         </div>
       </section>
       <section class="settings__points">
-        <AppInputBordered v-model="newItemData.points" label="Вес:" type="number" />
+        <AppInputBordered
+          v-model="newItemData.points"
+          label="Вес:"
+          type="number"
+        />
       </section>
     </div>
   </Modal>

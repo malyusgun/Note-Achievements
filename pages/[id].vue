@@ -15,12 +15,14 @@ const addBlock = () => {
     blockId: uuidv4(),
     label: "Название блока",
     progress: 0,
-    list: [{
-      label: "Покушать кашу",
-      checked: false,
-      points: 1,
-      children: [],
-    }],
+    list: [
+      {
+        label: "Покушать кашу",
+        checked: false,
+        points: 1,
+        children: [],
+      },
+    ],
   });
 };
 </script>
@@ -36,9 +38,7 @@ const addBlock = () => {
     <Button label="Добавить блок" @click="addBlock" :theme="mainTheme" />
 
     <pre style="margin-top: 100px">{{ pageData }}</pre>
-
   </article>
-
 </template>
 
 <style scoped lang="scss">

@@ -1,12 +1,18 @@
 import type { IMenuItem, IPageData, TMainTheme } from "~/types";
 
 export const useMainStore = defineStore("mainStore", () => {
-  const menuItems = ref<IMenuItem[]>(JSON.parse(localStorage.getItem("menuItems") || "[]"));
-  const mainTheme = ref<TMainTheme>(JSON.parse(localStorage.getItem("mainTheme") || "\"blue\""));
+  const menuItems = ref<IMenuItem[]>(
+    JSON.parse(localStorage.getItem("menuItems") || "[]")
+  );
+  const mainTheme = ref<TMainTheme>(
+    JSON.parse(localStorage.getItem("mainTheme") || '"blue"')
+  );
 
   const colorMode = useColorMode();
 
-  const contrastColor = computed(() => colorMode.value === "dark" ? "white" : "black");
+  const contrastColor = computed(() =>
+    colorMode.value === "dark" ? "white" : "black"
+  );
 
   const setMainTheme = (newTheme: TMainTheme) => {
     mainTheme.value = newTheme;

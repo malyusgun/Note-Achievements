@@ -1,20 +1,20 @@
 @use "primitives.scss";
 
 @each $color-name, $color-value in primitives.$colors {
-    .bg-#{$color-name} {
-        background-color: $color-value;
-    }
+  .bg-#{$color-name} {
+    background-color: $color-value;
+  }
 
-    .border-#{$color-name} {
-        border-color: $color-value;
-    }
+  .border-#{$color-name} {
+    border-color: $color-value;
+  }
 
-    .color-#{$color-name} {
-        color: $color-value;
-    }
+  .color-#{$color-name} {
+    color: $color-value;
+  }
 }
 
 body {
-    font-family: Calibri;
-    font-size: 20px;
+  font-family: Calibri;
+  font-size: 20px;
 }

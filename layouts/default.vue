@@ -53,7 +53,9 @@ body {
 }
 
 .dark {
-  body, .modal, .modal .buttonClose {
+  body,
+  .modal,
+  .modal .buttonClose {
     background-color: #18181b !important;
     color: #ebf4f1 !important;
   }

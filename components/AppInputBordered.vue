@@ -7,7 +7,13 @@ const value = defineModel();
 </script>
 
 <template>
-  <AppInput v-model="value" class="input" :label="label" :placeholder="placeholder" :type="type" />
+  <AppInput
+    v-model="value"
+    class="input"
+    :label="label"
+    :placeholder="placeholder"
+    :type="type"
+  />
 </template>
 
 <style scoped lang="scss">

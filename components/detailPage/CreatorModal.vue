@@ -21,17 +21,21 @@ const createPage = () => {
     pageId: uuidv4(),
     name: pageName.value,
     icon: pageIconName.value,
-    blocks: [{
-      blockId: uuidv4(),
-      label: "Название блока",
-      progress: 0,
-      list: [{
-        label: "Покушать кашу",
-        checked: false,
-        points: 1,
-        children: [],
-      }],
-    }],
+    blocks: [
+      {
+        blockId: uuidv4(),
+        label: "Название блока",
+        progress: 0,
+        list: [
+          {
+            label: "Покушать кашу",
+            checked: false,
+            points: 1,
+            children: [],
+          },
+        ],
+      },
+    ],
   };
 
   mainStore.addPage(pageData);
@@ -41,22 +45,32 @@ const createPage = () => {
 </script>
 
 <template>
-  <Modal v-model:visible="pageCreatorModal" width="30%" dismissible paddingRightOnActive="0">
-    <template #header>
-      Создать страницу
-    </template>
+  <Modal
+    v-model:visible="pageCreatorModal"
+    width="30%"
+    dismissible
+    paddingRightOnActive="0"
+  >
+    <template #header> Создать страницу </template>
 
     <div class="page-creator__content">
-      <AppInputBordered v-model="pageName" label="Название" placeholder="Тренажёрный зал"
-                        class="page-creator__name" />
+      <AppInputBordered
+        v-model="pageName"
+        label="Название"
+        placeholder="Тренажёрный зал"
+        class="page-creator__name"
+      />
 
       <p class="page-creator__icons-label">Выберите иконку:</p>
       <div class="page-creator__icons">
-        <AppIcon v-for="icon of Object.entries(icons)" :key="icon[0]"
-                 :class="`page-creator__icon bg-${mainTheme}`"
-                 :style="`${pageIconName === icon[0] ? `border-color: ${contrastColor}` : ''}`"
-                 :name="icon[0]"
-                 @click="setPageIconName(icon[0])"></AppIcon>
+        <AppIcon
+          v-for="icon of Object.entries(icons)"
+          :key="icon[0]"
+          :class="`page-creator__icon bg-${mainTheme}`"
+          :style="`${pageIconName === icon[0] ? `border-color: ${contrastColor}` : ''}`"
+          :name="icon[0]"
+          @click="setPageIconName(icon[0])"
+        ></AppIcon>
       </div>
 
       <Button

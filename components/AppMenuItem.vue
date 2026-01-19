@@ -20,6 +20,7 @@ defineProps<IMenuItemProps>();
 .menu-item {
   display: flex;
   align-items: center;
+  gap: 12px;
   cursor: pointer;
 
   &:not(:hover) {
@@ -34,10 +35,12 @@ defineProps<IMenuItemProps>();
   }
 
   &__label {
-    margin: 0 auto;
     font-weight: bold;
     opacity: 0;
     transition: all 0.2s;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 export type TMainTheme =
-  "blue"
+  | "blue"
   | "sky"
   | "pink"
   | "purple"
@@ -40,14 +40,14 @@ export interface IPageData {
   pageId: string;
   name: string;
   icon: string;
-  blocks: IPageBlock[],
+  blocks: IPageBlock[];
 }
 
 export interface IPageBlock {
   blockId: string;
   label: string;
   progress: number;
-  list: IPageBlockListItem[],
+  list: IPageBlockListItem[];
 }
 
 export interface IPageBlockProps {
@@ -61,7 +61,7 @@ export interface IPageBlockListProps {
 }
 
 export interface IPageBlockListItem extends IPageBlockListItemData {
-  children?: IPageBlockListItemData[],
+  children?: IPageBlockListItemData[];
 }
 
 export interface IPageBlockListItemData {

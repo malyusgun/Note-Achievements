@@ -15,13 +15,11 @@ export default defineNuxtConfig({
   css: ["~/assets/scss/index.scss"],
 
   vite: {
-    plugins: [
-      svgLoader(),
-    ],
+    plugins: [svgLoader()],
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: "@use \"~/assets/scss/primitives.scss\" as *;",
+          additionalData: '@use "~/assets/scss/primitives.scss" as *;',
         },
       },
     },

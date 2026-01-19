@@ -21,7 +21,11 @@ const mainTheme = computed(() => mainStore.mainTheme);
       theme="white"
     />
 
-    <DetailPageBlockList :list="block.list" :mainTheme="mainTheme" class="page-block__list" />
+    <DetailPageBlockList
+      :list="block.list"
+      :mainTheme="mainTheme"
+      class="page-block__list"
+    />
   </section>
 </template>
 
