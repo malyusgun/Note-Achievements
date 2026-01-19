@@ -1,10 +1,27 @@
 $color-blue: #007bff;
 $color-sky: #00b7ff;
 $color-pink: #fb00ff;
+$color-purple: #8c00ff;
+$color-teal: #00ffff;
 $color-green: #00ff55;
 $color-red: #ff0000;
 $color-orange: #ff8c00;
 $color-yellow: #f2ff00;
-$color-purple: #8c00ff;
 $color-black: #000000;
+$color-grey: #838383;
 $color-white: #ffffff;
+
+$colors: (
+        'blue': $color-blue,
+        'sky': $color-sky,
+        'pink': $color-pink,
+        'purple': $color-purple,
+        'teal': $color-teal,
+        'green': $color-green,
+        'red': $color-red,
+        'orange': $color-orange,
+        'yellow': $color-yellow,
+        'black': $color-black,
+        'grey': $color-grey,
+        'white': $color-white,
+);

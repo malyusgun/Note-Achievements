@@ -1,18 +1,17 @@
 <script setup lang="ts">
+import { Knob, Button } from "@featherui";
 </script>
 
 <template>
-  <main class="main">
-    <h1 class="main__title">
-      Hello World!
-    </h1>
-  </main>
+  <h1 class="main__title">
+    Hello World!
+  </h1>
+  <Knob />
+  <Button iconOnly theme="blue">
+    <AppIcon name="home" />
+  </Button>
 </template>
 
 <style lang="scss">
-.main {
-  &__title {
-    color: $color-pink;
-  }
-}
+
 </style>
