@@ -80,3 +80,7 @@ export interface IPageBlockListItemSettingsModalProps {
   item: Required<IPageBlockListItem> | null;
   mainTheme?: TMainTheme;
 }
+
+export interface IConfirmDeleteModalProps {
+  description: string;
+}

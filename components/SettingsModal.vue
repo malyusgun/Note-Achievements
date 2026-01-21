@@ -26,6 +26,10 @@ const colors: TMainTheme[] = [
   "yellow",
 ];
 
+const deleteModalDescription = computed(
+  () => `Вы собираетесь удалить страницу "${deletePageData.value?.name}"`
+);
+
 const onPageChange = (newName: string, pageId: string) => {
   clearTimeout(timerId);
   timerId = setTimeout(() => {
@@ -105,26 +109,11 @@ const deletePage = () => {
       <div v-else class="settings__no-pages">Страниц пока нет</div>
     </div>
 
-    <Modal v-model:visible="deleteModal" :width="200">
-      <template #header> Вы уверены?</template>
-
-      <p class="delete-modal__paragraph">
-        Вы собираетесь удалить страницу "{{ deletePageData?.name }}".
-      </p>
-      <p class="delete-modal__paragraph">Назад пути уже не будет. Подумайте.</p>
-
-      <section class="delete-modal__buttons">
-        <Button theme="red" label="Удалить" @click="deletePage">
-          <AppIcon name="basket" :size="16" />
-        </Button>
-
-        <Button
-          theme="green"
-          label="Галя, у нас отмена"
-          @click="deleteModal = false"
-        />
-      </section>
-    </Modal>
+    <ConfirmDeleteModal
+      v-model="deleteModal"
+      :description="deleteModalDescription"
+      @confirm="deletePage"
+    />
   </Modal>
 </template>
 
@@ -163,9 +152,6 @@ const deletePage = () => {
     }
   }
 
-  &__pages {
-  }
-
   &__pages-list {
     max-height: 200px;
     padding-right: 20px;
@@ -191,17 +177,6 @@ const deletePage = () => {
 
   &__no-pages {
     color: $color-grey;
-  }
-}
-
-.delete-modal {
-  &__paragraph {
-    margin-bottom: 20px;
-  }
-
-  &__buttons {
-    display: flex;
-    gap: 20px;
   }
 }
 </style>

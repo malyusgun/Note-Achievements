@@ -32,14 +32,14 @@ const createPage = () => {
         list: [
           {
             itemId: uuidv4(),
-            label: "Покушать кашу",
+            label: generateItemLabel(),
             checked: false,
             points: 1,
             showChildren: false,
             children: [
               {
                 itemId: uuidv4(),
-                label: "Поспать",
+                label: generateItemLabel(),
                 checked: false,
                 points: 1,
               },

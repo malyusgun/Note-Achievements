@@ -26,9 +26,9 @@ const openSettings = () => {
       <AppLoader v-if="isLoader" />
     </Transition>
 
-    <article class="main__content">
+    <div class="main__content">
       <NuxtPage />
-    </article>
+    </div>
 
     <DetailPageCreatorModal v-model="pageCreatorModal" />
     <SettingsModal v-model="settingsModal" />

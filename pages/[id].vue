@@ -22,7 +22,7 @@ const addBlock = () => {
     list: [
       {
         itemId: uuidv4(),
-        label: "Покушать кашу",
+        label: generateItemLabel(),
         checked: false,
         points: 1,
         showChildren: false,
@@ -50,8 +50,6 @@ const addBlock = () => {
     <Button label="Добавить блок" @click="addBlock" :theme="mainTheme">
       <AppIcon name="box" :size="20" />
     </Button>
-
-    <pre style="margin-top: 100px">{{ pageData }}</pre>
   </article>
 </template>
 

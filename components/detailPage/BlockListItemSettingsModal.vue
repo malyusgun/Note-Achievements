@@ -17,7 +17,7 @@ const newItemData = ref<Required<IPageBlockListItem> | null>(null);
 const addChild = () => {
   newItemData.value!.children.push({
     itemId: uuidv4(),
-    label: "Поспать",
+    label: generateItemLabel(),
     checked: false,
     points: 1,
   });
@@ -52,8 +52,8 @@ const deleteItem = () => {
 watch(
   settingsModal,
   () => {
+    console.log("props.item: ", props.item);
     if (props.item) {
-      console.log("props.item", props.item);
       newItemData.value = structuredClone(toRaw(props.item));
     }
   },
@@ -83,6 +83,7 @@ watch(
     paddingRightOnActive="0"
   >
     <template #header> Пункт "{{ item.label }}"</template>
+    <pre>{{ item }}</pre>
     <div class="settings">
       <section class="settings__children children">
         <div class="children__toggle">

@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { Button, ProgressBar } from "@featherui";
+import { Modal, Button, ProgressBar } from "@featherui";
 import type { IPageBlockProps } from "~/types";
 import { v4 as uuidv4 } from "uuid";
-import { structuredClone } from "structured-clone-es";
 
 const props = defineProps<IPageBlockProps>();
 
 const mainStore = useMainStore();
 
+const deleteModal = ref<boolean>(false);
+
 const pageId = computed(() => props.pageData.pageId);
 const mainTheme = computed(() => mainStore.mainTheme);
 const list = computed(() => props.block.list);
+const deleteModalDescription = computed(
+  () => `Вы собираетесь удалить блок "${props.block.label}"`
+);
 const progressBarValue = computed(() => {
   let active = 0;
   let total = 0;
@@ -39,9 +43,16 @@ const onBlockChange = (changes: object) => {
   mainStore.editPage({ pageId: page.pageId, blocks });
 };
 
+const deleteBlock = () => {
+  const blocks = props.pageData.blocks.filter(
+    (block) => block.blockId !== props.block.blockId
+  );
+
+  mainStore.editPage({ pageId: props.pageData.pageId, blocks });
+};
+
 const addItem = () => {
-  const pageData = structuredClone(toRaw(props.pageData));
-  const blocks = pageData.blocks.map((block) => {
+  const blocks = props.pageData.blocks.map((block) => {
     if (block.blockId !== props.block.blockId) return block;
 
     return {
@@ -50,7 +61,7 @@ const addItem = () => {
         ...block.list,
         {
           itemId: uuidv4(),
-          label: "Покушать кашу",
+          label: generateItemLabel(),
           checked: false,
           points: 1,
           showChildren: false,
@@ -60,16 +71,49 @@ const addItem = () => {
     };
   });
 
-  mainStore.editPage({ pageId: pageData.pageId, blocks });
+  mainStore.editPage({ pageId: props.pageData.pageId, blocks });
 };
+
+const updateBlockProgress = (newValue: string) => {
+  const blocks = props.pageData.blocks.map((block) => {
+    if (block.blockId !== props.block.blockId) return block;
+
+    return {
+      ...block,
+      progress: +newValue,
+    };
+  });
+  mainStore.editPage({ pageId: props.pageData.pageId, blocks });
+};
+
+watch(progressBarValue, (value) => {
+  updateBlockProgress(value);
+});
 </script>
 
 <template>
   <section class="page-block">
     <h3 class="page-block__title">
       <AppInput
+        class="page-block__title-input"
         :modelValue="block.label"
-        @change="() => onBlockChange({ label: $event })"
+        @change="(label) => onBlockChange({ label })"
+      />
+
+      <Button
+        class="page-block__delete-button"
+        iconOnly
+        size="small"
+        :theme="mainTheme"
+        @click="deleteModal = true"
+      >
+        <AppIcon name="basket" :size="20" />
+      </Button>
+
+      <ConfirmDeleteModal
+        v-model="deleteModal"
+        :description="deleteModalDescription"
+        @confirm="deleteBlock"
       />
     </h3>
     <ProgressBar
@@ -100,13 +144,29 @@ const addItem = () => {
   margin: 20px 0;
   padding: 20px;
 
+  &:hover {
+    .page-block__delete-button {
+      opacity: 1;
+    }
+  }
+
   &__title {
-    font-size: 28px;
+    display: flex;
     margin-bottom: 20px;
+  }
+
+  &__title-input {
+    flex: 1;
+    font-size: 28px;
   }
 
   &__list {
     margin: 20px 0;
+  }
+
+  &__delete-button {
+    opacity: 0;
+    transition: opacity 0.2s;
   }
 }
 </style>

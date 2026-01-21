@@ -47,7 +47,6 @@ const onChangeChecked = (newValue: boolean) => {
       })),
     });
   } else {
-    console.log("3254346457y");
     emit(
       "saveItemChanges",
       {
@@ -60,6 +59,13 @@ const onChangeChecked = (newValue: boolean) => {
 };
 
 watch(
+  () => props.item.points,
+  () => {
+    pointsProgress.value = countPointsProgress();
+  }
+);
+
+watch(
   itemChildrenCheckedCount,
   (count) => {
     isUpdating.value = true;
@@ -67,6 +73,8 @@ watch(
       pointsProgress.value = countPointsProgress();
       isUpdating.value = false;
     }, 100);
+
+    if (!props.item.showChildren) return;
 
     if (
       props.item.children &&

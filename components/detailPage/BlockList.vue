@@ -6,7 +6,7 @@ const mainStore = useMainStore();
 
 const props = defineProps<IPageBlockListProps>();
 
-const activeSettingsItem = ref<Required<IPageBlockListItem> | null>(
+const activeSettingsItem = shallowRef<Required<IPageBlockListItem> | null>(
   props.list[0] || null
 );
 const settingsActive = ref<boolean>(false);
@@ -24,18 +24,15 @@ const saveItemChanges = (
   newData: Partial<IPageBlockListItem>,
   isChild?: boolean
 ) => {
-  console.log("newData, isChild: ", newData, isChild);
   if (page.value) {
     const blocks = toRaw(page.value.blocks).map((block) => {
       if (block.blockId !== props.blockId) return block;
 
       if (isChild) {
-        console.log("block.list: ", block.list);
         const list = block.list.map((item) => {
           const currentChild = item.children.find(
             (child) => child.itemId === newData.itemId
           );
-          console.log("currentChild: ", currentChild);
           if (!currentChild) return item;
           return {
             ...item,
@@ -54,7 +51,6 @@ const saveItemChanges = (
         return { ...block, list };
       }
     });
-    console.log("result: ", { pageId: page.value.pageId, blocks });
     mainStore.editPage({ pageId: page.value.pageId, blocks });
   }
 };
