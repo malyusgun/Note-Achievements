@@ -5,56 +5,81 @@ import { Button } from "@featherui";
 const mainStore = useMainStore();
 
 const props = defineProps<IPageBlockListProps>();
-let timerId: number;
 
-const activeSettingsItem = ref<IPageBlockListItem | null>(
-  props.list[0] || null,
+const activeSettingsItem = ref<Required<IPageBlockListItem> | null>(
+  props.list[0] || null
 );
 const settingsActive = ref<boolean>(false);
 
-const openItemSettings = (item: IPageBlockListItem) => {
+const page = computed(() =>
+  mainStore.pages.find((page) => page.pageId === props.pageId)
+);
+
+const openItemSettings = (item: Required<IPageBlockListItem>) => {
   activeSettingsItem.value = item;
   settingsActive.value = true;
 };
 
-const saveItemChanges = (newData: IPageBlockListItem) => {
-  const page = mainStore.pages.find((item) => item.pageId === props.pageId);
-
-  if (page) {
-    const blocks = page.blocks.map((block) => {
+const saveItemChanges = (
+  newData: Partial<IPageBlockListItem>,
+  isChild?: boolean
+) => {
+  console.log("newData, isChild: ", newData, isChild);
+  if (page.value) {
+    const blocks = toRaw(page.value.blocks).map((block) => {
       if (block.blockId !== props.blockId) return block;
-      const list = block.list.map((item) => {
-        if (item.itemId !== newData.itemId) return item;
-        return newData;
-      });
-      return { ...block, list };
+
+      if (isChild) {
+        console.log("block.list: ", block.list);
+        const list = block.list.map((item) => {
+          const currentChild = item.children.find(
+            (child) => child.itemId === newData.itemId
+          );
+          console.log("currentChild: ", currentChild);
+          if (!currentChild) return item;
+          return {
+            ...item,
+            children: item.children.map((child) => {
+              if (child.itemId !== newData.itemId) return child;
+              return { ...currentChild, ...newData };
+            }),
+          };
+        });
+        return { ...block, list };
+      } else {
+        const list = block.list.map((item) => {
+          if (item.itemId !== newData.itemId) return item;
+          return { ...item, ...newData };
+        });
+        return { ...block, list };
+      }
     });
-    console.log("item changes: ", newData);
-    mainStore.editPage({ pageId: page.pageId, blocks });
+    console.log("result: ", { pageId: page.value.pageId, blocks });
+    mainStore.editPage({ pageId: page.value.pageId, blocks });
   }
 };
 
-watch(
-  () => props.list,
-  () => {
-    clearTimeout(timerId);
-
-    timerId = setTimeout(() => {
-      console.log("changes");
-    }, 500);
-  },
-  { deep: true },
-);
+const deleteItem = (itemId: string) => {
+  if (page.value) {
+    const blocks = page.value.blocks.map((block) => {
+      if (block.blockId !== props.blockId) return block;
+      const list = block.list.filter((item) => item.itemId !== itemId);
+      return { ...block, list };
+    });
+    mainStore.editPage({ pageId: page.value.pageId, blocks });
+  }
+};
 </script>
 
 <template>
   <section>
     <ul class="page-block-list">
-      <li v-for="item of list" class="page-block-list__item">
+      <li v-for="item of list" :key="item.itemId" class="page-block-list__item">
         <DetailPageBlockListItem
           :item="item"
           :mainTheme="mainTheme"
           @openItemSettings="openItemSettings"
+          @saveItemChanges="saveItemChanges"
         />
       </li>
     </ul>
@@ -64,6 +89,7 @@ watch(
       :item="activeSettingsItem"
       :mainTheme="mainTheme"
       @saveChanges="saveItemChanges"
+      @deleteItem="deleteItem"
     />
   </section>
 </template>

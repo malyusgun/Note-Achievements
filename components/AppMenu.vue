@@ -19,7 +19,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
         :contrastColor="contrastColor"
       />
 
-      <template v-for="page of pages">
+      <template v-for="page of pages" :key="page.pageId">
         <AppMenuItem
           :icon="page.icon"
           :name="page.name"

@@ -10,43 +10,54 @@ import { v4 as uuidv4 } from "uuid";
 const props = defineProps<IPageBlockListItemSettingsModalProps>();
 
 const settingsModal = defineModel();
-const emits = defineEmits(["saveChanges"]);
+const emit = defineEmits(["saveChanges", "deleteItem"]);
 
-const newItemData = ref<IPageBlockListItem | null>(null);
+const newItemData = ref<Required<IPageBlockListItem> | null>(null);
 
 const addChild = () => {
   newItemData.value!.children.push({
     itemId: uuidv4(),
-    label: "",
+    label: "Поспать",
     checked: false,
     points: 1,
   });
 };
 
 const deleteChild = (child: IPageBlockListItemData) => {
-  newItemData.value!.children = newItemData.value!.children.filter((i) => i.itemId !== child.itemId);
+  newItemData.value!.children = newItemData.value!.children.filter(
+    (i) => i.itemId !== child.itemId
+  );
 };
 
 const onChangeShowChildren = (newValue: boolean) => {
   if (!newItemData.value) return;
 
   newItemData.value.showChildren = newValue;
-  newItemData.value.points = newItemData.value.children.reduce((acc, child) => acc + child.points, 0);
+  newItemData.value.points = newItemData.value.children.reduce(
+    (acc, child) => acc + child.points,
+    0
+  );
 };
 
 const onSave = () => {
-  emits("saveChanges", newItemData.value);
+  emit("saveChanges", newItemData.value);
+  settingsModal.value = false;
+};
+
+const deleteItem = () => {
+  emit("deleteItem", props.item?.itemId);
   settingsModal.value = false;
 };
 
 watch(
-  () => props.item,
-  (item) => {
-    if (item) {
-      newItemData.value = structuredClone(toRaw(item));
+  settingsModal,
+  () => {
+    if (props.item) {
+      console.log("props.item", props.item);
+      newItemData.value = structuredClone(toRaw(props.item));
     }
   },
-  { immediate: true },
+  { immediate: true }
 );
 
 watch(
@@ -54,9 +65,12 @@ watch(
   (children) => {
     if (!children || !newItemData.value) return;
 
-    newItemData.value.points = children.reduce((acc, child) => acc + child.points, 0);
+    newItemData.value.points = children.reduce(
+      (acc, child) => acc + child.points,
+      0
+    );
   },
-  { deep: true },
+  { deep: true }
 );
 </script>
 
@@ -66,7 +80,7 @@ watch(
     v-model:visible="settingsModal"
     width="40%"
     dismissible
-    paddingRightOnActive="8px"
+    paddingRightOnActive="0"
   >
     <template #header> Пункт "{{ item.label }}"</template>
     <div class="settings">
@@ -117,7 +131,9 @@ watch(
               label="Сохранить"
               :theme="mainTheme === 'green' ? 'sky' : 'green'"
               @click="onSave"
-            />
+            >
+              <AppIcon name="save" :size="16" />
+            </Button>
 
             <Button
               v-show="newItemData?.showChildren"
@@ -125,7 +141,18 @@ watch(
               label="Добавить"
               :theme="mainTheme"
               @click="addChild"
-            />
+            >
+              <AppIcon name="plus" :size="16" />
+            </Button>
+
+            <Button
+              class="children__save-button"
+              label="Удалить пункт"
+              theme="red"
+              @click="deleteItem"
+            >
+              <AppIcon name="basket" :size="16" />
+            </Button>
           </div>
         </div>
       </section>

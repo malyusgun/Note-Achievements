@@ -2,6 +2,8 @@
 import { Modal, ToggleSwitch, Button } from "@featherui";
 import type { IPageData, TMainTheme } from "~/types";
 
+const route = useRoute();
+const router = useRouter();
 const mainStore = useMainStore();
 
 const { mainTheme, colorMode, contrastColor, pages } = storeToRefs(mainStore);
@@ -25,7 +27,6 @@ const colors: TMainTheme[] = [
 ];
 
 const onPageChange = (newName: string, pageId: string) => {
-  console.log("newName, pageId", newName, pageId);
   clearTimeout(timerId);
   timerId = setTimeout(() => {
     mainStore.editPage({ pageId, name: newName });
@@ -38,7 +39,19 @@ const openDeleteModal = (page: IPageData) => {
 };
 
 const deletePage = () => {
-  mainStore.deletePage(deletePageData.value!.pageId);
+  if (!deletePageData.value) return;
+
+  mainStore.deletePage(deletePageData.value.pageId);
+  console.log(
+    "route.path, deletePageData.value.link: ",
+    route.path,
+    deletePageData.value.link
+  );
+  if (route.name === deletePageData.value.link) {
+    router.push({ path: "/" });
+  }
+
+  deleteModal.value = false;
 };
 </script>
 
@@ -93,7 +106,7 @@ const deletePage = () => {
     </div>
 
     <Modal v-model:visible="deleteModal" :width="200">
-      <template #header> Вы уверены? </template>
+      <template #header> Вы уверены?</template>
 
       <p class="delete-modal__paragraph">
         Вы собираетесь удалить страницу "{{ deletePageData?.name }}".

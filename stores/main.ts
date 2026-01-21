@@ -2,16 +2,16 @@ import type { IPageData, TMainTheme } from "~/types";
 
 export const useMainStore = defineStore("mainStore", () => {
   const pages = ref<IPageData[]>(
-    JSON.parse(localStorage.getItem("pages") || "[]"),
+    JSON.parse(localStorage.getItem("pages") || "[]")
   );
   const mainTheme = ref<TMainTheme>(
-    JSON.parse(localStorage.getItem("mainTheme") || "\"blue\""),
+    JSON.parse(localStorage.getItem("mainTheme") || '"blue"')
   );
 
   const colorMode = useColorMode();
 
   const contrastColor = computed(() =>
-    colorMode.value === "dark" ? "white" : "black",
+    colorMode.value === "dark" ? "white" : "black"
   );
 
   const setMainTheme = (newTheme: TMainTheme) => {
@@ -43,7 +43,7 @@ export const useMainStore = defineStore("mainStore", () => {
 
   const deletePage = (pageId: string) => {
     pages.value = pages.value.filter(
-      (data: IPageData) => pageId !== data.pageId,
+      (data: IPageData) => pageId !== data.pageId
     );
 
     localStorage.setItem("pages", JSON.stringify(pages.value));

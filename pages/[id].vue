@@ -5,9 +5,12 @@ import { v4 as uuidv4 } from "uuid";
 const mainStore = useMainStore();
 const route = useRoute();
 
-const pageData = computed(() => mainStore.getPage(route.params.id as string));
-const mainTheme = computed(() => mainStore.mainTheme);
+const pageData = computed(
+  () =>
+    mainStore.pages.find((page) => page.pageId === (route.params.id as string))!
+);
 const contrastColor = computed(() => mainStore.contrastColor);
+const mainTheme = computed(() => mainStore.mainTheme);
 
 const addBlock = () => {
   if (!pageData.value) return;
@@ -27,18 +30,26 @@ const addBlock = () => {
       },
     ],
   });
+
+  mainStore.editPage(pageData.value);
 };
 </script>
 
 <template>
-  <article v-if="pageData" class="detail-page">
+  <article class="detail-page">
     <h1 class="detail-page__title">{{ pageData.name }}</h1>
 
-    <template v-for="block of pageData.blocks">
-      <DetailPageBlock :pageId="pageData.pageId" :block="block" :contrastColor="contrastColor" />
+    <template v-for="block of pageData.blocks" :key="block.blockId">
+      <DetailPageBlock
+        :pageData="pageData"
+        :block="block"
+        :contrastColor="contrastColor"
+      />
     </template>
 
-    <Button label="Добавить блок" @click="addBlock" :theme="mainTheme" />
+    <Button label="Добавить блок" @click="addBlock" :theme="mainTheme">
+      <AppIcon name="box" :size="20" />
+    </Button>
 
     <pre style="margin-top: 100px">{{ pageData }}</pre>
   </article>

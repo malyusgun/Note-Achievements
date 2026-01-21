@@ -43,11 +43,11 @@ export interface IPageBlock {
   blockId: string;
   label: string;
   progress: number;
-  list: IPageBlockListItem[];
+  list: Required<IPageBlockListItem>[];
 }
 
 export interface IPageBlockProps {
-  pageId: string;
+  pageData: IPageData;
   block: IPageBlock;
   contrastColor: TSecondTheme;
 }
@@ -55,13 +55,13 @@ export interface IPageBlockProps {
 export interface IPageBlockListProps {
   pageId: string;
   blockId: string;
-  list: IPageBlockListItem[];
+  list: Required<IPageBlockListItem>[];
   mainTheme: TMainTheme;
 }
 
 export interface IPageBlockListItem extends IPageBlockListItemData {
-  showChildren: boolean;
-  children: IPageBlockListItemData[];
+  showChildren?: boolean;
+  children?: IPageBlockListItemData[];
 }
 
 export interface IPageBlockListItemData {
@@ -77,6 +77,6 @@ export interface IPageBlockListItemProps {
 }
 
 export interface IPageBlockListItemSettingsModalProps {
-  item: IPageBlockListItem | null;
+  item: Required<IPageBlockListItem> | null;
   mainTheme?: TMainTheme;
 }

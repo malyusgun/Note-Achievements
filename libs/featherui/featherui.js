@@ -7,13 +7,13 @@ import {
   createStaticVNode as J1,
   normalizeStyle as b,
   mergeModels as O,
-  useCssVars as o1,
+  useCssVars as l1,
   useModel as N,
   watch as X,
   computed as u,
-  normalizeClass as B,
+  normalizeClass as Z,
+  withModifiers as e1,
   renderSlot as W,
-  withModifiers as l1,
   createBlock as P,
   resolveDynamicComponent as n1,
   unref as A,
@@ -6559,7 +6559,7 @@ const y7 = (l) => {
     l === "white" || l === "black"
       ? x7(l, e)
       : V(l, String(100 + ((+e + 600) % 900))),
-  e1 = (l, e) =>
+  o1 = (l, e) =>
     l === "normal" ? e[1] : l === "large" ? e[2] : l === "huge" ? e[3] : e[0],
   T7 = { class: "modalHeader" },
   P7 = { class: "main" },
@@ -6588,8 +6588,8 @@ const y7 = (l) => {
     ),
     emits: /* @__PURE__ */ O(["onClose"], ["update:visible"]),
     setup(l, { emit: e }) {
-      o1((p) => ({
-        "297d6e85": g.value,
+      l1((p) => ({
+        "621f82d2": g.value,
       }));
       const o = l,
         i = document.querySelector("body"),
@@ -6624,14 +6624,18 @@ const y7 = (l) => {
             t(
               "section",
               {
-                class: B([
+                class: Z([
                   "modalBackground",
                   {
                     openedModalBackground: c.value,
                   },
                 ]),
                 onPointerdown:
-                  f[0] || (f[0] = () => (p.dismissible ? (c.value = !1) : !1)),
+                  f[0] ||
+                  (f[0] = e1(
+                    () => (p.dismissible ? (c.value = !1) : !1),
+                    ["stop"]
+                  )),
               },
               null,
               34
@@ -6642,7 +6646,7 @@ const y7 = (l) => {
                 style: b(
                   `color: ${_.value}; background-color: ${w.value}; width: ${p.width}; height: ${p.height}; border: 2px solid ${g.value};`
                 ),
-                class: B([
+                class: Z([
                   "modal",
                   {
                     openedModal: c.value,
@@ -6681,7 +6685,7 @@ const y7 = (l) => {
                     {
                       class: "buttonClose",
                       onClick:
-                        f[1] || (f[1] = l1((d) => (c.value = !1), ["prevent"])),
+                        f[1] || (f[1] = e1((d) => (c.value = !1), ["prevent"])),
                     },
                     [(n(), P(n1(A(r1)[p.closeIcon])))]
                   ),
@@ -6713,7 +6717,7 @@ const y7 = (l) => {
     for (const [i, a] of e) o[i] = a;
     return o;
   },
-  D7 = /* @__PURE__ */ G(A7, [["__scopeId", "data-v-486ce5cb"]]),
+  D7 = /* @__PURE__ */ G(A7, [["__scopeId", "data-v-a9668299"]]),
   R7 = /* @__PURE__ */ h({
     __name: "ToggleSwitch",
     props: /* @__PURE__ */ O(
@@ -6733,7 +6737,7 @@ const y7 = (l) => {
     ),
     emits: /* @__PURE__ */ O(["update"], ["update:modelValue"]),
     setup(l, { emit: e }) {
-      o1((_) => ({
+      l1((_) => ({
         "780819e9": w.value,
       }));
       const o = l,
@@ -6803,7 +6807,7 @@ const y7 = (l) => {
             class: "switcher",
             onClick:
               r[0] ||
-              (r[0] = l1(
+              (r[0] = e1(
                 (p) => !_.disabled && (i.value = !i.value),
                 ["prevent"]
               )),
@@ -6815,7 +6819,7 @@ const y7 = (l) => {
                 style: b(
                   `background-color: ${_.disabled ? "#e1e7f1 !important" : v.value}; border-radius: ${g.value.borderRadius}px;`
                 ),
-                class: B([
+                class: Z([
                   "background",
                   {
                     inactiveBackground: !i.value && !_.disabled,
@@ -6866,7 +6870,7 @@ const y7 = (l) => {
     ),
     emits: /* @__PURE__ */ O(["onClick"], ["update:modelValue"]),
     setup(l, { emit: e }) {
-      o1((m) => ({
+      l1((m) => ({
         a84524aa: g.value,
         "859a1b36": p.value,
       }));
@@ -6940,7 +6944,7 @@ const y7 = (l) => {
         s(
           "div",
           {
-            class: B([
+            class: Z([
               "buttonGroup",
               {
                 "rounded-full": o.rounded,
@@ -6962,7 +6966,7 @@ const y7 = (l) => {
                     "button",
                     {
                       key: k.label,
-                      class: B([
+                      class: Z([
                         "button",
                         {
                           "flex-column":
@@ -6971,7 +6975,7 @@ const y7 = (l) => {
                         },
                       ]),
                       style: b(`padding: ${r.value}`),
-                      onClick: l1(() => {
+                      onClick: e1(() => {
                         ((a.value = k.value ?? k.label), i("onClick", a.value));
                       }, ["prevent"]),
                     },
@@ -6980,7 +6984,7 @@ const y7 = (l) => {
                         "span",
                         {
                           style: b(`background-color: ${d(k)}`),
-                          class: B([
+                          class: Z([
                             "background",
                             {
                               "rounded-left": L === 0,
@@ -7002,7 +7006,7 @@ const y7 = (l) => {
                             {
                               key: 0,
                               style: b(`color: ${f(k)}; font-size: ${_.value}`),
-                              class: B([
+                              class: Z([
                                 {
                                   bold: k.textStyle === "bold",
                                   italic: k.textStyle === "italic",
@@ -7018,7 +7022,7 @@ const y7 = (l) => {
                             "span",
                             {
                               key: 1,
-                              class: B([
+                              class: Z([
                                 "icon",
                                 {
                                   "order-1":
@@ -7074,7 +7078,7 @@ const y7 = (l) => {
     ),
     emits: /* @__PURE__ */ O(["onClose"], ["update:visible"]),
     setup(l, { emit: e }) {
-      o1((d) => ({
+      l1((d) => ({
         "4593a7ee": r.value,
       }));
       const o = l,
@@ -7116,7 +7120,7 @@ const y7 = (l) => {
                 "section",
                 {
                   key: 0,
-                  class: B([
+                  class: Z([
                     "drawerBackground",
                     {
                       drawerBackgroundOpened: w.value,
@@ -7136,7 +7140,7 @@ const y7 = (l) => {
               style: b(
                 `color: ${p.value}; background-color: ${_.value};  width: ${f.value}; ${d.position === "top" || d.position === "bottom" ? `height: ${f.value} !important;` : ""} ${d.position === "left" ? `border-right: 2px solid ${r.value};` : d.position === "right" ? `border-left: 2px solid ${r.value};` : d.position === "top" ? `border-bottom: 2px solid ${r.value};` : `border-top: 2px solid ${r.value};`}`
               ),
-              class: B([
+              class: Z([
                 "drawer",
                 {
                   drawerLeft: d.position === "left",
@@ -7165,7 +7169,7 @@ const y7 = (l) => {
                     {
                       class: "buttonClose",
                       onClick:
-                        m[1] || (m[1] = l1(($) => (w.value = !1), ["prevent"])),
+                        m[1] || (m[1] = e1(($) => (w.value = !1), ["prevent"])),
                     },
                     [
                       (n(),
@@ -7244,7 +7248,7 @@ const y7 = (l) => {
     ),
     emits: ["update:modelValue"],
     setup(l) {
-      o1((d) => ({
+      l1((d) => ({
         "67e33cba": a.value,
         "1380bb80": _.value,
         "0ac8f5e9": r.value,
@@ -7312,7 +7316,7 @@ const y7 = (l) => {
           s(
             "div",
             {
-              class: B([
+              class: Z([
                 "sliderContainer",
                 {
                   verticalSlider: d.orientation === "vertical",
@@ -7393,7 +7397,8 @@ const y7 = (l) => {
     },
   }),
   K7 = /* @__PURE__ */ G(Y7, [["__scopeId", "data-v-e3bc3a73"]]),
-  J7 = /* @__PURE__ */ h({
+  J7 = { style: { width: "max-content" } },
+  Q7 = /* @__PURE__ */ h({
     __name: "Button",
     props: {
       label: {},
@@ -7443,11 +7448,11 @@ const y7 = (l) => {
         });
       return (g, _) => (
         n(),
-        s("div", null, [
+        s("div", J7, [
           t(
             "button",
             {
-              class: B([
+              class: Z([
                 "button",
                 {
                   "flex-column": g.iconPos === "top" || g.iconPos === "bottom",
@@ -7475,7 +7480,7 @@ const y7 = (l) => {
                     {
                       key: 0,
                       style: b(`color: ${i.value}; font-size: ${v.value}`),
-                      class: B([
+                      class: Z([
                         "text",
                         {
                           bold: g.textStyle === "bold",
@@ -7493,7 +7498,7 @@ const y7 = (l) => {
                     "span",
                     {
                       key: 1,
-                      class: B([
+                      class: Z([
                         "icon",
                         {
                           "order-1":
@@ -7512,10 +7517,10 @@ const y7 = (l) => {
       );
     },
   }),
-  C1 = /* @__PURE__ */ G(J7, [["__scopeId", "data-v-d146a4eb"]]),
-  Q7 = { class: "menuContainer" },
-  el = ["onClick"],
-  ol = /* @__PURE__ */ h({
+  C1 = /* @__PURE__ */ G(Q7, [["__scopeId", "data-v-9e7c8d3f"]]),
+  el = { class: "menuContainer" },
+  ol = ["onClick"],
+  ll = /* @__PURE__ */ h({
     __name: "MenuDial",
     props: /* @__PURE__ */ O(
       {
@@ -7534,7 +7539,7 @@ const y7 = (l) => {
     ),
     emits: ["update:modelValue"],
     setup(l) {
-      o1((r) => ({
+      l1((r) => ({
         "3b6f3348": c.value,
       }));
       const e = l,
@@ -7578,7 +7583,7 @@ const y7 = (l) => {
               : "white";
       return (r, p) => (
         n(),
-        s("section", Q7, [
+        s("section", el, [
           t(
             "button",
             {
@@ -7587,7 +7592,7 @@ const y7 = (l) => {
               ),
               class: "menuButton",
               onClick:
-                p[0] || (p[0] = l1((f) => (o.value = !o.value), ["prevent"])),
+                p[0] || (p[0] = e1((f) => (o.value = !o.value), ["prevent"])),
             },
             [
               W(r.$slots, "buttonIcon", {}, void 0, !0),
@@ -7611,7 +7616,7 @@ const y7 = (l) => {
           t(
             "ul",
             {
-              class: B([
+              class: Z([
                 "menuList",
                 {
                   menuListColumn:
@@ -7649,7 +7654,7 @@ const y7 = (l) => {
                           "p",
                           {
                             style: { padding: "5px" },
-                            class: B([
+                            class: Z([
                               "",
                               {
                                 bold: f.textStyle === "bold",
@@ -7663,7 +7668,7 @@ const y7 = (l) => {
                         W(r.$slots, `${d + 1}IconAfter`, {}, void 0, !0),
                       ],
                       12,
-                      el
+                      ol
                     )
                   )
                 ),
@@ -7676,12 +7681,12 @@ const y7 = (l) => {
       );
     },
   }),
-  ll = /* @__PURE__ */ G(ol, [["__scopeId", "data-v-9f67743a"]]),
-  tl = {
+  tl = /* @__PURE__ */ G(ll, [["__scopeId", "data-v-9f67743a"]]),
+  nl = {
     key: 0,
     style: { "background-color": "black", color: "white", padding: "10px" },
   },
-  nl = /* @__PURE__ */ h({
+  rl = /* @__PURE__ */ h({
     __name: "Popup",
     props: /* @__PURE__ */ O(
       {
@@ -7704,7 +7709,7 @@ const y7 = (l) => {
     ),
     emits: ["update:modelValue"],
     setup(l) {
-      o1((p) => ({
+      l1((p) => ({
         a2b266aa: a.value,
       }));
       const e = l,
@@ -7776,7 +7781,7 @@ const y7 = (l) => {
               ref: g,
               oncontextmenu: "return false",
               id: "popup",
-              onPointerdown: f[0] || (f[0] = l1(() => {}, ["stop"])),
+              onPointerdown: f[0] || (f[0] = e1(() => {}, ["stop"])),
               style:
                 b(`top: ${c.value}px; left: ${v.value}px; opacity: ${o.value ? 1 : 0}; pointer-events: ${o.value ? "auto" : "none"}; padding: ${p.padding}; background-color: ${i.value};
   border: 1px solid ${a.value};`),
@@ -7791,7 +7796,7 @@ const y7 = (l) => {
                 },
                 [
                   W(p.$slots, "default", {}, void 0, !0),
-                  p.$slots.default ? T("", !0) : (n(), s("p", tl, "Popup")),
+                  p.$slots.default ? T("", !0) : (n(), s("p", nl, "Popup")),
                 ],
                 4
               ),
@@ -7802,8 +7807,8 @@ const y7 = (l) => {
       );
     },
   }),
-  B1 = /* @__PURE__ */ G(nl, [["__scopeId", "data-v-8bcce3e3"]]),
-  rl = (l, e, o, i, a, c, v, w, g) => {
+  B1 = /* @__PURE__ */ G(rl, [["__scopeId", "data-v-8bcce3e3"]]),
+  sl = (l, e, o, i, a, c, v, w, g) => {
     if (!(l != null && l.length)) return [];
     let _ = [...l];
     if (
@@ -7831,21 +7836,21 @@ const y7 = (l) => {
           ).splice(o * (e - 1), o);
     }
   },
-  sl = (l, e) =>
+  il = (l, e) =>
     l ??
     (!e || isNaN(+e.slice(0, -3)) || parseInt(e) < 20
       ? "5px"
       : parseInt(e) < 36
         ? "10px"
         : "15px"),
-  il = (l, e) => {
+  al = (l, e) => {
     if (l === "normal") return "0px";
     const o = isFinite(+e[e.length - 3]),
       i = o ? e.slice(0, -2) : e.slice(0, -3),
       a = o ? e.slice(-2) : e.slice(-3);
     return l === "large" ? +i / 2 + a : l === "huge" ? i + a : -+i / 4 + a;
   },
-  al = (l, e, o) =>
+  ul = (l, e, o) =>
     e
       ? `0px calc(${o} / 2 + ${l.padding ?? "0px"} / 2)`
       : `0 ${l.padding ?? "0px"} 0 0`,
@@ -7864,14 +7869,14 @@ const y7 = (l) => {
           theme: (l == null ? void 0 : l.theme) ?? e,
         }
       : l,
-  ul = { class: "columnHeader-container" },
-  dl = ["onClick"],
-  cl = ["onPointerdown", "id"],
-  Cl = { key: 0 },
-  pl = { style: { padding: "2px" } },
-  hl = { class: "filterButtons" },
-  fl = { style: { width: "50px", "font-size": "20px" } },
-  vl = /* @__PURE__ */ h({
+  dl = { class: "columnHeader-container" },
+  cl = ["onClick"],
+  Cl = ["onPointerdown", "id"],
+  pl = { key: 0 },
+  hl = { style: { padding: "2px" } },
+  fl = { class: "filterButtons" },
+  vl = { style: { width: "50px", "font-size": "20px" } },
+  ml = /* @__PURE__ */ h({
     __name: "TableHeader",
     props: /* @__PURE__ */ O(
       {
@@ -7909,7 +7914,7 @@ const y7 = (l) => {
       ]
     ),
     setup(l, { emit: e }) {
-      o1((r) => ({
+      l1((r) => ({
         "3287e180": r.secondaryColor,
       }));
       const o = l,
@@ -7949,7 +7954,7 @@ const y7 = (l) => {
                     style: b(
                       `position: relative; padding: calc(${r.initGap} / 2 + ${r.additionalHeightFromSize}) ${r.initGap}`
                     ),
-                    class: B([
+                    class: Z([
                       "column",
                       {
                         leftBorder: r.showAllLines,
@@ -7961,12 +7966,12 @@ const y7 = (l) => {
                       "div",
                       {
                         style: b(
-                          `justify-content: ${r.center ? "center" : "start"}; gap: ${r.center ? "0" : r.initGap}; padding: ${A(al)(f, r.center, r.initGap)}`
+                          `justify-content: ${r.center ? "center" : "start"}; gap: ${r.center ? "0" : r.initGap}; padding: ${A(ul)(f, r.center, r.initGap)}`
                         ),
                         class: "columnFlex",
                       },
                       [
-                        t("div", ul, [
+                        t("div", dl, [
                           t("h3", null, F(f.name), 1),
                           E(
                             t(
@@ -7985,7 +7990,7 @@ const y7 = (l) => {
                             t(
                               "button",
                               {
-                                onClick: l1(
+                                onClick: e1(
                                   (m) => i("changeColumnSortMode", d),
                                   ["prevent"]
                                 ),
@@ -8035,7 +8040,7 @@ const y7 = (l) => {
                                 ),
                               ],
                               12,
-                              dl
+                              cl
                             ),
                             [[Q, f.sortable && !r.isEditMode]]
                           ),
@@ -8064,11 +8069,11 @@ const y7 = (l) => {
                                   ),
                                 ],
                                 44,
-                                cl
+                                Cl
                               ))
                             : T("", !0),
                         ]),
-                        r.center ? T("", !0) : (n(), s("div", Cl)),
+                        r.center ? T("", !0) : (n(), s("div", pl)),
                       ],
                       4
                     ),
@@ -8093,7 +8098,7 @@ const y7 = (l) => {
             },
             {
               default: R(() => [
-                t("article", pl, [
+                t("article", hl, [
                   E(
                     t(
                       "input",
@@ -8111,7 +8116,7 @@ const y7 = (l) => {
                     ),
                     [[L1, a.value]]
                   ),
-                  t("section", hl, [
+                  t("section", fl, [
                     y(
                       C1,
                       {
@@ -8120,7 +8125,7 @@ const y7 = (l) => {
                         theme: "green",
                         onClick:
                           p[1] ||
-                          (p[1] = l1((f) => (c.value = !1), ["prevent"])),
+                          (p[1] = e1((f) => (c.value = !1), ["prevent"])),
                       },
                       {
                         default: R(() => [
@@ -8141,14 +8146,14 @@ const y7 = (l) => {
                           theme: "sky",
                           onClick:
                             p[2] ||
-                            (p[2] = l1(
+                            (p[2] = e1(
                               (f) => (v.value = !v.value),
                               ["prevent"]
                             )),
                         },
                         {
                           default: R(() => [
-                            t("div", fl, F(v.value ? "A≠a" : "A = a"), 1),
+                            t("div", vl, F(v.value ? "A≠a" : "A = a"), 1),
                           ]),
                           _: 1,
                         },
@@ -8164,7 +8169,7 @@ const y7 = (l) => {
                         theme: "red",
                         onClick:
                           p[3] ||
-                          (p[3] = l1((f) => i("cancelFilter"), ["prevent"])),
+                          (p[3] = e1((f) => i("cancelFilter"), ["prevent"])),
                       },
                       {
                         default: R(() => [
@@ -8188,9 +8193,9 @@ const y7 = (l) => {
       );
     },
   }),
-  ml = /* @__PURE__ */ G(vl, [["__scopeId", "data-v-d818f6c3"]]),
-  gl = ["name", "value", "disabled"],
-  wl = /* @__PURE__ */ h({
+  gl = /* @__PURE__ */ G(ml, [["__scopeId", "data-v-d818f6c3"]]),
+  wl = ["name", "value", "disabled"],
+  $l = /* @__PURE__ */ h({
     __name: "Checkbox",
     props: /* @__PURE__ */ O(
       {
@@ -8236,9 +8241,9 @@ const y7 = (l) => {
               ? "#62708c"
               : V(o.borderColor, o.darknessBorder)
         ),
-        p = u(() => e1(o.size, [13, 20, 30, 40])),
+        p = u(() => o1(o.size, [13, 20, 30, 40])),
         f = u(() =>
-          o.label ? e1(o.size, ["5px", "7px", "10px", "15px"]) : "0px"
+          o.label ? o1(o.size, ["5px", "7px", "10px", "15px"]) : "0px"
         ),
         d = u(() => (o.size === "large" || o.size === "huge" ? 2 : 1)),
         m = u(() => `${p.value / 7 - d.value}px`);
@@ -8247,7 +8252,7 @@ const y7 = (l) => {
         s(
           "section",
           {
-            class: B([
+            class: Z([
               "container",
               {
                 flexColumn: ["top", "bottom"].includes($.labelPos),
@@ -8256,7 +8261,7 @@ const y7 = (l) => {
             style: b(`gap: ${f.value}`),
             onClick:
               k[1] ||
-              (k[1] = l1(
+              (k[1] = e1(
                 (L) => ($.disabled ? "" : (i.value = !i.value)),
                 ["prevent"]
               )),
@@ -8287,14 +8292,14 @@ const y7 = (l) => {
                     },
                     null,
                     12,
-                    gl
+                    wl
                   ),
                   [[h2, i.value]]
                 ),
                 t(
                   "div",
                   {
-                    class: B([
+                    class: Z([
                       {
                         inactive: !i.value,
                         active: i.value,
@@ -8333,7 +8338,7 @@ const y7 = (l) => {
             t(
               "p",
               {
-                class: B([
+                class: Z([
                   {
                     first: ["top", "left"].includes($.labelPos),
                   },
@@ -8351,8 +8356,8 @@ const y7 = (l) => {
       );
     },
   }),
-  g1 = /* @__PURE__ */ G(wl, [["__scopeId", "data-v-1a286206"]]),
-  $l = /* @__PURE__ */ h({
+  g1 = /* @__PURE__ */ G($l, [["__scopeId", "data-v-8c84ac48"]]),
+  _l = /* @__PURE__ */ h({
     __name: "Tag",
     props: /* @__PURE__ */ O(
       {
@@ -8392,9 +8397,9 @@ const y7 = (l) => {
           )
         ),
         v = u(() => (e.border ? V(e.border, e.darknessBorder) : "transparent")),
-        w = u(() => e1(e.size, ["12px", "16px", "20px", "24px"])),
+        w = u(() => o1(e.size, ["12px", "16px", "20px", "24px"])),
         g = u(() =>
-          e1(e.size, ["3px 7px", "5px 11px", "6px 13px", "7px 16px"])
+          o1(e.size, ["3px 7px", "5px 11px", "6px 13px", "7px 16px"])
         );
 
       function _(r) {
@@ -8491,7 +8496,7 @@ const y7 = (l) => {
       );
     },
   }),
-  S1 = /* @__PURE__ */ G($l, [["__scopeId", "data-v-bfc45be2"]]),
+  S1 = /* @__PURE__ */ G(_l, [["__scopeId", "data-v-bfc45be2"]]),
   H1 = /* @__PURE__ */ h({
     __name: "SelectItem",
     props: {
@@ -8558,7 +8563,7 @@ const y7 = (l) => {
       };
     },
   }),
-  _l = (l, e, o) => {
+  bl = (l, e, o) => {
     if (!(e != null && e.length)) return [];
     const i = l.filter(
       (a) =>
@@ -8571,7 +8576,7 @@ const y7 = (l) => {
     for (const a of e) a.items = i.filter((c) => c.group === a.name);
     return e;
   },
-  bl = (l) =>
+  kl = (l) =>
     l === "normal"
       ? "16px"
       : l === "large"
@@ -8579,7 +8584,7 @@ const y7 = (l) => {
         : l === "huge"
           ? "24px"
           : "12px",
-  kl = (l) =>
+  Ll = (l) =>
     l === "normal"
       ? "6px"
       : l === "large"
@@ -8587,9 +8592,9 @@ const y7 = (l) => {
         : l === "huge"
           ? "14px"
           : "4px",
-  Ll = ["name"],
-  zl = ["selected"],
-  yl = /* @__PURE__ */ h({
+  zl = ["name"],
+  yl = ["selected"],
+  Ml = /* @__PURE__ */ h({
     __name: "Select",
     props: /* @__PURE__ */ O(
       {
@@ -8623,7 +8628,7 @@ const y7 = (l) => {
     ),
     emits: /* @__PURE__ */ O(["update"], ["update:modelValue"]),
     setup(l, { emit: e }) {
-      o1((M) => ({
+      l1((M) => ({
         "45a98ec8": k.value,
         "02ea04c2": p.value,
         "1c458ea7": $.value,
@@ -8636,7 +8641,7 @@ const y7 = (l) => {
       (X(c, () => (i.value = c.value)), X(i, () => a("update", i)));
       const v = S(!1),
         w = S(""),
-        g = u(() => _l(o.options, o.groups, w.value)),
+        g = u(() => bl(o.options, o.groups, w.value)),
         _ = u(() =>
           o.options.filter(
             (M) =>
@@ -8648,8 +8653,8 @@ const y7 = (l) => {
                 : !0)
           )
         ),
-        r = u(() => o.fontSize ?? bl(o.size)),
-        p = u(() => kl(o.size)),
+        r = u(() => o.fontSize ?? kl(o.size)),
+        p = u(() => Ll(o.size)),
         f = u(() => o.options.find((M) => M.value === i.value)),
         d = u(() => {
           const M = String(parseInt(o.width));
@@ -8727,7 +8732,7 @@ const y7 = (l) => {
                           },
                           F(C.label ?? C.value),
                           9,
-                          zl
+                          yl
                         )
                       )
                     ),
@@ -8735,12 +8740,12 @@ const y7 = (l) => {
                   )),
                 ],
                 8,
-                Ll
+                zl
               ),
               t(
                 "div",
                 {
-                  class: B([
+                  class: Z([
                     "list",
                     {
                       noHighlight: M.noHighlight,
@@ -8756,11 +8761,11 @@ const y7 = (l) => {
                     {
                       onPointerup:
                         x[0] ||
-                        (x[0] = l1(
+                        (x[0] = e1(
                           (C) => (M.disabled ? "" : (v.value = !v.value)),
                           ["stop"]
                         )),
-                      class: B([
+                      class: Z([
                         "button",
                         {
                           disabled: M.disabled,
@@ -8782,7 +8787,7 @@ const y7 = (l) => {
                         },
                         {
                           default: R(() => {
-                            var C, Z;
+                            var C, B;
                             return [
                               W(
                                 M.$slots,
@@ -8804,7 +8809,7 @@ const y7 = (l) => {
                               ),
                               W(
                                 M.$slots,
-                                `icon-right-${(Z = f.value) == null ? void 0 : Z.value}`,
+                                `icon-right-${(B = f.value) == null ? void 0 : B.value}`,
                                 {},
                                 void 0,
                                 !0
@@ -8836,7 +8841,7 @@ const y7 = (l) => {
                   t(
                     "div",
                     {
-                      class: B([
+                      class: Z([
                         "options",
                         {
                           optionsOpened: v.value,
@@ -8978,41 +8983,41 @@ const y7 = (l) => {
                                       null,
                                       Y(
                                         C.items,
-                                        (Z) => (
+                                        (B) => (
                                           n(),
                                           P(
                                             H1,
                                             {
-                                              onClick: l1(
-                                                (i1) => H(Z.value),
+                                              onClick: e1(
+                                                (i1) => H(B.value),
                                                 ["prevent"]
                                               ),
-                                              key: Z.value,
+                                              key: B.value,
                                               width: M.width,
-                                              option: Z,
+                                              option: B,
                                               fontSizeNumber: m.value,
                                               textColor: $.value,
-                                              class: B([
+                                              class: Z([
                                                 "flex",
                                                 {
                                                   firstOption:
                                                     M.options[0].value ===
-                                                    Z.value,
+                                                    B.value,
                                                   lastOption:
                                                     M.options[
                                                       M.options.length - 1
-                                                    ].value === Z.value,
+                                                    ].value === B.value,
                                                 },
                                               ]),
                                               style:
-                                                b(`color: ${D(Z.color, Z.darknessColor, $.value)};
-            background-color: ${D(Z.background, Z.darknessBackground, L.value)}`),
+                                                b(`color: ${D(B.color, B.darknessColor, $.value)};
+            background-color: ${D(B.background, B.darknessBackground, L.value)}`),
                                             },
                                             {
                                               default: R(() => [
                                                 W(
                                                   M.$slots,
-                                                  `icon-left-${Z.value}`,
+                                                  `icon-left-${B.value}`,
                                                   {},
                                                   void 0,
                                                   !0
@@ -9025,12 +9030,12 @@ const y7 = (l) => {
                                                       `font-size: ${r.value}`
                                                     ),
                                                   },
-                                                  F(Z.label ?? Z.value),
+                                                  F(B.label ?? B.value),
                                                   5
                                                 ),
                                                 W(
                                                   M.$slots,
-                                                  `icon-right-${Z.value}`,
+                                                  `icon-right-${B.value}`,
                                                   {},
                                                   void 0,
                                                   !0
@@ -9070,13 +9075,13 @@ const y7 = (l) => {
                                 P(
                                   H1,
                                   {
-                                    onClick: l1((Z) => H(C.value), ["prevent"]),
+                                    onClick: e1((B) => H(C.value), ["prevent"]),
                                     key: C.value,
                                     width: M.width,
                                     option: C,
                                     fontSizeNumber: m.value,
                                     textColor: $.value,
-                                    class: B([
+                                    class: Z([
                                       "flex",
                                       {
                                         firstOption:
@@ -9148,10 +9153,10 @@ const y7 = (l) => {
       );
     },
   }),
-  M1 = /* @__PURE__ */ G(yl, [["__scopeId", "data-v-cec4939e"]]),
-  Ml = ["onClick"],
+  M1 = /* @__PURE__ */ G(Ml, [["__scopeId", "data-v-cec4939e"]]),
   Vl = ["onClick"],
-  Hl = /* @__PURE__ */ h({
+  Hl = ["onClick"],
+  Il = /* @__PURE__ */ h({
     __name: "Rating",
     props: /* @__PURE__ */ O(
       {
@@ -9182,7 +9187,7 @@ const y7 = (l) => {
         w = u(() => V(o.theme, o.darknessTheme)),
         g = u(() => (o.offTheme ? V(o.offTheme, o.darknessTheme) : null)),
         _ = u(() => V(o.offTheme ?? o.theme, "200")),
-        r = u(() => e1(o.size, ["10px", "20px", "30px", "40px"])),
+        r = u(() => o1(o.size, ["10px", "20px", "30px", "40px"])),
         p = (f) => {
           if (i.value > f) {
             i.value = f;
@@ -9294,7 +9299,7 @@ const y7 = (l) => {
                             ),
                           ],
                           8,
-                          Ml
+                          Vl
                         ),
                         [[Q, i.value < m + 1]]
                       ),
@@ -9330,7 +9335,7 @@ const y7 = (l) => {
                             ),
                           ],
                           12,
-                          Vl
+                          Hl
                         ),
                         [[Q, i.value >= m + 1]]
                       ),
@@ -9347,8 +9352,7 @@ const y7 = (l) => {
       );
     },
   }),
-  x1 = /* @__PURE__ */ G(Hl, [["__scopeId", "data-v-47a819ea"]]),
-  Il = { class: "active" },
+  x1 = /* @__PURE__ */ G(Il, [["__scopeId", "data-v-47a819ea"]]),
   Zl = /* @__PURE__ */ h({
     __name: "ProgressBar",
     props: /* @__PURE__ */ O(
@@ -9370,6 +9374,7 @@ const y7 = (l) => {
         labelBefore: {},
         labelAfter: { default: "%" },
         noBorder: { type: Boolean },
+        disabled: { type: Boolean },
       },
       {
         modelValue: {},
@@ -9378,12 +9383,12 @@ const y7 = (l) => {
     ),
     emits: /* @__PURE__ */ O(["update"], ["update:modelValue"]),
     setup(l, { emit: e }) {
-      o1((L) => ({
-        "7ce0f98e": f.value,
-        "1466110f": r.value,
-        "2a2a5f8f": g.value,
-        "973b7dd8": _.value,
-        e51ad5e6: p.value,
+      l1((L) => ({
+        c2579566: f.value,
+        "7b3ce90a": r.value,
+        e946f2ba: g.value,
+        "1cdd3300": _.value,
+        "58c42579": p.value,
       }));
       const o = l,
         i = S(),
@@ -9418,15 +9423,16 @@ const y7 = (l) => {
             : V(o.inactiveTheme, o.darknessInactiveTheme);
         }),
         p = u(() => s1(o.theme, o.darknessTheme)),
-        f = u(() => e1(o.size, ["12px", "16px", "20px", "24px"])),
-        d = u(() => e1(o.size, ["15px", "30px", "45px", "60px"])),
+        f = u(() => o1(o.size, ["12px", "16px", "20px", "24px"])),
+        d = u(() => o1(o.size, ["15px", "30px", "45px", "60px"])),
         m = S(!1),
         $ = (L) => {
+          if (o.disabled) return;
           const H = L.layerX;
           a.value = Math.round((H / (w.value - 1)) * o.max);
         },
         k = (L) => {
-          ((m.value = !0), $(L));
+          o.disabled || ((m.value = !0), $(L));
         };
       return (L, H) => (
         n(),
@@ -9438,32 +9444,44 @@ const y7 = (l) => {
             ref: i,
             id: "progressBar",
             style: b(
-              `width: ${L.width ?? "300px"}; height: ${L.height ?? d.value}; border: ${L.noBorder ? "" : "2px solid black"}`
+              `width: ${L.width ?? "300px"}; height: ${L.height ?? d.value}; border: ${L.noBorder ? "" : "2px solid black"}; ${L.disabled ? "" : "cursor: pointer"}`
             ),
-            onPointerdown: H[0] || (H[0] = l1((D) => k(D), ["prevent"])),
+            onPointerdown: H[0] || (H[0] = e1((D) => k(D), ["prevent"])),
             onPointermove: H[1] || (H[1] = (D) => (m.value ? $(D) : "")),
             onPointerup: H[2] || (H[2] = (D) => (m.value = !1)),
             onPointerleave: H[3] || (H[3] = (D) => (m.value = !1)),
           },
           [
-            t("div", Il, [
-              E(
-                t(
-                  "span",
-                  { class: "value" },
-                  F(L.labelBefore) + F(a.value) + F(L.labelAfter),
-                  513
+            t(
+              "div",
+              {
+                class: Z([
+                  "active",
+                  {
+                    "--transition": L.disabled,
+                  },
+                ]),
+              },
+              [
+                E(
+                  t(
+                    "span",
+                    { class: "value" },
+                    F(L.labelBefore) + F(a.value) + F(L.labelAfter),
+                    513
+                  ),
+                  [[Q, L.showLabel]]
                 ),
-                [[Q, L.showLabel]]
-              ),
-            ]),
+              ],
+              2
+            ),
           ],
           36
         )
       );
     },
   }),
-  T1 = /* @__PURE__ */ G(Zl, [["__scopeId", "data-v-32c92385"]]),
+  T1 = /* @__PURE__ */ G(Zl, [["__scopeId", "data-v-1bda2f38"]]),
   Bl = (l, e, o, i, a, c, v) => {
     const w = l.clientX,
       g = l.clientY,
@@ -9614,16 +9632,16 @@ const y7 = (l) => {
         z = (C) => {
           ((v.value = !0), U(C));
         };
-      return (C, Z) => (
+      return (C, B) => (
         n(),
         s(
           "section",
           {
             onPointerdown:
-              Z[2] || (Z[2] = l1((i1) => !C.buttons && z(i1), ["prevent"])),
-            onPointermove: Z[3] || (Z[3] = (i1) => (v.value ? U(i1) : "")),
-            onPointerup: Z[4] || (Z[4] = (i1) => (v.value = !1)),
-            onPointerleave: Z[5] || (Z[5] = (i1) => (v.value = !1)),
+              B[2] || (B[2] = e1((i1) => !C.buttons && z(i1), ["prevent"])),
+            onPointermove: B[3] || (B[3] = (i1) => (v.value ? U(i1) : "")),
+            onPointerup: B[4] || (B[4] = (i1) => (v.value = !1)),
+            onPointerleave: B[5] || (B[5] = (i1) => (v.value = !1)),
             class: "container containerSize",
             style: b(`width: ${f.value}; height: ${f.value};`),
             ref_key: "container",
@@ -9693,8 +9711,8 @@ const y7 = (l) => {
                       C1,
                       {
                         onClick:
-                          Z[0] ||
-                          (Z[0] = (i1) =>
+                          B[0] ||
+                          (B[0] = (i1) =>
                             i.value !== C.max ? i.value++ : null),
                         theme: C.negativeTheme,
                         textColor: "white",
@@ -9712,8 +9730,8 @@ const y7 = (l) => {
                       C1,
                       {
                         onClick:
-                          Z[1] ||
-                          (Z[1] = (i1) =>
+                          B[1] ||
+                          (B[1] = (i1) =>
                             i.value !== C.min ? i.value-- : null),
                         theme: C.negativeTheme,
                         textColor: "white",
@@ -9770,7 +9788,7 @@ const y7 = (l) => {
               style: b(
                 `width: calc(${((i = e.column) == null ? void 0 : i.width) ?? "auto"} - 2 * ${e.initGap})`
               ),
-              class: B([
+              class: Z([
                 "cell",
                 {
                   cellCenter: e.center,
@@ -10371,7 +10389,7 @@ const y7 = (l) => {
     },
     setup(l) {
       return (
-        o1((e) => ({
+        l1((e) => ({
           "620b4a36": e.textColor,
           "303e0b92": e.color,
         })),
@@ -10380,7 +10398,7 @@ const y7 = (l) => {
           s(
             "div",
             {
-              class: B([
+              class: Z([
                 "item",
                 {
                   disable: e.disable,
@@ -10391,7 +10409,7 @@ const y7 = (l) => {
               t(
                 "div",
                 {
-                  class: B([
+                  class: Z([
                     "bg",
                     {
                       active: e.active,
@@ -10438,7 +10456,7 @@ const y7 = (l) => {
     ),
     emits: ["update:current", "update:itemsPerPage"],
     setup(l) {
-      o1(($) => ({
+      l1(($) => ({
         "8a854632": p.value,
         "29bc6caa": f.value,
       }));
@@ -10467,8 +10485,8 @@ const y7 = (l) => {
                 ? [L - 2, L - 1, L, L + 1, L + 2]
                 : c.value;
         }),
-        r = u(() => e1(e.size, ["7", "10", "15", "18"])),
-        p = u(() => e1(e.size, ["12px", "16px", "26px", "32px"])),
+        r = u(() => o1(e.size, ["7", "10", "15", "18"])),
+        p = u(() => o1(e.size, ["12px", "16px", "26px", "32px"])),
         f = u(() => `${+r.value * 2.5}px`),
         d = u(() => V(e.theme, e.darknessTheme)),
         m = u(() => s1(e.theme, e.darknessTheme));
@@ -10693,13 +10711,13 @@ const y7 = (l) => {
     ),
     emits: /* @__PURE__ */ O(["updateData"], ["update:modelValue"]),
     setup(l, { emit: e }) {
-      o1((I) => ({
+      l1((I) => ({
         "6c81dda6": I.fontSize,
         d2391526: x.value,
         b5ea3360: U.value,
         "065a1e6d": z.value,
         "7bb8f285": C.value,
-        "3218bd55": Z.value,
+        "3218bd55": B.value,
       }));
       const o = l,
         i = N(l, "modelValue"),
@@ -10717,8 +10735,8 @@ const y7 = (l) => {
       const m = u(() => o.columns),
         $ = m.value.findIndex((I) => I.initSort && I.initSort !== "none");
       ~$ && (_.value = [$, m.value[$].initSort]);
-      const k = u(() => sl(o.gap ?? "5px", o.fontSize)),
-        L = u(() => il(o.size, o.fontSize)),
+      const k = u(() => il(o.gap ?? "5px", o.fontSize)),
+        L = u(() => al(o.size, o.fontSize)),
         H = u(() => {
           const I = [];
           for (const q of m.value)
@@ -10727,7 +10745,7 @@ const y7 = (l) => {
         }),
         D = u(() => {
           var I, q;
-          return rl(
+          return sl(
             i.value,
             v.value,
             w.value,
@@ -10751,7 +10769,7 @@ const y7 = (l) => {
             : s1(o.theme, o.darknessTheme)
         ),
         C = u(() => p1(o.theme, o.darknessTheme)),
-        Z = u(() => p1(o.theme, String(+o.darknessTheme + 300))),
+        B = u(() => p1(o.theme, String(+o.darknessTheme + 300))),
         i1 = u(() =>
           isNaN(+o.fontSize[o.fontSize.length - 3])
             ? +o.fontSize.slice(0, -3) * 2.5 + o.fontSize.slice(-3)
@@ -10788,7 +10806,7 @@ const y7 = (l) => {
             t(
               "table",
               {
-                class: B([
+                class: Z([
                   {
                     tableLines: I.showAllLines,
                   },
@@ -10801,7 +10819,7 @@ const y7 = (l) => {
               [
                 t("thead", null, [
                   y(
-                    ml,
+                    gl,
                     {
                       filterValue: f.value,
                       "onUpdate:filterValue":
@@ -10868,7 +10886,7 @@ const y7 = (l) => {
                           "tr",
                           {
                             key: u1,
-                            class: B({
+                            class: Z({
                               noEdit:
                                 !g.value ||
                                 (((_1 = I.noEditingSettings) == null
@@ -10923,7 +10941,7 @@ const y7 = (l) => {
                                             : h1.call(c1)
                                           : null;
                                       },
-                                      class: B({
+                                      class: Z({
                                         leftBorder: I.showAllLines,
                                         darkRow: I.stripedRows && !(u1 % 2),
                                         noEdit:
@@ -11106,7 +11124,7 @@ const y7 = (l) => {
         s(
           "div",
           {
-            class: B([
+            class: Z([
               "arrowContainer",
               {
                 disable: e.disable,
@@ -11120,7 +11138,7 @@ const y7 = (l) => {
             t(
               "div",
               {
-                class: B([
+                class: Z([
                   "bg",
                   {
                     disableBg: e.disable,
@@ -11210,11 +11228,11 @@ const y7 = (l) => {
             ? !1
             : o.value === Math.ceil(i.value / e.perView) || !i.value
         ),
-        g = u(() => e1(e.size, [0.75, 1, 2, 3])),
+        g = u(() => o1(e.size, [0.75, 1, 2, 3])),
         _ = u(() => 10 * g.value),
         r = u(() => `calc(${e.innerWidth} / ${e.perView}`),
         p = u(() =>
-          e1(e.size, [
+          o1(e.size, [
             9 * g.value + "px",
             12 * g.value + "px",
             12 * g.value + "px",
@@ -11496,7 +11514,7 @@ const y7 = (l) => {
     ),
     emits: ["update:modelValue"],
     setup(l) {
-      o1((J) => ({
+      l1((J) => ({
         cbd279d0: L.value,
         "3df99bc4": $.value,
         "05ce6ae6": J.width,
@@ -11549,11 +11567,11 @@ const y7 = (l) => {
           V(_.value, _.value === "white" || _.value === "black" ? "500" : "800")
         ),
         $ = u(() => V(_.value, "500")),
-        k = u(() => e1(e.size, ["12px", "16px", "20px", "24px"])),
+        k = u(() => o1(e.size, ["12px", "16px", "20px", "24px"])),
         L = u(
           () =>
             c.value &&
-            e1(e.size, ["7px 10px", "10px 15px", "14px 20px", "20px 30px"])
+            o1(e.size, ["7px 10px", "10px 15px", "14px 20px", "20px 30px"])
         ),
         H = u(() =>
           e.size === "normal"
@@ -11612,7 +11630,7 @@ const y7 = (l) => {
           immediate: !0,
         }
       );
-      const Z = () => (c.value = !1);
+      const B = () => (c.value = !1);
       let i1;
       return (
         X(c, () => {
@@ -11638,7 +11656,7 @@ const y7 = (l) => {
             {
               ref_key: "toast",
               ref: w,
-              class: B([
+              class: Z([
                 `toast-container ${J.position}`,
                 {
                   relative: g.value,
@@ -11680,7 +11698,7 @@ const y7 = (l) => {
               y(
                 w1,
                 {
-                  onClick: Z,
+                  onClick: B,
                   class: "toast-close_button",
                   style: b(
                     `top: ${L.value && L.value.split(" ")[0]}; right: ${L.value && L.value.split(" ")[1]}`
@@ -11865,7 +11883,7 @@ const y7 = (l) => {
     ),
     emits: ["update:modelValue"],
     setup(l) {
-      o1((H) => ({
+      l1((H) => ({
         "79cf1fa5": m.value,
         "4253c872": r.value,
         "619b8cfe": d.value,
@@ -11892,9 +11910,9 @@ const y7 = (l) => {
             ? V(e.textColor, e.darknessTextColor)
             : s1(e.theme, e.darknessTheme)
         ),
-        p = u(() => e1(e.size, ["20px", "24px", "30px", "45px"])),
-        f = u(() => e1(e.size, ["30px", "36px", "45px", "67px"])),
-        d = u(() => e1(e.size, ["12px", "16px", "24px", "32px"])),
+        p = u(() => o1(e.size, ["20px", "24px", "30px", "45px"])),
+        f = u(() => o1(e.size, ["30px", "36px", "45px", "67px"])),
+        d = u(() => o1(e.size, ["12px", "16px", "24px", "32px"])),
         m = u(() => e.gap ?? d.value),
         $ = u(() => +m.value.slice(0, -2) * -0.5 - 5 + "px"),
         k = u(() =>
@@ -11940,7 +11958,7 @@ const y7 = (l) => {
                             "div",
                             {
                               key: x,
-                              class: B([
+                              class: Z([
                                 `item ${x}`,
                                 {
                                   dashed:
@@ -11967,14 +11985,14 @@ const y7 = (l) => {
                                       "input",
                                       {
                                         key: C,
-                                        onInput: (Z) => L(Z.target, x, +C),
+                                        onInput: (B) => L(B.target, x, +C),
                                         onKeydown: [
                                           m1(
-                                            (Z) => L(Z.target, x, +C, !0),
+                                            (B) => L(B.target, x, +C, !0),
                                             ["delete"]
                                           ),
                                           m1(
-                                            (Z) =>
+                                            (B) =>
                                               A(y1)(
                                                 "left",
                                                 a.value,
@@ -11985,7 +12003,7 @@ const y7 = (l) => {
                                             ["left"]
                                           ),
                                           m1(
-                                            (Z) =>
+                                            (B) =>
                                               A(y1)(
                                                 "right",
                                                 a.value,
@@ -11997,7 +12015,7 @@ const y7 = (l) => {
                                           ),
                                         ],
                                         type: H.secret ? "password" : "text",
-                                        class: B([
+                                        class: Z([
                                           `input ${C}`,
                                           {
                                             firstInput:
@@ -12051,7 +12069,7 @@ const y7 = (l) => {
                             "div",
                             {
                               key: x,
-                              class: B([
+                              class: Z([
                                 `item ${x}`,
                                 {
                                   dashed:
@@ -12078,14 +12096,14 @@ const y7 = (l) => {
                                       "input",
                                       {
                                         key: C,
-                                        onInput: (Z) => L(Z.target, x, +C),
+                                        onInput: (B) => L(B.target, x, +C),
                                         onKeydown: [
                                           m1(
-                                            (Z) => L(Z.target, x, +C, !0),
+                                            (B) => L(B.target, x, +C, !0),
                                             ["delete"]
                                           ),
                                           m1(
-                                            (Z) =>
+                                            (B) =>
                                               A(y1)(
                                                 "left",
                                                 a.value,
@@ -12096,7 +12114,7 @@ const y7 = (l) => {
                                             ["left"]
                                           ),
                                           m1(
-                                            (Z) =>
+                                            (B) =>
                                               A(y1)(
                                                 "right",
                                                 a.value,
@@ -12108,7 +12126,7 @@ const y7 = (l) => {
                                           ),
                                         ],
                                         type: H.secret ? "password" : "text",
-                                        class: B([
+                                        class: Z([
                                           `input ${C}`,
                                           {
                                             firstInput:
@@ -12665,7 +12683,7 @@ const y7 = (l) => {
               ["visible"]
             ),
             y(
-              ll,
+              tl,
               {
                 active: w.value,
                 "onUpdate:active": z[18] || (z[18] = (C) => (w.value = C)),
@@ -12814,7 +12832,7 @@ const y7 = (l) => {
         s(
           "div",
           {
-            class: B([
+            class: Z([
               "button",
               {
                 "flex-column": c.iconPos === "top" || c.iconPos === "bottom",
@@ -12841,7 +12859,7 @@ const y7 = (l) => {
                   "span",
                   {
                     key: 0,
-                    class: B([
+                    class: Z([
                       "icon",
                       {
                         "order-1": c.iconPos === "left" || c.iconPos === "top",
@@ -12877,14 +12895,14 @@ const y7 = (l) => {
     ),
     emits: ["update:modelValue"],
     setup(l) {
-      o1((r) => ({
+      l1((r) => ({
         d2069796: a.value,
         "3fa0b403": c.value,
         "70848d26": i.value,
       }));
       const e = l,
         o = N(l, "modelValue"),
-        i = u(() => e1(e.size, ["15px", "25px", "40px", "60px"])),
+        i = u(() => o1(e.size, ["15px", "25px", "40px", "60px"])),
         a = u(() => (e.size === "small" ? "2px" : "3px")),
         c = u(() => `calc(${i.value} * 0.3)`);
 
@@ -12963,7 +12981,7 @@ const y7 = (l) => {
                           style: b(
                             `padding: ${_.value}; color: ${w.value}; font-size: ${g.value}`
                           ),
-                          class: B([
+                          class: Z([
                             "text",
                             {
                               bold:
@@ -13001,7 +13019,7 @@ const y7 = (l) => {
                 id: "inputColor",
                 "onUpdate:modelValue": p[0] || (p[0] = (f) => (o.value = f)),
                 disabled: r.disabled,
-                class: B({
+                class: Z({
                   noVisible: !!r.buttonProps,
                   disabled: r.disabled,
                 }),
@@ -13057,7 +13075,7 @@ const y7 = (l) => {
     emits: ["toggleIsOpen", "onClick"],
     setup(l) {
       return (
-        o1((e) => ({
+        l1((e) => ({
           "327a5a3c": e.themeColor,
         })),
         (e, o) => {
@@ -13077,7 +13095,7 @@ const y7 = (l) => {
                       "li",
                       {
                         key: a.label,
-                        class: B([
+                        class: Z([
                           "item",
                           {
                             pl27: !a.children,
@@ -13092,7 +13110,7 @@ const y7 = (l) => {
                           t(
                             "section",
                             {
-                              class: B([
+                              class: Z([
                                 "textContainer",
                                 {
                                   pointer: a.children,
@@ -13107,7 +13125,7 @@ const y7 = (l) => {
                                     a2,
                                     {
                                       key: 0,
-                                      class: B([
+                                      class: Z([
                                         "openButton",
                                         {
                                           openButtonOpened: e.state.find(
@@ -13135,7 +13153,7 @@ const y7 = (l) => {
                                 {
                                   href: a.link,
                                   target: a.linkBlank ? "_blank" : "_self",
-                                  class: B([
+                                  class: Z([
                                     "label",
                                     {
                                       bold: a.textStyle === "bold",
@@ -13425,7 +13443,7 @@ export {
   X5 as LineDiagonalIcon,
   F3 as LineDottedIcon,
   S9 as LineIcon,
-  ll as MenuDial,
+  tl as MenuDial,
   D7 as Modal,
   qo as MoveIcon,
   c8 as Paginator,

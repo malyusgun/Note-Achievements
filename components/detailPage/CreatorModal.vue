@@ -39,7 +39,7 @@ const createPage = () => {
             children: [
               {
                 itemId: uuidv4(),
-                label: "",
+                label: "Поспать",
                 checked: false,
                 points: 1,
               },
