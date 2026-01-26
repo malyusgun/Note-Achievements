@@ -6,7 +6,15 @@ defineProps<IMenuItemProps>();
 </script>
 
 <template>
-  <NuxtLink class="menu-item" :to="link">
+  <NuxtLink
+    :class="[
+      'menu-item',
+      {
+        '--active': currentPath === (link?.startsWith('/') ? link : '/' + link),
+      },
+    ]"
+    :to="link"
+  >
     <Button iconOnly :theme="theme">
       <AppIcon :name="icon" :size="32" class="menu-item__icon" />
     </Button>
@@ -23,7 +31,7 @@ defineProps<IMenuItemProps>();
   gap: 12px;
   cursor: pointer;
 
-  &:not(:hover) {
+  &:not(:hover):not(.--active) {
     .menu-item__label {
       color: v-bind(contrastColor);
       border-color: v-bind(contrastColor);

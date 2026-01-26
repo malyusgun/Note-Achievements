@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type {
-  IPageBlockListItem,
   IPageBlockListItemData,
   IPageBlockListItemSettingsModalProps,
 } from "~/types";
@@ -12,10 +11,33 @@ const props = defineProps<IPageBlockListItemSettingsModalProps>();
 const settingsModal = defineModel();
 const emit = defineEmits(["saveChanges", "deleteItem"]);
 
-const newItemData = ref<Required<IPageBlockListItem> | null>(null);
+const itemData = computed({
+  get: () => props.item,
+  set: () => {
+    // Read-only computed, changes are made directly to props.item
+    // This is safe because parent already cloned the item
+  },
+});
+
+const childrenPoints = computed(() => {
+  if (!itemData.value?.children) return 0;
+  return itemData.value.children.reduce((acc, child) => acc + child.points, 0);
+});
+
+watch(
+  [() => itemData.value?.showChildren, childrenPoints],
+  () => {
+    if (!itemData.value) return;
+    if (itemData.value.showChildren) {
+      itemData.value.points = childrenPoints.value;
+    }
+  },
+  { immediate: true }
+);
 
 const addChild = () => {
-  newItemData.value!.children.push({
+  if (!itemData.value || !itemData.value.children) return;
+  itemData.value.children.push({
     itemId: uuidv4(),
     label: generateItemLabel(),
     checked: false,
@@ -24,82 +46,101 @@ const addChild = () => {
 };
 
 const deleteChild = (child: IPageBlockListItemData) => {
-  newItemData.value!.children = newItemData.value!.children.filter(
+  if (!itemData.value || !itemData.value.children) return;
+  itemData.value.children = itemData.value.children.filter(
     (i) => i.itemId !== child.itemId
   );
 };
 
 const onChangeShowChildren = (newValue: boolean) => {
-  if (!newItemData.value) return;
+  if (!itemData.value) return;
 
-  newItemData.value.showChildren = newValue;
-  newItemData.value.points = newItemData.value.children.reduce(
-    (acc, child) => acc + child.points,
-    0
+  itemData.value.showChildren = newValue;
+  if (newValue) {
+    itemData.value.points = childrenPoints.value;
+  }
+};
+
+const onToggleTracker = () => {
+  if (!itemData.value) return;
+
+  if (itemData.value.tracker) {
+    delete itemData.value.tracker;
+  } else {
+    itemData.value.tracker = {
+      max: 10,
+      value: 0,
+    };
+  }
+};
+
+const onToggleTrackerChild = (childId: string) => {
+  if (!itemData.value?.children) return;
+  const child = itemData.value.children.find(
+    (child) => child.itemId === childId
   );
+  if (!child) return;
+
+  if (child.tracker) {
+    itemData.value.children = itemData.value.children.map((child) => {
+      if (child.itemId !== childId) return child;
+      delete child.tracker;
+      return child;
+    });
+  } else {
+    itemData.value.children = itemData.value.children.map((child) => {
+      if (child.itemId !== childId) return child;
+      return {
+        ...child,
+        tracker: {
+          max: 10,
+          value: 0,
+        },
+      };
+    });
+  }
 };
 
 const onSave = () => {
-  emit("saveChanges", newItemData.value);
+  if (!itemData.value) return;
+
+  if (itemData.value.showChildren && itemData.value.tracker)
+    delete itemData.value.tracker;
+  emit("saveChanges", itemData.value);
   settingsModal.value = false;
 };
 
 const deleteItem = () => {
-  emit("deleteItem", props.item?.itemId);
+  if (!props.item?.itemId) return;
+  emit("deleteItem", props.item.itemId);
   settingsModal.value = false;
 };
-
-watch(
-  settingsModal,
-  () => {
-    console.log("props.item: ", props.item);
-    if (props.item) {
-      newItemData.value = structuredClone(toRaw(props.item));
-    }
-  },
-  { immediate: true }
-);
-
-watch(
-  () => newItemData.value?.children,
-  (children) => {
-    if (!children || !newItemData.value) return;
-
-    newItemData.value.points = children.reduce(
-      (acc, child) => acc + child.points,
-      0
-    );
-  },
-  { deep: true }
-);
 </script>
 
 <template>
   <Modal
-    v-if="item && newItemData"
     v-model:visible="settingsModal"
-    width="40%"
+    width="800px"
     dismissible
     paddingRightOnActive="0"
   >
-    <template #header> Пункт "{{ item.label }}"</template>
-    <pre>{{ item }}</pre>
+    <template #header> Пункт "{{ itemData?.label }}"</template>
     <div class="settings">
-      <section class="settings__children children">
-        <div class="children__toggle">
-          <span>Подпункты:</span>
-          <ToggleSwitch
-            negativeTheme="grey"
-            :theme="mainTheme"
-            :modelValue="newItemData.showChildren"
-            @update:modelValue="onChangeShowChildren"
-          />
-        </div>
+      <div class="settings__content">
+        <section class="settings__children children">
+          <div class="children__toggle">
+            <span>Подпункты:</span>
+            <ToggleSwitch
+              negativeTheme="grey"
+              :theme="mainTheme"
+              :modelValue="itemData?.showChildren"
+              @update:modelValue="onChangeShowChildren"
+            />
+          </div>
 
-        <div>
-          <ul v-show="newItemData?.showChildren" class="children__list">
+          <ul v-show="itemData?.showChildren" class="children__list">
             <li
-              v-for="(child, index) of newItemData.children"
+              v-for="(child, index) of itemData?.children"
               :key="child.itemId"
               class="children__item"
             >
@@ -115,6 +156,22 @@ watch(
                 :modelValue="child.points"
                 @update:modelValue="child.points = $event"
               />
+              <div class="children__item-tracker">
+                <p class="children__item-tracker-label">Трекер:</p>
+                <ToggleSwitch
+                  negativeTheme="grey"
+                  :theme="mainTheme"
+                  :modelValue="child?.tracker"
+                  @update:modelValue="onToggleTrackerChild(child.itemId)"
+                />
+              </div>
+              <AppInputBordered
+                v-if="child?.tracker"
+                label="Всего:"
+                type="number"
+                :modelValue="child.tracker.max"
+                @update:modelValue="child.tracker.max = $event"
+              />
               <Button
                 iconOnly
                 :theme="mainTheme"
@@ -125,54 +182,73 @@ watch(
               </Button>
             </li>
           </ul>
+        </section>
 
-          <div class="children__buttons">
-            <Button
-              class="children__save-button"
-              label="Сохранить"
-              :theme="mainTheme === 'green' ? 'sky' : 'green'"
-              @click="onSave"
-            >
-              <AppIcon name="save" :size="16" />
-            </Button>
-
-            <Button
-              v-show="newItemData?.showChildren"
-              class="children__add-button"
-              label="Добавить"
+        <section v-if="itemData?.points" class="settings__common common">
+          <AppInputBordered
+            v-model="itemData.points"
+            label="Вес:"
+            type="number"
+            :disabled="itemData?.showChildren"
+          />
+          <div v-if="!itemData?.showChildren" class="tracker">
+            <p class="tracker-label">Трекер:</p>
+            <ToggleSwitch
+              negativeTheme="grey"
               :theme="mainTheme"
-              @click="addChild"
-            >
-              <AppIcon name="plus" :size="16" />
-            </Button>
-
-            <Button
-              class="children__save-button"
-              label="Удалить пункт"
-              theme="red"
-              @click="deleteItem"
-            >
-              <AppIcon name="basket" :size="16" />
-            </Button>
+              :modelValue="itemData?.tracker"
+              @update:modelValue="onToggleTracker"
+            />
           </div>
-        </div>
-      </section>
-      <section class="settings__points">
-        <AppInputBordered
-          v-model="newItemData.points"
-          label="Вес:"
-          type="number"
-          :disabled="newItemData.showChildren"
-        />
-      </section>
+          <AppInputBordered
+            v-if="itemData?.tracker && !itemData?.showChildren"
+            label="Всего:"
+            type="number"
+            :modelValue="itemData.tracker.max"
+            @update:modelValue="itemData.tracker.max = $event"
+          />
+        </section>
+      </div>
+
+      <div class="children__buttons">
+        <Button
+          class="children__save-button"
+          label="Сохранить"
+          :theme="mainTheme === 'green' ? 'sky' : 'green'"
+          @click="onSave"
+        >
+          <AppIcon name="save" :size="16" />
+        </Button>
+
+        <Button
+          v-show="itemData?.showChildren"
+          class="children__add-button"
+          label="Добавить"
+          :theme="mainTheme"
+          @click="addChild"
+        >
+          <AppIcon name="plus" :size="16" />
+        </Button>
+
+        <Button
+          class="children__save-button"
+          label="Удалить пункт"
+          theme="red"
+          @click="deleteItem"
+        >
+          <AppIcon name="basket" :size="16" />
+        </Button>
+      </div>
     </div>
   </Modal>
 </template>
 
 <style scoped lang="scss">
 .settings {
-  display: flex;
-  justify-content: space-between;
+  &__content {
+    display: flex;
+    justify-content: space-between;
+  }
 
   &__children {
     flex: 1;
@@ -199,6 +275,14 @@ watch(
       position: relative;
     }
 
+    &__item-tracker {
+      margin-bottom: 8px;
+    }
+
+    &__item-tracker-label {
+      margin-bottom: 10px;
+    }
+
     &__item-number {
       position: absolute;
       top: 50%;
@@ -209,6 +293,22 @@ watch(
     &__buttons {
       display: flex;
       justify-content: space-between;
+    }
+  }
+
+  &__common {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 15px;
+  }
+
+  .common {
+    height: max-content;
+  }
+
+  .tracker {
+    &-label {
+      margin-bottom: 10px;
     }
   }
 }

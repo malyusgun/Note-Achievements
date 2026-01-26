@@ -1,15 +1,24 @@
 <script setup lang="ts">
 const emit = defineEmits(["openPageCreator", "openSettings"]);
 
+const route = useRoute();
 const mainStore = useMainStore();
 
+const routePath = computed(() => route.path);
 const pages = computed(() => mainStore.pages);
 const mainTheme = computed(() => mainStore.mainTheme);
 const contrastColor = computed(() => mainStore.contrastColor);
 </script>
 
 <template>
-  <aside class="menu">
+  <aside
+    :class="[
+      'menu',
+      {
+        '--home-page': route.path === '/',
+      },
+    ]"
+  >
     <section class="menu__items">
       <AppMenuItem
         icon="home"
@@ -17,6 +26,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
         link="/"
         :theme="mainTheme"
         :contrastColor="contrastColor"
+        :currentPath="routePath"
       />
 
       <template v-for="page of pages" :key="page.pageId">
@@ -26,6 +36,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
           :link="page.link"
           :theme="mainTheme"
           :contrastColor="contrastColor"
+          :currentPath="routePath"
         />
       </template>
 
@@ -36,6 +47,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
         class="menu__add-button"
         :theme="mainTheme"
         :contrastColor="contrastColor"
+        :currentPath="routePath"
       />
     </section>
 
@@ -46,6 +58,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
         @click="emit('openSettings')"
         :theme="mainTheme"
         :contrastColor="contrastColor"
+        :currentPath="routePath"
       />
     </section>
   </aside>
@@ -63,7 +76,8 @@ const contrastColor = computed(() => mainStore.contrastColor);
   flex-direction: column;
   justify-content: space-between;
 
-  &:hover {
+  &:hover,
+  &.--home-page {
     width: 250px;
 
     :deep(.menu-item__label) {

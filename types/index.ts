@@ -22,6 +22,7 @@ export interface IMenuItemProps {
   link?: string;
   theme: TMainTheme;
   contrastColor: TSecondTheme;
+  currentPath: string;
 }
 
 export interface IInputProps {
@@ -43,7 +44,7 @@ export interface IPageBlock {
   blockId: string;
   label: string;
   progress: number;
-  list: Required<IPageBlockListItem>[];
+  list: IPageBlockListItem[];
 }
 
 export interface IPageBlockProps {
@@ -55,7 +56,7 @@ export interface IPageBlockProps {
 export interface IPageBlockListProps {
   pageId: string;
   blockId: string;
-  list: Required<IPageBlockListItem>[];
+  list: IPageBlockListItem[];
   mainTheme: TMainTheme;
 }
 
@@ -69,6 +70,10 @@ export interface IPageBlockListItemData {
   label: string;
   checked: boolean;
   points: number;
+  tracker?: {
+    max: number;
+    value: number;
+  };
 }
 
 export interface IPageBlockListItemProps {
@@ -77,7 +82,7 @@ export interface IPageBlockListItemProps {
 }
 
 export interface IPageBlockListItemSettingsModalProps {
-  item: Required<IPageBlockListItem> | null;
+  item: IPageBlockListItem | null;
   mainTheme?: TMainTheme;
 }
 

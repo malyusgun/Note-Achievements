@@ -3,6 +3,34 @@ import { Knob, Button } from "@featherui";
 
 const mainStore = useMainStore();
 
+const knobColorGaps = [
+  {
+    start: 0,
+    end: 20,
+    color: "red",
+  },
+  {
+    start: 21,
+    end: 40,
+    color: "orange",
+  },
+  {
+    start: 41,
+    end: 60,
+    color: "yellow",
+  },
+  {
+    start: 61,
+    end: 80,
+    color: "green",
+  },
+  {
+    start: 81,
+    end: 100,
+    color: "sky",
+  },
+];
+
 const pages = computed(() => mainStore.pages);
 const mainTheme = computed(() => mainStore.mainTheme);
 const contrastColor = computed(() => mainStore.contrastColor);
@@ -19,16 +47,20 @@ const contrastColor = computed(() => mainStore.contrastColor);
           :key="block.blockId"
           class="page__block"
         >
-          <Knob
-            :modelValue="block.progress"
-            :max="100"
-            :theme="mainTheme"
-            :negativeTheme="contrastColor === 'white' ? 'white' : '#18181b'"
-            :color="contrastColor === 'white' ? 'white' : '#18181b'"
-            :background="contrastColor === 'white' ? '#18181b' : 'white'"
-            size="giant"
-            disabled
-          />
+          <div style="width: max-content">
+            <Knob
+              :modelValue="block.progress"
+              :max="100"
+              :colorGaps="knobColorGaps"
+              :negativeTheme="contrastColor === 'white' ? 'white' : '#18181b'"
+              :color="contrastColor === 'white' ? 'white' : '#18181b'"
+              :background="contrastColor === 'white' ? '#18181b' : 'white'"
+              size="giant"
+              disabled
+            />
+
+            <p class="page__block-label">{{ block.label }}</p>
+          </div>
         </li>
       </ul>
     </section>
@@ -44,7 +76,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
 
 .page {
   &__name {
-    font-size: 28px;
+    font-size: 40px;
     margin: 40px 0;
   }
 
@@ -54,7 +86,10 @@ const contrastColor = computed(() => mainStore.contrastColor);
     gap: 40px;
   }
 
-  &__block {
+  &__block-label {
+    width: max-content;
+    margin: 0 auto;
+    font-size: 20px;
   }
 }
 </style>

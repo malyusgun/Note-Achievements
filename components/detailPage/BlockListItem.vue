@@ -1,101 +1,138 @@
 <script setup lang="ts">
-import type { IPageBlockListItemProps } from "~/types";
-import { Button, Checkbox } from "@featherui";
+import type { IPageBlockListItem, IPageBlockListItemProps } from "~/types";
+import { Button, Checkbox, Slider } from "@featherui";
 
 const props = defineProps<IPageBlockListItemProps>();
 const emit = defineEmits(["openItemSettings", "saveItemChanges"]);
 
-const pointsProgress = ref();
-const itemChildrenCheckedCount = computed(
-  () =>
-    props.item.children &&
-    props.item.children.filter((child) => child.checked).length
+const itemRef = computed(() => props.item);
+const sliderMax = computed(() => props.item.tracker?.max);
+const sliderOptions = computed<
+  { label: number; value: number; color: string }[]
+>(() => {
+  const result: { label: number; value: number; color: string }[] = [];
+  if (!sliderMax.value) return result;
+
+  const step = Math.ceil(sliderMax.value / 5);
+  let current = sliderMax.value;
+
+  while (current > 0) {
+    result.push({
+      label: current,
+      value: current,
+      color: ["red", "orange", "yellow", "green", "sky"][
+        Math.floor(current / step) - 1
+      ]!,
+    });
+    current -= step;
+  }
+
+  if (!result.find((item) => !item.label)) {
+    result.push({
+      label: 0,
+      value: 0,
+      color: "red",
+    });
+  }
+  return result.reverse();
+});
+const { pointsProgress, isUpdating, itemChildrenCheckedCount } =
+  useBlockListItem(itemRef);
+
+// Local ref for label to avoid prop mutation
+const itemLabel = ref(props.item.label);
+
+// Sync local label with prop changes
+watch(
+  () => props.item.label,
+  (newLabel) => {
+    if (newLabel !== itemLabel.value) {
+      itemLabel.value = newLabel;
+    }
+  },
+  { immediate: true }
 );
 
-const isUpdating = ref(false);
-
-const countPointsProgress = () => {
-  const item = props.item;
-  if (!item.children) return item.points;
-  if (!item.showChildren)
-    return `${item.checked ? item.points : 0}/${item.points}`;
-
-  const current = item.children.reduce((acc, child) => {
-    if (!child.checked) return acc;
-    return acc + child.points;
-  }, 0);
-  const total = item.children.reduce((acc, child) => acc + child.points, 0);
-
-  return `${current}/${total}`;
-};
-
 const onChangeLabel = (newLabel: string) => {
-  emit("saveItemChanges", {
-    itemId: props.item.itemId,
-    label: newLabel,
-  });
+  if (!newLabel || !newLabel.trim()) {
+    console.warn("Label cannot be empty");
+    return;
+  }
+  itemLabel.value = newLabel;
+  emit(
+    "saveItemChanges",
+    {
+      itemId: props.item.itemId,
+      label: newLabel,
+    },
+    !props.item.children
+  );
 };
 
 const onChangeChecked = (newValue: boolean) => {
-  if (props.item.children) {
-    emit("saveItemChanges", {
-      checked: newValue,
-      itemId: props.item.itemId,
-      children: toRaw(props.item.children).map((child) => ({
-        ...child,
-        checked: newValue,
-      })),
-    });
-  } else {
-    emit(
-      "saveItemChanges",
-      {
-        itemId: props.item.itemId,
-        checked: newValue,
-      },
-      true
-    );
+  const item = props.item;
+  let isChild = false;
+  const changes: Partial<IPageBlockListItem> = {
+    checked: newValue,
+    itemId: item.itemId,
+  };
+
+  if (item.tracker) {
+    changes.tracker = {
+      max: item.tracker?.max,
+      value: newValue ? item.tracker?.max : 0,
+    };
   }
+
+  if (item.children) {
+    changes.children = toRaw(item.children).map((child) => ({
+      ...child,
+      checked: newValue,
+    }));
+  } else {
+    isChild = true;
+  }
+
+  emit("saveItemChanges", changes, isChild);
 };
 
-watch(
-  () => props.item.points,
-  () => {
-    pointsProgress.value = countPointsProgress();
-  }
-);
+const onChangeTracker = (newValue: string | number) => {
+  newValue = +newValue;
+  if (!props.item.tracker) return;
+
+  const changes: Partial<IPageBlockListItem> = {
+    itemId: props.item.itemId,
+    tracker: {
+      value: newValue,
+      max: props.item.tracker.max,
+    },
+  };
+  if (props.item.tracker.max === newValue) changes.checked = true;
+  if (props.item.tracker.max !== newValue && props.item.checked)
+    changes.checked = false;
+
+  emit("saveItemChanges", changes, !props.item.children);
+};
 
 watch(
   itemChildrenCheckedCount,
   (count) => {
-    isUpdating.value = true;
-    setTimeout(() => {
-      pointsProgress.value = countPointsProgress();
-      isUpdating.value = false;
-    }, 100);
+    if (!props.item.showChildren || !props.item.children) return;
 
-    if (!props.item.showChildren) return;
-
-    if (
-      props.item.children &&
-      count === props.item.children.length &&
-      !props.item.checked
-    )
+    const allChecked = count === props.item.children.length;
+    if (allChecked && !props.item.checked) {
       emit("saveItemChanges", {
         itemId: props.item.itemId,
         checked: true,
       });
-    if (
-      props.item.children &&
-      count !== props.item.children.length &&
-      props.item.checked
-    )
+    } else if (!allChecked && props.item.checked) {
       emit("saveItemChanges", {
         itemId: props.item.itemId,
         checked: false,
       });
+    }
   },
-  { immediate: true, deep: true }
+  { deep: true }
 );
 </script>
 
@@ -128,10 +165,26 @@ watch(
       />
 
       <AppInput
-        v-model="item.label"
+        v-model="itemLabel"
         @change="onChangeLabel"
         class="page-block-list-item__input"
       />
+
+      <div v-if="item.tracker" class="page-block-list-item__slider">
+        <Slider
+          :max="item.tracker.max"
+          isSmooth
+          width="200"
+          :options="sliderOptions"
+          :modelValue="item.tracker.value"
+          @update:modelValue="onChangeTracker"
+        />
+        <AppInputBordered
+          type="number"
+          :modelValue="item.tracker.value"
+          @update:modelValue="onChangeTracker"
+        />
+      </div>
 
       <span
         :class="[
@@ -183,12 +236,16 @@ watch(
     margin-left: -40px;
   }
 
-  &__checkbox {
-  }
-
   &__input {
     width: 100%;
     flex: 1;
+  }
+
+  &__slider {
+    display: flex;
+    gap: 10px;
+    margin: 10px 20px;
+    font-size: 16px;
   }
 
   &__settings {

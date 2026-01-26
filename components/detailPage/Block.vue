@@ -20,13 +20,19 @@ const progressBarValue = computed(() => {
   let total = 0;
   for (const item of list.value) {
     total += item.points;
-    if (item.showChildren) {
-      active += item.children.reduce(
-        (acc, cur) => (cur.checked ? acc + cur.points : acc),
-        0
-      );
+    if (item.showChildren && item.children) {
+      active += item.children.reduce((acc, cur) => {
+        if (cur.checked) return acc + cur.points;
+        if (cur.tracker)
+          return acc + (cur.points / cur.tracker.max) * cur.tracker.value;
+        return acc;
+      }, 0);
     } else {
-      active += item.checked ? item.points : 0;
+      active += item.checked
+        ? item.points
+        : item.tracker
+          ? (item.points / item.tracker.max) * item.tracker.value
+          : 0;
     }
   }
   return ((active / (total || 1)) * 100).toFixed(0);

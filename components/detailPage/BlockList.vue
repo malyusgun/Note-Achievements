@@ -1,68 +1,70 @@
 <script setup lang="ts">
-import type { IPageBlockListItem, IPageBlockListProps } from "~/types";
-import { Button } from "@featherui";
+import type {
+  IPageBlockListItem,
+  IPageBlockListProps,
+  IPageData,
+} from "~/types";
 
 const mainStore = useMainStore();
 
 const props = defineProps<IPageBlockListProps>();
 
-const activeSettingsItem = shallowRef<Required<IPageBlockListItem> | null>(
-  props.list[0] || null
-);
+const activeSettingsItem = ref<IPageBlockListItem | null>(null);
 const settingsActive = ref<boolean>(false);
 
 const page = computed(() =>
-  mainStore.pages.find((page) => page.pageId === props.pageId)
+  mainStore.pages.find((page: IPageData) => page.pageId === props.pageId)
 );
 
-const openItemSettings = (item: Required<IPageBlockListItem>) => {
-  activeSettingsItem.value = item;
+const openItemSettings = (item: IPageBlockListItem) => {
+  activeSettingsItem.value = deepClone(item);
   settingsActive.value = true;
 };
 
-const saveItemChanges = (
-  newData: Partial<IPageBlockListItem>,
-  isChild?: boolean
-) => {
-  if (page.value) {
-    const blocks = toRaw(page.value.blocks).map((block) => {
-      if (block.blockId !== props.blockId) return block;
-
-      if (isChild) {
-        const list = block.list.map((item) => {
-          const currentChild = item.children.find(
-            (child) => child.itemId === newData.itemId
-          );
-          if (!currentChild) return item;
-          return {
-            ...item,
-            children: item.children.map((child) => {
-              if (child.itemId !== newData.itemId) return child;
-              return { ...currentChild, ...newData };
-            }),
-          };
-        });
-        return { ...block, list };
-      } else {
-        const list = block.list.map((item) => {
-          if (item.itemId !== newData.itemId) return item;
-          return { ...item, ...newData };
-        });
-        return { ...block, list };
+const saveItemChanges = (newData: IPageBlockListItem, isChild?: boolean) => {
+  if (!page.value || !newData.itemId) {
+    console.warn("Cannot save changes: missing page or itemId");
+    return;
+  }
+  try {
+    if (isChild) {
+      const parentItem = props.list.find((item) =>
+        item.children?.some((child) => child.itemId === newData.itemId)
+      );
+      if (!parentItem) {
+        console.warn(`Parent item not found for child ${newData.itemId}`);
+        return;
       }
-    });
-    mainStore.editPage({ pageId: page.value.pageId, blocks });
+      mainStore.updateBlockListItemChild(
+        page.value.pageId,
+        props.blockId,
+        parentItem.itemId,
+        newData.itemId,
+        newData
+      );
+    } else {
+      mainStore.updateBlockListItem(
+        page.value.pageId,
+        props.blockId,
+        newData.itemId,
+        newData
+      );
+    }
+  } catch (error) {
+    console.error("Error saving item changes:", error);
   }
 };
 
 const deleteItem = (itemId: string) => {
-  if (page.value) {
-    const blocks = page.value.blocks.map((block) => {
-      if (block.blockId !== props.blockId) return block;
-      const list = block.list.filter((item) => item.itemId !== itemId);
-      return { ...block, list };
-    });
-    mainStore.editPage({ pageId: page.value.pageId, blocks });
+  if (!page.value || !itemId) {
+    console.warn("Cannot delete item: missing page or itemId");
+    return;
+  }
+
+  try {
+    mainStore.deleteBlockListItem(page.value.pageId, props.blockId, itemId);
+  } catch (error) {
+    console.error("Error deleting item:", error);
   }
 };
 </script>

@@ -46,16 +46,13 @@ const deletePage = () => {
   if (!deletePageData.value) return;
 
   mainStore.deletePage(deletePageData.value.pageId);
-  console.log(
-    "route.path, deletePageData.value.link: ",
-    route.path,
-    deletePageData.value.link
-  );
-  if (route.name === deletePageData.value.link) {
+
+  if (route.path && route.path.slice(1) === deletePageData.value.link) {
     router.push({ path: "/" });
   }
 
   deleteModal.value = false;
+  settingsModal.value = false;
 };
 </script>
 

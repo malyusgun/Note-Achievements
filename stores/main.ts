@@ -1,4 +1,9 @@
-import type { IPageData, TMainTheme } from "~/types";
+import type {
+  IPageData,
+  IPageBlockListItem,
+  IPageBlockListItemData,
+  TMainTheme,
+} from "~/types";
 
 export const useMainStore = defineStore("mainStore", () => {
   const pages = ref<IPageData[]>(
@@ -49,6 +54,86 @@ export const useMainStore = defineStore("mainStore", () => {
     localStorage.setItem("pages", JSON.stringify(pages.value));
   };
 
+  const updateBlockListItem = (
+    pageId: string,
+    blockId: string,
+    itemId: string,
+    updates: Partial<IPageBlockListItem>
+  ) => {
+    const page = pages.value.find((p) => p.pageId === pageId);
+    if (!page) {
+      console.warn(`Page with id ${pageId} not found`);
+      return;
+    }
+
+    const blocks = toRaw(page.blocks).map((block) => {
+      if (block.blockId !== blockId) return block;
+
+      const list = block.list.map((item) => {
+        if (item.itemId !== itemId) return item;
+        return { ...item, ...updates };
+      });
+
+      return { ...block, list };
+    });
+
+    editPage({ pageId, blocks });
+  };
+
+  const updateBlockListItemChild = (
+    pageId: string,
+    blockId: string,
+    parentItemId: string,
+    childItemId: string,
+    updates: Partial<IPageBlockListItemData>
+  ) => {
+    const page = pages.value.find((p) => p.pageId === pageId);
+    if (!page) {
+      console.warn(`Page with id ${pageId} not found`);
+      return;
+    }
+
+    const blocks = toRaw(page.blocks).map((block) => {
+      if (block.blockId !== blockId) return block;
+
+      const list = block.list.map((item) => {
+        if (item.itemId !== parentItemId || !item.children) return item;
+
+        const children = item.children.map((child) => {
+          if (child.itemId !== childItemId) return child;
+          return { ...child, ...updates };
+        });
+
+        return { ...item, children };
+      });
+
+      return { ...block, list };
+    });
+
+    editPage({ pageId, blocks });
+  };
+
+  const deleteBlockListItem = (
+    pageId: string,
+    blockId: string,
+    itemId: string
+  ) => {
+    const page = pages.value.find((p) => p.pageId === pageId);
+    if (!page) {
+      console.warn(`Page with id ${pageId} not found`);
+      return;
+    }
+
+    const blocks = toRaw(page.blocks).map((block) => {
+      if (block.blockId !== blockId) return block;
+
+      const list = block.list.filter((item) => item.itemId !== itemId);
+      return { ...block, list };
+    });
+
+    editPage({ pageId, blocks });
+  };
+
   return {
     pages,
     mainTheme,
@@ -60,5 +145,8 @@ export const useMainStore = defineStore("mainStore", () => {
     getPage,
     editPage,
     deletePage,
+    updateBlockListItem,
+    updateBlockListItemChild,
+    deleteBlockListItem,
   };
 });

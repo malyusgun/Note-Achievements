@@ -36,7 +36,7 @@ const addBlock = () => {
 </script>
 
 <template>
-  <article class="detail-page">
+  <article v-if="pageData" class="detail-page">
     <h1 class="detail-page__title">{{ pageData.name }}</h1>
 
     <template v-for="block of pageData.blocks" :key="block.blockId">
