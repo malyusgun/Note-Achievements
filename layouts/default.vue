@@ -7,11 +7,11 @@ onMounted(() => {
 
 const mainStore = useMainStore();
 
-const pageCreatorModal = ref(false);
+const workspaceCreatorModal = ref(false);
 const settingsModal = ref(false);
 
-const openPageCreator = () => {
-  pageCreatorModal.value = true;
+const openWorkspaceCreator = () => {
+  workspaceCreatorModal.value = true;
 };
 const openSettings = () => {
   settingsModal.value = true;
@@ -20,7 +20,10 @@ const openSettings = () => {
 
 <template>
   <main class="main">
-    <AppMenu @openPageCreator="openPageCreator" @openSettings="openSettings" />
+    <AppMenu
+      @openWorkspaceCreator="openWorkspaceCreator"
+      @openSettings="openSettings"
+    />
 
     <Transition>
       <AppLoader v-if="isLoader" />
@@ -30,7 +33,7 @@ const openSettings = () => {
       <NuxtPage />
     </div>
 
-    <DetailPageCreatorModal v-model="pageCreatorModal" />
+    <WorkspaceCreatorModal v-model="workspaceCreatorModal" />
     <SettingsModal v-model="settingsModal" />
   </main>
 </template>

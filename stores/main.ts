@@ -1,13 +1,13 @@
 import type {
-  IPageData,
-  IPageBlockListItem,
-  IPageBlockListItemData,
+  IWorkspaceData,
+  IWorkspaceBlockListItem,
+  IWorkspaceBlockListItemData,
   TMainTheme,
 } from "~/types";
 
 export const useMainStore = defineStore("mainStore", () => {
-  const pages = ref<IPageData[]>(
-    JSON.parse(localStorage.getItem("pages") || "[]")
+  const workspaces = ref<IWorkspaceData[]>(
+    JSON.parse(localStorage.getItem("workspaces") || "[]")
   );
   const mainTheme = ref<TMainTheme>(
     JSON.parse(localStorage.getItem("mainTheme") || '"blue"')
@@ -28,45 +28,51 @@ export const useMainStore = defineStore("mainStore", () => {
     colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
   };
 
-  const addPage = (pageData: IPageData) => {
-    pages.value.push(pageData);
-    localStorage.setItem("pages", JSON.stringify(pages.value));
+  const addWorkspace = (workspaceData: IWorkspaceData) => {
+    workspaces.value.push(workspaceData);
+    localStorage.setItem("workspaces", JSON.stringify(workspaces.value));
   };
 
-  const getPage = (pageId: string) => {
-    return pages.value.find((page: IPageData) => page.pageId === pageId);
+  const getWorkspace = (workspaceId: string) => {
+    return workspaces.value.find(
+      (workspace: IWorkspaceData) => workspace.workspaceId === workspaceId
+    );
   };
 
-  const editPage = (pageData: Partial<IPageData> & { pageId: string }) => {
-    pages.value = pages.value.map((data: IPageData) => {
-      if (pageData.pageId !== data.pageId) return data;
-      return { ...data, ...pageData };
+  const editWorkspace = (
+    workspaceData: Partial<IWorkspaceData> & { workspaceId: string }
+  ) => {
+    workspaces.value = workspaces.value.map((data: IWorkspaceData) => {
+      if (workspaceData.workspaceId !== data.workspaceId) return data;
+      return { ...data, ...workspaceData };
     });
 
-    localStorage.setItem("pages", JSON.stringify(pages.value));
+    localStorage.setItem("workspaces", JSON.stringify(workspaces.value));
   };
 
-  const deletePage = (pageId: string) => {
-    pages.value = pages.value.filter(
-      (data: IPageData) => pageId !== data.pageId
+  const deleteWorkspace = (workspaceId: string) => {
+    workspaces.value = workspaces.value.filter(
+      (data: IWorkspaceData) => workspaceId !== data.workspaceId
     );
 
-    localStorage.setItem("pages", JSON.stringify(pages.value));
+    localStorage.setItem("workspaces", JSON.stringify(workspaces.value));
   };
 
   const updateBlockListItem = (
-    pageId: string,
+    workspaceId: string,
     blockId: string,
     itemId: string,
-    updates: Partial<IPageBlockListItem>
+    updates: Partial<IWorkspaceBlockListItem>
   ) => {
-    const page = pages.value.find((p) => p.pageId === pageId);
-    if (!page) {
-      console.warn(`Page with id ${pageId} not found`);
+    const workspace = workspaces.value.find(
+      (p) => p.workspaceId === workspaceId
+    );
+    if (!workspace) {
+      console.warn(`Workspace with id ${workspaceId} not found`);
       return;
     }
 
-    const blocks = toRaw(page.blocks).map((block) => {
+    const blocks = toRaw(workspace.blocks).map((block) => {
       if (block.blockId !== blockId) return block;
 
       const list = block.list.map((item) => {
@@ -77,23 +83,25 @@ export const useMainStore = defineStore("mainStore", () => {
       return { ...block, list };
     });
 
-    editPage({ pageId, blocks });
+    editWorkspace({ workspaceId, blocks });
   };
 
   const updateBlockListItemChild = (
-    pageId: string,
+    workspaceId: string,
     blockId: string,
     parentItemId: string,
     childItemId: string,
-    updates: Partial<IPageBlockListItemData>
+    updates: Partial<IWorkspaceBlockListItemData>
   ) => {
-    const page = pages.value.find((p) => p.pageId === pageId);
-    if (!page) {
-      console.warn(`Page with id ${pageId} not found`);
+    const workspace = workspaces.value.find(
+      (p) => p.workspaceId === workspaceId
+    );
+    if (!workspace) {
+      console.warn(`Workspace with id ${workspaceId} not found`);
       return;
     }
 
-    const blocks = toRaw(page.blocks).map((block) => {
+    const blocks = toRaw(workspace.blocks).map((block) => {
       if (block.blockId !== blockId) return block;
 
       const list = block.list.map((item) => {
@@ -110,41 +118,43 @@ export const useMainStore = defineStore("mainStore", () => {
       return { ...block, list };
     });
 
-    editPage({ pageId, blocks });
+    editWorkspace({ workspaceId, blocks });
   };
 
   const deleteBlockListItem = (
-    pageId: string,
+    workspaceId: string,
     blockId: string,
     itemId: string
   ) => {
-    const page = pages.value.find((p) => p.pageId === pageId);
-    if (!page) {
-      console.warn(`Page with id ${pageId} not found`);
+    const workspace = workspaces.value.find(
+      (p) => p.workspaceId === workspaceId
+    );
+    if (!workspace) {
+      console.warn(`Workspace with id ${workspaceId} not found`);
       return;
     }
 
-    const blocks = toRaw(page.blocks).map((block) => {
+    const blocks = toRaw(workspace.blocks).map((block) => {
       if (block.blockId !== blockId) return block;
 
       const list = block.list.filter((item) => item.itemId !== itemId);
       return { ...block, list };
     });
 
-    editPage({ pageId, blocks });
+    editWorkspace({ workspaceId, blocks });
   };
 
   return {
-    pages,
+    workspaces,
     mainTheme,
     colorMode,
     contrastColor,
     setMainTheme,
     toggleColorMode,
-    addPage,
-    getPage,
-    editPage,
-    deletePage,
+    addWorkspace,
+    getWorkspace,
+    editWorkspace,
+    deleteWorkspace,
     updateBlockListItem,
     updateBlockListItemChild,
     deleteBlockListItem,

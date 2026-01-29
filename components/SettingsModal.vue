@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { Modal, ToggleSwitch, Button } from "@featherui";
-import type { IPageData, TMainTheme } from "~/types";
+import type { IWorkspaceData, TMainTheme } from "~/types";
 
 const route = useRoute();
 const router = useRouter();
 const mainStore = useMainStore();
 
-const { mainTheme, colorMode, contrastColor, pages } = storeToRefs(mainStore);
+const { mainTheme, colorMode, contrastColor, workspaces } =
+  storeToRefs(mainStore);
 
 const settingsModal = defineModel();
 
 const deleteModal = ref<boolean>(false);
-const deletePageData = ref<IPageData | null>(null);
+const deleteWorkspaceData = ref<IWorkspaceData | null>(null);
 
 let timerId: number = 0;
 const colors: TMainTheme[] = [
@@ -27,27 +28,27 @@ const colors: TMainTheme[] = [
 ];
 
 const deleteModalDescription = computed(
-  () => `Вы собираетесь удалить страницу "${deletePageData.value?.name}"`
+  () => `Вы собираетесь удалить страницу "${deleteWorkspaceData.value?.name}"`
 );
 
-const onPageChange = (newName: string, pageId: string) => {
+const onWorkspaceChange = (newName: string, workspaceId: string) => {
   clearTimeout(timerId);
   timerId = setTimeout(() => {
-    mainStore.editPage({ pageId, name: newName });
+    mainStore.editWorkspace({ workspaceId, name: newName });
   }, 500);
 };
 
-const openDeleteModal = (page: IPageData) => {
-  deletePageData.value = page;
+const openDeleteModal = (workspace: IWorkspaceData) => {
+  deleteWorkspaceData.value = workspace;
   deleteModal.value = true;
 };
 
-const deletePage = () => {
-  if (!deletePageData.value) return;
+const deleteWorkspace = () => {
+  if (!deleteWorkspaceData.value) return;
 
-  mainStore.deletePage(deletePageData.value.pageId);
+  mainStore.deleteWorkspace(deleteWorkspaceData.value.workspaceId);
 
-  if (route.path && route.path.slice(1) === deletePageData.value.link) {
+  if (route.path && route.path.slice(1) === deleteWorkspaceData.value.link) {
     router.push({ path: "/" });
   }
 
@@ -83,33 +84,37 @@ const deletePage = () => {
           />
         </div>
       </section>
-      <section v-if="pages?.length" class="settings__pages">
-        <h3 class="settings__page-title">Страницы:</h3>
-        <div class="settings__pages-list">
-          <div v-for="page of pages" :key="page.pageId" class="settings__page">
+      <section v-if="workspaces?.length" class="settings__workspaces">
+        <h3 class="settings__workspace-title">Страницы:</h3>
+        <div class="settings__workspaces-list">
+          <div
+            v-for="workspace of workspaces"
+            :key="workspace.workspaceId"
+            class="settings__workspace"
+          >
             <AppInputBordered
-              class="settings__page-input"
-              :modelValue="page.name"
-              @change="onPageChange($event, page.pageId)"
+              class="settings__workspace-input"
+              :modelValue="workspace.name"
+              @change="onWorkspaceChange($event, workspace.workspaceId)"
             />
             <Button
               iconOnly
               :theme="mainTheme"
               size="small"
-              @click="openDeleteModal(page)"
+              @click="openDeleteModal(workspace)"
             >
               <AppIcon name="basket" :size="16" />
             </Button>
           </div>
         </div>
       </section>
-      <div v-else class="settings__no-pages">Страниц пока нет</div>
+      <div v-else class="settings__no-workspaces">Страниц пока нет</div>
     </div>
 
     <ConfirmDeleteModal
       v-model="deleteModal"
       :description="deleteModalDescription"
-      @confirm="deletePage"
+      @confirm="deleteWorkspace"
     />
   </Modal>
 </template>
@@ -149,17 +154,17 @@ const deletePage = () => {
     }
   }
 
-  &__pages-list {
+  &__workspaces-list {
     max-height: 200px;
     padding-right: 20px;
     overflow-y: auto;
   }
 
-  &__page-title {
+  &__workspace-title {
     margin-bottom: 10px;
   }
 
-  &__page {
+  &__workspace {
     display: flex;
     gap: 10px;
 
@@ -168,11 +173,11 @@ const deletePage = () => {
     }
   }
 
-  &__page-input {
+  &__workspace-input {
     width: 200px;
   }
 
-  &__no-pages {
+  &__no-workspaces {
     color: $color-grey;
   }
 }

@@ -1,9 +1,11 @@
-import type { IPageBlockListItem } from "~/types";
+import type { IWorkspaceBlockListItem } from "~/types";
 
 /**
  * Composable for block list item calculations and logic
  */
-export const useBlockListItem = (item: ComputedRef<IPageBlockListItem>) => {
+export const useBlockListItem = (
+  item: ComputedRef<IWorkspaceBlockListItem>
+) => {
   const pointsProgress = ref<string | number>(0);
   const isUpdating = ref(false);
 

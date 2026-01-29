@@ -5,17 +5,19 @@ import { v4 as uuidv4 } from "uuid";
 const mainStore = useMainStore();
 const route = useRoute();
 
-const pageData = computed(
+const workspaceData = computed(
   () =>
-    mainStore.pages.find((page) => page.pageId === (route.params.id as string))!
+    mainStore.workspaces.find(
+      (workspace) => workspace.workspaceId === (route.params.id as string)
+    )!
 );
 const contrastColor = computed(() => mainStore.contrastColor);
 const mainTheme = computed(() => mainStore.mainTheme);
 
 const addBlock = () => {
-  if (!pageData.value) return;
+  if (!workspaceData.value) return;
 
-  pageData.value.blocks.push({
+  workspaceData.value.blocks.push({
     blockId: uuidv4(),
     label: "Название блока",
     progress: 0,
@@ -31,17 +33,17 @@ const addBlock = () => {
     ],
   });
 
-  mainStore.editPage(pageData.value);
+  mainStore.editWorkspace(workspaceData.value);
 };
 </script>
 
 <template>
-  <article v-if="pageData" class="detail-page">
-    <h1 class="detail-page__title">{{ pageData.name }}</h1>
+  <article v-if="workspaceData" class="detail-workspace">
+    <h1 class="detail-workspace__title">{{ workspaceData.name }}</h1>
 
-    <template v-for="block of pageData.blocks" :key="block.blockId">
-      <DetailPageBlock
-        :pageData="pageData"
+    <template v-for="block of workspaceData.blocks" :key="block.blockId">
+      <WorkspaceBlock
+        :workspaceData="workspaceData"
         :block="block"
         :contrastColor="contrastColor"
       />
@@ -54,7 +56,7 @@ const addBlock = () => {
 </template>
 
 <style scoped lang="scss">
-.detail-page {
+.detail-workspace {
   height: 100vh;
   overflow-y: auto;
   padding: 20px 40px;

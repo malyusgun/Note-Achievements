@@ -2,28 +2,28 @@
 import { v4 as uuidv4 } from "uuid";
 import { Modal, Button } from "@featherui";
 import icons from "~/assets/icons";
-import type { IPageData } from "~/types";
+import type { IWorkspaceData } from "~/types";
 
 const mainStore = useMainStore();
 const { mainTheme, contrastColor } = storeToRefs(mainStore);
 
-const pageCreatorModal = defineModel();
+const workspaceCreatorModal = defineModel();
 
-const pageName = ref<string>("");
-const pageIconName = ref<string>(Object.keys(icons)[0] || "");
+const workspaceName = ref<string>("");
+const workspaceIconName = ref<string>(Object.keys(icons)[0] || "");
 
-const setPageIconName = (iconName: string) => {
-  pageIconName.value = iconName;
+const setWorkspaceIconName = (iconName: string) => {
+  workspaceIconName.value = iconName;
 };
 
-const createPage = () => {
-  const pageId = uuidv4();
+const createWorkspace = () => {
+  const workspaceId = uuidv4();
 
-  const pageData: IPageData = {
-    pageId,
-    link: pageId,
-    name: pageName.value,
-    icon: pageIconName.value,
+  const workspaceData: IWorkspaceData = {
+    workspaceId,
+    link: workspaceId,
+    name: workspaceName.value,
+    icon: workspaceIconName.value,
     blocks: [
       {
         blockId: uuidv4(),
@@ -50,53 +50,53 @@ const createPage = () => {
     ],
   };
 
-  mainStore.addPage(pageData);
+  mainStore.addWorkspace(workspaceData);
 
-  pageCreatorModal.value = false;
+  workspaceCreatorModal.value = false;
 };
 </script>
 
 <template>
   <Modal
-    v-model:visible="pageCreatorModal"
+    v-model:visible="workspaceCreatorModal"
     width="30%"
     dismissible
     paddingRightOnActive="0"
   >
     <template #header> Создать страницу</template>
 
-    <div class="page-creator__content">
+    <div class="workspace-creator__content">
       <AppInputBordered
-        v-model="pageName"
+        v-model="workspaceName"
         label="Название"
         placeholder="Тренажёрный зал"
-        class="page-creator__name"
+        class="workspace-creator__name"
       />
 
-      <p class="page-creator__icons-label">Выберите иконку:</p>
-      <div class="page-creator__icons">
+      <p class="workspace-creator__icons-label">Выберите иконку:</p>
+      <div class="workspace-creator__icons">
         <AppIcon
           v-for="icon of Object.entries(icons)"
           :key="icon[0]"
-          :class="`page-creator__icon bg-${mainTheme}`"
-          :style="`${pageIconName === icon[0] ? `border-color: ${contrastColor}` : ''}`"
+          :class="`workspace-creator__icon bg-${mainTheme}`"
+          :style="`${workspaceIconName === icon[0] ? `border-color: ${contrastColor}` : ''}`"
           :name="icon[0]"
-          @click="setPageIconName(icon[0])"
+          @click="setWorkspaceIconName(icon[0])"
         ></AppIcon>
       </div>
 
       <Button
         label="Создать"
         :theme="mainTheme"
-        class="page-creator__submit"
-        @click="createPage"
+        class="workspace-creator__submit"
+        @click="createWorkspace"
       />
     </div>
   </Modal>
 </template>
 
 <style scoped lang="scss">
-.page-creator {
+.workspace-creator {
   &__content {
     width: max-content;
 

@@ -1,29 +1,34 @@
 <script setup lang="ts">
 import type {
-  IPageBlockListItem,
-  IPageBlockListProps,
-  IPageData,
+  IWorkspaceBlockListItem,
+  IWorkspaceBlockListProps,
+  IWorkspaceData,
 } from "~/types";
 
 const mainStore = useMainStore();
 
-const props = defineProps<IPageBlockListProps>();
+const props = defineProps<IWorkspaceBlockListProps>();
 
-const activeSettingsItem = ref<IPageBlockListItem | null>(null);
+const activeSettingsItem = ref<IWorkspaceBlockListItem | null>(null);
 const settingsActive = ref<boolean>(false);
 
-const page = computed(() =>
-  mainStore.pages.find((page: IPageData) => page.pageId === props.pageId)
+const workspace = computed(() =>
+  mainStore.workspaces.find(
+    (workspace: IWorkspaceData) => workspace.workspaceId === props.workspaceId
+  )
 );
 
-const openItemSettings = (item: IPageBlockListItem) => {
+const openItemSettings = (item: IWorkspaceBlockListItem) => {
   activeSettingsItem.value = deepClone(item);
   settingsActive.value = true;
 };
 
-const saveItemChanges = (newData: IPageBlockListItem, isChild?: boolean) => {
-  if (!page.value || !newData.itemId) {
-    console.warn("Cannot save changes: missing page or itemId");
+const saveItemChanges = (
+  newData: IWorkspaceBlockListItem,
+  isChild?: boolean
+) => {
+  if (!workspace.value || !newData.itemId) {
+    console.warn("Cannot save changes: missing workspace or itemId");
     return;
   }
   try {
@@ -36,7 +41,7 @@ const saveItemChanges = (newData: IPageBlockListItem, isChild?: boolean) => {
         return;
       }
       mainStore.updateBlockListItemChild(
-        page.value.pageId,
+        workspace.value.workspaceId,
         props.blockId,
         parentItem.itemId,
         newData.itemId,
@@ -44,7 +49,7 @@ const saveItemChanges = (newData: IPageBlockListItem, isChild?: boolean) => {
       );
     } else {
       mainStore.updateBlockListItem(
-        page.value.pageId,
+        workspace.value.workspaceId,
         props.blockId,
         newData.itemId,
         newData
@@ -56,13 +61,17 @@ const saveItemChanges = (newData: IPageBlockListItem, isChild?: boolean) => {
 };
 
 const deleteItem = (itemId: string) => {
-  if (!page.value || !itemId) {
-    console.warn("Cannot delete item: missing page or itemId");
+  if (!workspace.value || !itemId) {
+    console.warn("Cannot delete item: missing workspace or itemId");
     return;
   }
 
   try {
-    mainStore.deleteBlockListItem(page.value.pageId, props.blockId, itemId);
+    mainStore.deleteBlockListItem(
+      workspace.value.workspaceId,
+      props.blockId,
+      itemId
+    );
   } catch (error) {
     console.error("Error deleting item:", error);
   }
@@ -71,9 +80,13 @@ const deleteItem = (itemId: string) => {
 
 <template>
   <section>
-    <ul class="page-block-list">
-      <li v-for="item of list" :key="item.itemId" class="page-block-list__item">
-        <DetailPageBlockListItem
+    <ul class="workspace-block-list">
+      <li
+        v-for="item of list"
+        :key="item.itemId"
+        class="workspace-block-list__item"
+      >
+        <WorkspaceBlockListItem
           :item="item"
           :mainTheme="mainTheme"
           @openItemSettings="openItemSettings"
@@ -82,7 +95,7 @@ const deleteItem = (itemId: string) => {
       </li>
     </ul>
 
-    <DetailPageBlockListItemSettingsModal
+    <WorkspaceBlockListItemSettingsModal
       v-model="settingsActive"
       :item="activeSettingsItem"
       :mainTheme="mainTheme"
@@ -93,7 +106,7 @@ const deleteItem = (itemId: string) => {
 </template>
 
 <style scoped lang="scss">
-.page-block-list {
+.workspace-block-list {
   &__item {
     display: flex;
     justify-content: space-between;

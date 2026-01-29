@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { Modal, Button, ProgressBar } from "@featherui";
-import type { IPageBlockProps } from "~/types";
+import type { IWorkspaceBlockProps } from "~/types";
 import { v4 as uuidv4 } from "uuid";
 
-const props = defineProps<IPageBlockProps>();
+const props = defineProps<IWorkspaceBlockProps>();
 
 const mainStore = useMainStore();
 
 const deleteModal = ref<boolean>(false);
 
-const pageId = computed(() => props.pageData.pageId);
+const workspaceId = computed(() => props.workspaceData.workspaceId);
 const mainTheme = computed(() => mainStore.mainTheme);
 const list = computed(() => props.block.list);
 const deleteModalDescription = computed(
@@ -40,25 +40,28 @@ const progressBarValue = computed(() => {
 
 const onBlockChange = (changes: object) => {
   const blockId = props.block.blockId;
-  const page = mainStore.getPage(pageId.value);
-  if (!page) return;
+  const workspace = mainStore.getWorkspace(workspaceId.value);
+  if (!workspace) return;
 
-  const blocks = page.blocks.map((block) =>
+  const blocks = workspace.blocks.map((block) =>
     block.blockId === blockId ? { ...block, ...changes } : block
   );
-  mainStore.editPage({ pageId: page.pageId, blocks });
+  mainStore.editWorkspace({ workspaceId: workspace.workspaceId, blocks });
 };
 
 const deleteBlock = () => {
-  const blocks = props.pageData.blocks.filter(
+  const blocks = props.workspaceData.blocks.filter(
     (block) => block.blockId !== props.block.blockId
   );
 
-  mainStore.editPage({ pageId: props.pageData.pageId, blocks });
+  mainStore.editWorkspace({
+    workspaceId: props.workspaceData.workspaceId,
+    blocks,
+  });
 };
 
 const addItem = () => {
-  const blocks = props.pageData.blocks.map((block) => {
+  const blocks = props.workspaceData.blocks.map((block) => {
     if (block.blockId !== props.block.blockId) return block;
 
     return {
@@ -77,11 +80,14 @@ const addItem = () => {
     };
   });
 
-  mainStore.editPage({ pageId: props.pageData.pageId, blocks });
+  mainStore.editWorkspace({
+    workspaceId: props.workspaceData.workspaceId,
+    blocks,
+  });
 };
 
 const updateBlockProgress = (newValue: string) => {
-  const blocks = props.pageData.blocks.map((block) => {
+  const blocks = props.workspaceData.blocks.map((block) => {
     if (block.blockId !== props.block.blockId) return block;
 
     return {
@@ -89,7 +95,10 @@ const updateBlockProgress = (newValue: string) => {
       progress: +newValue,
     };
   });
-  mainStore.editPage({ pageId: props.pageData.pageId, blocks });
+  mainStore.editWorkspace({
+    workspaceId: props.workspaceData.workspaceId,
+    blocks,
+  });
 };
 
 watch(progressBarValue, (value) => {
@@ -98,16 +107,16 @@ watch(progressBarValue, (value) => {
 </script>
 
 <template>
-  <section class="page-block">
-    <h3 class="page-block__title">
+  <section class="workspace-block">
+    <h3 class="workspace-block__title">
       <AppInput
-        class="page-block__title-input"
+        class="workspace-block__title-input"
         :modelValue="block.label"
         @change="(label) => onBlockChange({ label })"
       />
 
       <Button
-        class="page-block__delete-button"
+        class="workspace-block__delete-button"
         iconOnly
         size="small"
         :theme="mainTheme"
@@ -123,7 +132,7 @@ watch(progressBarValue, (value) => {
       />
     </h3>
     <ProgressBar
-      class="page-block__progress"
+      class="workspace-block__progress"
       :value="progressBarValue"
       width="100%"
       :gradient="['red', 'yellow', 'green', '#0066ff']"
@@ -131,12 +140,12 @@ watch(progressBarValue, (value) => {
       disabled
     />
 
-    <DetailPageBlockList
-      :pageId="pageId"
+    <WorkspaceBlockList
+      :workspaceId="workspaceId"
       :blockId="block.blockId"
       :list="block.list"
       :mainTheme="mainTheme"
-      class="page-block__list"
+      class="workspace-block__list"
     />
     <Button label="Добавить пункт" @click="addItem" size="small">
       <AppIcon name="checkmark" :size="14" />
@@ -145,13 +154,13 @@ watch(progressBarValue, (value) => {
 </template>
 
 <style scoped lang="scss">
-.page-block {
+.workspace-block {
   border-top: 2px solid v-bind(contrastColor);
   margin: 20px 0;
   padding: 20px;
 
   &:hover {
-    .page-block__delete-button {
+    .workspace-block__delete-button {
       opacity: 1;
     }
   }

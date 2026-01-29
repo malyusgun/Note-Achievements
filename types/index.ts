@@ -32,40 +32,40 @@ export interface IInputProps {
   disabled?: boolean;
 }
 
-export interface IPageData {
-  pageId: string;
+export interface IWorkspaceData {
+  workspaceId: string;
   name: string;
   icon: string;
   link?: string;
-  blocks: IPageBlock[];
+  blocks: IWorkspaceBlock[];
 }
 
-export interface IPageBlock {
+export interface IWorkspaceBlock {
   blockId: string;
   label: string;
   progress: number;
-  list: IPageBlockListItem[];
+  list: IWorkspaceBlockListItem[];
 }
 
-export interface IPageBlockProps {
-  pageData: IPageData;
-  block: IPageBlock;
+export interface IWorkspaceBlockProps {
+  workspaceData: IWorkspaceData;
+  block: IWorkspaceBlock;
   contrastColor: TSecondTheme;
 }
 
-export interface IPageBlockListProps {
-  pageId: string;
+export interface IWorkspaceBlockListProps {
+  workspaceId: string;
   blockId: string;
-  list: IPageBlockListItem[];
+  list: IWorkspaceBlockListItem[];
   mainTheme: TMainTheme;
 }
 
-export interface IPageBlockListItem extends IPageBlockListItemData {
+export interface IWorkspaceBlockListItem extends IWorkspaceBlockListItemData {
   showChildren?: boolean;
-  children?: IPageBlockListItemData[];
+  children?: IWorkspaceBlockListItemData[];
 }
 
-export interface IPageBlockListItemData {
+export interface IWorkspaceBlockListItemData {
   itemId: string;
   label: string;
   checked: boolean;
@@ -76,13 +76,13 @@ export interface IPageBlockListItemData {
   };
 }
 
-export interface IPageBlockListItemProps {
-  item: IPageBlockListItem;
+export interface IWorkspaceBlockListItemProps {
+  item: IWorkspaceBlockListItem;
   mainTheme: TMainTheme;
 }
 
-export interface IPageBlockListItemSettingsModalProps {
-  item: IPageBlockListItem | null;
+export interface IWorkspaceBlockListItemSettingsModalProps {
+  item: IWorkspaceBlockListItem | null;
   mainTheme?: TMainTheme;
 }
 

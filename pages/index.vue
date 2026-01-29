@@ -31,21 +31,25 @@ const knobColorGaps = [
   },
 ];
 
-const pages = computed(() => mainStore.pages);
+const workspaces = computed(() => mainStore.workspaces);
 const mainTheme = computed(() => mainStore.mainTheme);
 const contrastColor = computed(() => mainStore.contrastColor);
 </script>
 
 <template>
   <article class="home">
-    <section v-for="page of pages" :key="page.pageId" class="page">
-      <h2 class="page__name">{{ page.name }}</h2>
+    <section
+      v-for="workspace of workspaces"
+      :key="workspace.workspaceId"
+      class="workspace"
+    >
+      <h2 class="workspace__name">{{ workspace.name }}</h2>
 
-      <ul class="page__blocks">
+      <ul class="workspace__blocks">
         <li
-          v-for="block of page.blocks"
+          v-for="block of workspace.blocks"
           :key="block.blockId"
-          class="page__block"
+          class="workspace__block"
         >
           <div style="width: max-content">
             <Knob
@@ -59,7 +63,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
               disabled
             />
 
-            <p class="page__block-label">{{ block.label }}</p>
+            <p class="workspace__block-label">{{ block.label }}</p>
           </div>
         </li>
       </ul>
@@ -74,7 +78,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
   padding: 20px 40px;
 }
 
-.page {
+.workspace {
   &__name {
     font-size: 40px;
     margin: 40px 0;

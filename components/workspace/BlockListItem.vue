@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import type { IPageBlockListItem, IPageBlockListItemProps } from "~/types";
+import type {
+  IWorkspaceBlockListItem,
+  IWorkspaceBlockListItemProps,
+} from "~/types";
 import { Button, Checkbox, Slider } from "@featherui";
 
-const props = defineProps<IPageBlockListItemProps>();
+const props = defineProps<IWorkspaceBlockListItemProps>();
 const emit = defineEmits(["openItemSettings", "saveItemChanges"]);
 
 const itemRef = computed(() => props.item);
@@ -72,7 +75,7 @@ const onChangeLabel = (newLabel: string) => {
 const onChangeChecked = (newValue: boolean) => {
   const item = props.item;
   let isChild = false;
-  const changes: Partial<IPageBlockListItem> = {
+  const changes: Partial<IWorkspaceBlockListItem> = {
     checked: newValue,
     itemId: item.itemId,
   };
@@ -100,7 +103,7 @@ const onChangeTracker = (newValue: string | number) => {
   newValue = +newValue;
   if (!props.item.tracker) return;
 
-  const changes: Partial<IPageBlockListItem> = {
+  const changes: Partial<IWorkspaceBlockListItem> = {
     itemId: props.item.itemId,
     tracker: {
       value: newValue,
@@ -139,16 +142,16 @@ watch(
 <template>
   <div
     :class="[
-      'page-block-list-item',
+      'workspace-block-list-item',
       {
         '--child': !item.children,
       },
     ]"
   >
-    <div class="page-block-list-item__content">
+    <div class="workspace-block-list-item__content">
       <Button
         v-if="item.children"
-        class="page-block-list-item__settings"
+        class="workspace-block-list-item__settings"
         iconOnly
         :theme="mainTheme"
         size="small"
@@ -160,17 +163,17 @@ watch(
       <Checkbox
         :modelValue="item.checked"
         :activeTheme="mainTheme"
-        class="page-block-list-item__checkbox"
+        class="workspace-block-list-item__checkbox"
         @update:modelValue="onChangeChecked"
       />
 
       <AppInput
         v-model="itemLabel"
         @change="onChangeLabel"
-        class="page-block-list-item__input"
+        class="workspace-block-list-item__input"
       />
 
-      <div v-if="item.tracker" class="page-block-list-item__slider">
+      <div v-if="item.tracker" class="workspace-block-list-item__slider">
         <Slider
           :max="item.tracker.max"
           isSmooth
@@ -188,7 +191,7 @@ watch(
 
       <span
         :class="[
-          'page-block-list-item__progress',
+          'workspace-block-list-item__progress',
           {
             '--to': !isUpdating,
             '--from': isUpdating,
@@ -201,7 +204,7 @@ watch(
 
     <ul
       v-if="item.showChildren && item.children"
-      class="page-block-list-item__children"
+      class="workspace-block-list-item__children"
     >
       <li v-for="child of item.children" :key="child.itemId">
         <BlockListItem
@@ -215,11 +218,11 @@ watch(
 </template>
 
 <style scoped lang="scss">
-.page-block-list-item {
+.workspace-block-list-item {
   width: 100%;
 
   &:hover {
-    .page-block-list-item__settings {
+    .workspace-block-list-item__settings {
       opacity: 1;
     }
   }

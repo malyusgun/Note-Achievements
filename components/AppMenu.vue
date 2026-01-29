@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const emit = defineEmits(["openPageCreator", "openSettings"]);
+const emit = defineEmits(["openWorkspaceCreator", "openSettings"]);
 
 const route = useRoute();
 const mainStore = useMainStore();
 
 const routePath = computed(() => route.path);
-const pages = computed(() => mainStore.pages);
+const workspaces = computed(() => mainStore.workspaces);
 const mainTheme = computed(() => mainStore.mainTheme);
 const contrastColor = computed(() => mainStore.contrastColor);
 </script>
@@ -15,7 +15,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
     :class="[
       'menu',
       {
-        '--home-page': route.path === '/',
+        '--home-workspace': route.path === '/',
       },
     ]"
   >
@@ -29,11 +29,11 @@ const contrastColor = computed(() => mainStore.contrastColor);
         :currentPath="routePath"
       />
 
-      <template v-for="page of pages" :key="page.pageId">
+      <template v-for="workspace of workspaces" :key="workspace.workspaceId">
         <AppMenuItem
-          :icon="page.icon"
-          :name="page.name"
-          :link="page.link"
+          :icon="workspace.icon"
+          :name="workspace.name"
+          :link="workspace.link"
           :theme="mainTheme"
           :contrastColor="contrastColor"
           :currentPath="routePath"
@@ -43,7 +43,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
       <AppMenuItem
         icon="plus"
         name="Добавить"
-        @click="emit('openPageCreator')"
+        @click="emit('openWorkspaceCreator')"
         class="menu__add-button"
         :theme="mainTheme"
         :contrastColor="contrastColor"
@@ -77,7 +77,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
   justify-content: space-between;
 
   &:hover,
-  &.--home-page {
+  &.--home-workspace {
     width: 250px;
 
     :deep(.menu-item__label) {

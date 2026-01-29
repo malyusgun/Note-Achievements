@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type {
-  IPageBlockListItemData,
-  IPageBlockListItemSettingsModalProps,
+  IWorkspaceBlockListItemData,
+  IWorkspaceBlockListItemSettingsModalProps,
 } from "~/types";
 import { Button, Modal, ToggleSwitch } from "@featherui";
 import { v4 as uuidv4 } from "uuid";
 
-const props = defineProps<IPageBlockListItemSettingsModalProps>();
+const props = defineProps<IWorkspaceBlockListItemSettingsModalProps>();
 
 const settingsModal = defineModel();
 const emit = defineEmits(["saveChanges", "deleteItem"]);
@@ -45,7 +45,7 @@ const addChild = () => {
   });
 };
 
-const deleteChild = (child: IPageBlockListItemData) => {
+const deleteChild = (child: IWorkspaceBlockListItemData) => {
   if (!itemData.value || !itemData.value.children) return;
   itemData.value.children = itemData.value.children.filter(
     (i) => i.itemId !== child.itemId
