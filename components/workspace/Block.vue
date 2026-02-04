@@ -2,6 +2,7 @@
 import { Modal, Button, ProgressBar } from "@featherui";
 import type { IWorkspaceBlockProps } from "~/types";
 import { v4 as uuidv4 } from "uuid";
+import { countItemPoints } from "~/helpers";
 
 const props = defineProps<IWorkspaceBlockProps>();
 
@@ -28,11 +29,7 @@ const progressBarValue = computed(() => {
         return acc;
       }, 0);
     } else {
-      active += item.checked
-        ? item.points
-        : item.tracker
-          ? (item.points / item.tracker.max) * item.tracker.value
-          : 0;
+      active += countItemPoints(item);
     }
   }
   return ((active / (total || 1)) * 100).toFixed(0);
@@ -86,13 +83,13 @@ const addItem = () => {
   });
 };
 
-const updateBlockProgress = (newValue: string) => {
+const updateBlockProgress = (newValue: Ref<string>) => {
   const blocks = props.workspaceData.blocks.map((block) => {
     if (block.blockId !== props.block.blockId) return block;
 
     return {
       ...block,
-      progress: +newValue,
+      progress: +newValue.value,
     };
   });
   mainStore.editWorkspace({
@@ -100,10 +97,6 @@ const updateBlockProgress = (newValue: string) => {
     blocks,
   });
 };
-
-watch(progressBarValue, (value) => {
-  updateBlockProgress(value);
-});
 </script>
 
 <template>
@@ -138,6 +131,7 @@ watch(progressBarValue, (value) => {
       :gradient="['red', 'yellow', 'green', '#0066ff']"
       theme="white"
       disabled
+      @update="updateBlockProgress"
     />
 
     <WorkspaceBlockList

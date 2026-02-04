@@ -8,7 +8,7 @@ import { Button, Checkbox, Slider } from "@featherui";
 const props = defineProps<IWorkspaceBlockListItemProps>();
 const emit = defineEmits(["openItemSettings", "saveItemChanges"]);
 
-const itemRef = computed(() => props.item);
+const item = computed(() => props.item);
 const sliderMax = computed(() => props.item.tracker?.max);
 const sliderOptions = computed<
   { label: number; value: number; color: string }[]
@@ -39,22 +39,10 @@ const sliderOptions = computed<
   }
   return result.reverse();
 });
-const { pointsProgress, isUpdating, itemChildrenCheckedCount } =
-  useBlockListItem(itemRef);
+const { pointsProgress, isUpdating } = useBlockListItem(item, emit);
 
 // Local ref for label to avoid prop mutation
 const itemLabel = ref(props.item.label);
-
-// Sync local label with prop changes
-watch(
-  () => props.item.label,
-  (newLabel) => {
-    if (newLabel !== itemLabel.value) {
-      itemLabel.value = newLabel;
-    }
-  },
-  { immediate: true }
-);
 
 const onChangeLabel = (newLabel: string) => {
   if (!newLabel || !newLabel.trim()) {
@@ -116,27 +104,6 @@ const onChangeTracker = (newValue: string | number) => {
 
   emit("saveItemChanges", changes, !props.item.children);
 };
-
-watch(
-  itemChildrenCheckedCount,
-  (count) => {
-    if (!props.item.showChildren || !props.item.children) return;
-
-    const allChecked = count === props.item.children.length;
-    if (allChecked && !props.item.checked) {
-      emit("saveItemChanges", {
-        itemId: props.item.itemId,
-        checked: true,
-      });
-    } else if (!allChecked && props.item.checked) {
-      emit("saveItemChanges", {
-        itemId: props.item.itemId,
-        checked: false,
-      });
-    }
-  },
-  { deep: true }
-);
 </script>
 
 <template>
@@ -235,8 +202,9 @@ watch(
   &__content {
     display: flex;
     align-items: center;
-    flex: 1;
     margin-left: -40px;
+    padding-right: 20px;
+    position: relative;
   }
 
   &__input {
@@ -258,6 +226,8 @@ watch(
   }
 
   &__progress {
+    position: absolute;
+    right: 0;
     font-size: 16px;
     color: $color-grey;
 

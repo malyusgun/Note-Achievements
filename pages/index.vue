@@ -79,6 +79,9 @@ const contrastColor = computed(() => mainStore.contrastColor);
 }
 
 .workspace {
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--gray-500);
+
   &__name {
     font-size: 40px;
     margin: 40px 0;

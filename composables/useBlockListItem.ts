@@ -1,12 +1,15 @@
 import type { IWorkspaceBlockListItem } from "~/types";
+import { countItemPoints } from "~/helpers";
+import type { EmitFn } from "vue";
 
 /**
  * Composable for block list item calculations and logic
  */
 export const useBlockListItem = (
-  item: ComputedRef<IWorkspaceBlockListItem>
+  item: ComputedRef<IWorkspaceBlockListItem>,
+  emit: EmitFn<("saveItemChanges" | "openItemSettings")[]>
 ) => {
-  const pointsProgress = ref<string | number>(0);
+  const pointsProgress = ref<string | number>();
   const isUpdating = ref(false);
 
   const itemChildrenCheckedCount = computed(
@@ -19,7 +22,7 @@ export const useBlockListItem = (
     const currentItem = item.value;
     if (!currentItem.children) return currentItem.points;
     if (!currentItem.showChildren)
-      return `${currentItem.checked ? currentItem.points : 0}/${currentItem.points}`;
+      return `${countItemPoints(currentItem)}/${currentItem.points}`;
 
     const current = currentItem.children.reduce((acc, child) => {
       if (!child.checked) return acc;
@@ -35,7 +38,7 @@ export const useBlockListItem = (
 
   // Update points progress when item changes
   watch(
-    () => item.value.points,
+    item,
     () => {
       pointsProgress.value = countPointsProgress();
     },
@@ -51,6 +54,23 @@ export const useBlockListItem = (
         pointsProgress.value = countPointsProgress();
         isUpdating.value = false;
       }, 100);
+
+      if (!item.value.showChildren || !item.value.children) return;
+
+      const allChecked =
+        itemChildrenCheckedCount.value === item.value.children.length;
+
+      if (allChecked && !item.value.checked) {
+        emit("saveItemChanges", {
+          itemId: item.value.itemId,
+          checked: true,
+        });
+      } else if (!allChecked && item.value.checked) {
+        emit("saveItemChanges", {
+          itemId: item.value.itemId,
+          checked: false,
+        });
+      }
     },
     { immediate: true, deep: true }
   );
@@ -58,7 +78,5 @@ export const useBlockListItem = (
   return {
     pointsProgress,
     isUpdating,
-    itemChildrenCheckedCount,
-    countPointsProgress,
   };
 };
