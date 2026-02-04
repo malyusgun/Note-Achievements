@@ -38,6 +38,10 @@ defineProps<IMenuItemProps>();
     }
   }
 
+  &.--active {
+    filter: brightness(70%);
+  }
+
   &__icon {
     color: v-bind(contrastColor);
   }

@@ -39,19 +39,25 @@ const contrastColor = computed(() => mainStore.contrastColor);
           :currentPath="routePath"
         />
       </template>
+    </section>
 
+    <section class="menu__footer">
       <AppMenuItem
         icon="plus"
         name="Добавить"
         @click="emit('openWorkspaceCreator')"
-        class="menu__add-button"
         :theme="mainTheme"
         :contrastColor="contrastColor"
         :currentPath="routePath"
       />
-    </section>
-
-    <section class="menu__settings">
+      <AppMenuItem
+        icon="coins"
+        name="Финансы"
+        link="/finance"
+        :theme="mainTheme"
+        :contrastColor="contrastColor"
+        :currentPath="routePath"
+      />
       <AppMenuItem
         icon="settings"
         name="Настройки"
@@ -59,6 +65,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
         :theme="mainTheme"
         :contrastColor="contrastColor"
         :currentPath="routePath"
+        class="menu__settings-button"
       />
     </section>
   </aside>
@@ -66,7 +73,7 @@ const contrastColor = computed(() => mainStore.contrastColor);
 
 <style scoped lang="scss">
 .menu {
-  width: 80px;
+  width: 82px;
   height: 100vh;
   padding: 20px 10px;
   border-right: 2px solid v-bind(contrastColor);
@@ -86,16 +93,21 @@ const contrastColor = computed(() => mainStore.contrastColor);
   }
 
   &__items {
+    overflow-y: auto;
+
     > * {
       margin-bottom: 20px;
     }
   }
 
-  &__add-button {
+  &__settings-button {
     filter: brightness(150%);
   }
 
-  &__settings {
+  &__footer {
+    > *:not(:last-child) {
+      margin-bottom: 10px;
+    }
   }
 }
 </style>
