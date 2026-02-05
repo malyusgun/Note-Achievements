@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Modal, Button, ProgressBar } from "@featherui";
-import type { IWorkspaceBlockProps } from "~/types";
+import type { IWorkspaceBlockProps } from "~/types/props";
 import { v4 as uuidv4 } from "uuid";
 import { countItemPoints } from "~/helpers";
 

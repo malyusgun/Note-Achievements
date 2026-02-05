@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Button, Modal } from "@featherui";
-import type { IConfirmDeleteModalProps } from "~/types";
+import type { IConfirmDeleteModalProps } from "~/types/props";
 
 const visible = defineModel();
 defineProps<IConfirmDeleteModalProps>();

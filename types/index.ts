@@ -16,15 +16,6 @@ export type TMainTheme =
 
 export type TSecondTheme = "white" | "black";
 
-export interface IMenuItemProps {
-  icon: string;
-  name: string;
-  link?: string;
-  theme: TMainTheme;
-  contrastColor: TSecondTheme;
-  currentPath: string;
-}
-
 export interface IInputProps {
   label?: string;
   placeholder?: string;
@@ -47,19 +38,6 @@ export interface IWorkspaceBlock {
   list: IWorkspaceBlockListItem[];
 }
 
-export interface IWorkspaceBlockProps {
-  workspaceData: IWorkspaceData;
-  block: IWorkspaceBlock;
-  contrastColor: TSecondTheme;
-}
-
-export interface IWorkspaceBlockListProps {
-  workspaceId: string;
-  blockId: string;
-  list: IWorkspaceBlockListItem[];
-  mainTheme: TMainTheme;
-}
-
 export interface IWorkspaceBlockListItem extends IWorkspaceBlockListItemData {
   showChildren?: boolean;
   children?: IWorkspaceBlockListItemData[];
@@ -76,16 +54,13 @@ export interface IWorkspaceBlockListItemData {
   };
 }
 
-export interface IWorkspaceBlockListItemProps {
-  item: IWorkspaceBlockListItem;
-  mainTheme: TMainTheme;
+export interface IChartData {
+  labels: string[];
+  datasets: IChartDataset[];
 }
 
-export interface IWorkspaceBlockListItemSettingsModalProps {
-  item: IWorkspaceBlockListItem | null;
-  mainTheme?: TMainTheme;
-}
-
-export interface IConfirmDeleteModalProps {
-  description: string;
+export interface IChartDataset {
+  label?: string;
+  backgroundColor?: string;
+  data: number[];
 }

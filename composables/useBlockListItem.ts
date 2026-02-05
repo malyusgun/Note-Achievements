@@ -25,8 +25,13 @@ export const useBlockListItem = (
       return `${countItemPoints(currentItem)}/${currentItem.points}`;
 
     const current = currentItem.children.reduce((acc, child) => {
-      if (!child.checked) return acc;
-      return acc + child.points;
+      if (child.checked) return acc + child.points;
+      if (child.tracker)
+        return (
+          acc +
+          Math.floor((child.tracker.value * child.points) / child.tracker.max)
+        );
+      return acc;
     }, 0);
     const total = currentItem.children.reduce(
       (acc, child) => acc + child.points,

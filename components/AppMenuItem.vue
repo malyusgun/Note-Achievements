@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IMenuItemProps } from "~/types";
+import type { IMenuItemProps } from "~/types/props";
 import { Button } from "@featherui";
 
 defineProps<IMenuItemProps>();

@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import type {
-  IWorkspaceBlockListItem,
-  IWorkspaceBlockListProps,
-  IWorkspaceData,
-} from "~/types";
+import type { IWorkspaceBlockListItem, IWorkspaceData } from "~/types";
+import type { IWorkspaceBlockListProps } from "~/types/props";
 
 const mainStore = useMainStore();
 
