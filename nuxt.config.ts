@@ -31,12 +31,19 @@ export default defineNuxtConfig({
       short_name: "Achievements",
       theme_color: "#ffffff",
       background_color: "#ffffff",
+      start_url: "/",
+      scope: "/",
       display: "standalone",
       icons: [
         {
-          src: "/achievements.png",
+          src: "/achievement.png",
           sizes: "512x512",
           type: "image/png",
+        },
+        {
+          src: "/achievement128x128.jpg",
+          sizes: "128x128",
+          type: "image/jpg",
         },
       ],
     },
