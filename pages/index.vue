@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Knob, Button } from "@featherui";
 
-const mainStore = useMainStore();
+const workspacesStore = useWorkspacesStore();
+const userStore = useUserStore();
 
 const knobColorGaps = [
   {
@@ -31,9 +32,8 @@ const knobColorGaps = [
   },
 ];
 
-const workspaces = computed(() => mainStore.workspaces);
-const mainTheme = computed(() => mainStore.mainTheme);
-const contrastColor = computed(() => mainStore.contrastColor);
+const workspaces = computed(() => workspacesStore.workspaces);
+const contrastColor = computed(() => userStore.contrastColor);
 </script>
 
 <template>

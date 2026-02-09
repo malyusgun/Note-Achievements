@@ -1,24 +1,74 @@
 <script setup lang="ts">
-const chartData = ref({
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "Data",
-      backgroundColor: "#f87979",
-      data: [40, 20, 12, 13, 10, 65, 34],
-    },
-    {
-      label: "Data 2",
-      backgroundColor: "green",
-      data: [20, 10, 6, 17, 14, 61, 22],
-    },
-  ],
+import type { TChartTwoAxlesComponent } from "~/types";
+
+const financesStore = useFinancesStore();
+
+const chartTwoAxlesComponent = ref<TChartTwoAxlesComponent>("bar");
+
+const financesStateHistory = computed(() => financesStore.financesStateHistory);
+chartTwoAxlesComponent.value = financesStateHistory.value.chartType || "bar";
+
+const chartData = computed(() => {
+  const history = financesStateHistory.value;
+  if (!history.items) return null;
+  console.log("history: ", history);
+  return {
+    labels: history.items.map((item) => item.dateLabel),
+    datasets: [
+      {
+        label: "Доходы",
+        backgroundColor: "#3f3",
+        data: history.items.map((item) => item.income),
+      },
+      {
+        label: "Расходы",
+        backgroundColor: "red",
+        data: history.items.map((item) => item.expense),
+      },
+      {
+        label: "Свободные",
+        backgroundColor: "#09f",
+        data: history.items.map((item) => item.freeMoney),
+      },
+    ],
+  };
 });
-const chartTwoAxlesComponent = ref<"line" | "bar">("bar");
+
+const onToggleChartTwoAxlesComponent = () => {
+  chartTwoAxlesComponent.value =
+    chartTwoAxlesComponent.value === "bar" ? "line" : "bar";
+  financesStore.toggleChartTwoAxlesComponent(chartTwoAxlesComponent.value);
+};
 </script>
 
 <template>
-  <ChartTwoAxles :component="chartTwoAxlesComponent" :chartData="chartData" />
+  <article class="finance">
+    <section class="finance__money-state">
+      <h2 class="finance__title">Доходы и расходы</h2>
+      <ChartTwoAxles
+        v-if="chartData"
+        :component="chartTwoAxlesComponent"
+        :chartData="chartData"
+      />
+      <FinanceMoneyStateData
+        :data="financesStateHistory"
+        :chartTwoAxlesComponent="chartTwoAxlesComponent"
+        @onToggleComponent="onToggleChartTwoAxlesComponent"
+      />
+    </section>
+
+    <section class="finance__spending-categories">
+      <h2 class="finance__title">Расходы по категориям</h2>
+    </section>
+  </article>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.finance {
+  &__title {
+    margin: 30px;
+    text-align: center;
+    font-size: 30px;
+  }
+}
+</style>

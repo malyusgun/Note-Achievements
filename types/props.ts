@@ -1,5 +1,7 @@
 import type {
   IChartData,
+  IFinanceStateHistory,
+  IFinanceStateItem,
   IWorkspaceBlock,
   IWorkspaceBlockListItem,
   IWorkspaceData,
@@ -46,4 +48,14 @@ export interface IConfirmDeleteModalProps {
 export interface ITwoAxlesProps {
   component: "line" | "bar";
   chartData: IChartData;
+}
+
+export interface IMoneyStateDataProps {
+  data: IFinanceStateHistory;
+  chartTwoAxlesComponent: "line" | "bar";
+}
+
+export interface IMoneyStateDataItemProps {
+  item: IFinanceStateItem;
+  mainTheme: TMainTheme;
 }

@@ -5,28 +5,10 @@ import type {
   TMainTheme,
 } from "~/types";
 
-export const useMainStore = defineStore("mainStore", () => {
+export const useWorkspacesStore = defineStore("workspacesStore", () => {
   const workspaces = ref<IWorkspaceData[]>(
     JSON.parse(localStorage.getItem("workspaces") || "[]")
   );
-  const mainTheme = ref<TMainTheme>(
-    JSON.parse(localStorage.getItem("mainTheme") || '"blue"')
-  );
-
-  const colorMode = useColorMode();
-
-  const contrastColor = computed(() =>
-    colorMode.value === "dark" ? "white" : "black"
-  );
-
-  const setMainTheme = (newTheme: TMainTheme) => {
-    mainTheme.value = newTheme;
-    localStorage.setItem("mainTheme", JSON.stringify(newTheme));
-  };
-
-  const toggleColorMode = () => {
-    colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
-  };
 
   const addWorkspace = (workspaceData: IWorkspaceData) => {
     workspaces.value.push(workspaceData);
@@ -146,11 +128,6 @@ export const useMainStore = defineStore("mainStore", () => {
 
   return {
     workspaces,
-    mainTheme,
-    colorMode,
-    contrastColor,
-    setMainTheme,
-    toggleColorMode,
     addWorkspace,
     getWorkspace,
     editWorkspace,

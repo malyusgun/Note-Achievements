@@ -23,34 +23,22 @@ ChartJS.register(
   PointElement,
   LineElement
 );
-
+ChartJS.defaults.borderColor = "#888";
+ChartJS.defaults.color = "#888";
 const props = defineProps<ITwoAxlesProps>();
 const charts = {
   line: Line,
   bar: Bar,
 };
-const chartOptions = ref({
+const chartOptions = {
   responsive: true,
-  gridLine: {
-    color: "#f00",
-  },
-  minor: {
-    fontColor: "#f00",
-  },
-  major: {
-    fontColor: "#f00",
-  },
-  legend: {
-    labels: {
-      // This more specific font property overrides the global property
-      fontColor: "#f00",
-    },
-  },
-});
+  borderColor: (ctx) => ctx.dataset?.backgroundColor || "#888",
+  borderWidth: 2,
+};
 </script>
 
 <template>
-  <div style="width: 1000px; margin: 150px auto; padding: 10px">
+  <div class="two-axles">
     <component
       :is="charts[component]"
       id="my-chart-id"
@@ -60,4 +48,10 @@ const chartOptions = ref({
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.two-axles {
+  max-width: 60%;
+  margin: auto;
+  padding: 10px;
+}
+</style>

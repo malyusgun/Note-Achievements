@@ -2,17 +2,18 @@
 import { Button } from "@featherui";
 import { v4 as uuidv4 } from "uuid";
 
-const mainStore = useMainStore();
+const workspacesStore = useWorkspacesStore();
+const userStore = useUserStore();
 const route = useRoute();
 
 const workspaceData = computed(
   () =>
-    mainStore.workspaces.find(
+    workspacesStore.workspaces.find(
       (workspace) => workspace.workspaceId === (route.params.id as string)
     )!
 );
-const contrastColor = computed(() => mainStore.contrastColor);
-const mainTheme = computed(() => mainStore.mainTheme);
+const contrastColor = computed(() => userStore.contrastColor);
+const mainTheme = computed(() => userStore.mainTheme);
 
 const addBlock = () => {
   if (!workspaceData.value) return;
@@ -33,7 +34,7 @@ const addBlock = () => {
     ],
   });
 
-  mainStore.editWorkspace(workspaceData.value);
+  workspacesStore.editWorkspace(workspaceData.value);
 };
 </script>
 
@@ -57,10 +58,6 @@ const addBlock = () => {
 
 <style scoped lang="scss">
 .detail-workspace {
-  height: 100vh;
-  overflow-y: auto;
-  padding: 20px 40px;
-
   &__title {
     font-size: 40px;
     text-align: center;

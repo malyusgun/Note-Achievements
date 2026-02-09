@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { Modal, Button, ProgressBar } from "@featherui";
+import { Button, ProgressBar } from "@featherui";
 import type { IWorkspaceBlockProps } from "~/types/props";
 import { v4 as uuidv4 } from "uuid";
 import { countItemPoints } from "~/helpers";
 
 const props = defineProps<IWorkspaceBlockProps>();
 
-const mainStore = useMainStore();
+const workspacesStore = useWorkspacesStore();
+const userStore = useUserStore();
 
 const deleteModal = ref<boolean>(false);
 
 const workspaceId = computed(() => props.workspaceData.workspaceId);
-const mainTheme = computed(() => mainStore.mainTheme);
+const mainTheme = computed(() => userStore.mainTheme);
 const list = computed(() => props.block.list);
 const deleteModalDescription = computed(
   () => `Вы собираетесь удалить блок "${props.block.label}"`
@@ -37,13 +38,16 @@ const progressBarValue = computed(() => {
 
 const onBlockChange = (changes: object) => {
   const blockId = props.block.blockId;
-  const workspace = mainStore.getWorkspace(workspaceId.value);
+  const workspace = workspacesStore.getWorkspace(workspaceId.value);
   if (!workspace) return;
 
   const blocks = workspace.blocks.map((block) =>
     block.blockId === blockId ? { ...block, ...changes } : block
   );
-  mainStore.editWorkspace({ workspaceId: workspace.workspaceId, blocks });
+  workspacesStore.editWorkspace({
+    workspaceId: workspace.workspaceId,
+    blocks,
+  });
 };
 
 const deleteBlock = () => {
@@ -51,7 +55,7 @@ const deleteBlock = () => {
     (block) => block.blockId !== props.block.blockId
   );
 
-  mainStore.editWorkspace({
+  workspacesStore.editWorkspace({
     workspaceId: props.workspaceData.workspaceId,
     blocks,
   });
@@ -77,7 +81,7 @@ const addItem = () => {
     };
   });
 
-  mainStore.editWorkspace({
+  workspacesStore.editWorkspace({
     workspaceId: props.workspaceData.workspaceId,
     blocks,
   });
@@ -92,7 +96,7 @@ const updateBlockProgress = (newValue: Ref<string>) => {
       progress: +newValue.value,
     };
   });
-  mainStore.editWorkspace({
+  workspacesStore.editWorkspace({
     workspaceId: props.workspaceData.workspaceId,
     blocks,
   });

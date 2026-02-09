@@ -4,10 +4,10 @@ import type { IWorkspaceData, TMainTheme } from "~/types";
 
 const route = useRoute();
 const router = useRouter();
-const mainStore = useMainStore();
-
-const { mainTheme, colorMode, contrastColor, workspaces } =
-  storeToRefs(mainStore);
+const workspacesStore = useWorkspacesStore();
+const userStore = useUserStore();
+const { mainTheme, colorMode, contrastColor } = storeToRefs(userStore);
+const { workspaces } = storeToRefs(workspacesStore);
 
 const settingsModal = defineModel();
 
@@ -34,7 +34,7 @@ const deleteModalDescription = computed(
 const onWorkspaceChange = (newName: string, workspaceId: string) => {
   clearTimeout(timerId);
   timerId = setTimeout(() => {
-    mainStore.editWorkspace({ workspaceId, name: newName });
+    workspacesStore.editWorkspace({ workspaceId, name: newName });
   }, 500);
 };
 
@@ -46,7 +46,7 @@ const openDeleteModal = (workspace: IWorkspaceData) => {
 const deleteWorkspace = () => {
   if (!deleteWorkspaceData.value) return;
 
-  mainStore.deleteWorkspace(deleteWorkspaceData.value.workspaceId);
+  workspacesStore.deleteWorkspace(deleteWorkspaceData.value.workspaceId);
 
   if (route.path && route.path.slice(1) === deleteWorkspaceData.value.link) {
     router.push({ path: "/" });
@@ -72,7 +72,7 @@ const deleteWorkspace = () => {
           :key="color"
           :class="`settings__color bg-${color}`"
           :style="`${mainTheme === color ? `border-color: ${contrastColor}` : ''}`"
-          @click="mainStore.setMainTheme(color)"
+          @click="workspacesStore.setMainTheme(color)"
         ></button>
         <div class="settings__dark-theme">
           <span>Тёмная тема:</span>
@@ -80,7 +80,7 @@ const deleteWorkspace = () => {
             negativeTheme="grey"
             :theme="mainTheme"
             :modelValue="colorMode.value === 'dark'"
-            @click="mainStore.toggleColorMode()"
+            @click="workspacesStore.toggleColorMode()"
           />
         </div>
       </section>

@@ -16,6 +16,8 @@ export type TMainTheme =
 
 export type TSecondTheme = "white" | "black";
 
+export type TDataOperation = "add" | "edit" | "delete";
+
 export interface IInputProps {
   label?: string;
   placeholder?: string;
@@ -62,5 +64,22 @@ export interface IChartData {
 export interface IChartDataset {
   label?: string;
   backgroundColor?: string;
-  data: number[];
+  data: (number | null)[];
 }
+
+export interface IFinanceStateHistory {
+  items: IFinanceStateItem[];
+  chartType: TChartTwoAxlesComponent;
+}
+
+export interface IFinanceStateItem {
+  id: string;
+  income: number | null;
+  expense: number | null;
+  freeMoney: number | null;
+  dateLabel: string;
+}
+
+export type TChartTwoAxlesComponent = "line" | "bar";
+
+export type TFinanceStateCategory = "income" | "expense" | "freeMoney";
