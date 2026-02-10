@@ -57,5 +57,6 @@ export interface IMoneyStateDataProps {
 
 export interface IMoneyStateDataItemProps {
   item: IFinanceStateItem;
+  dynamic: number | null;
   mainTheme: TMainTheme;
 }

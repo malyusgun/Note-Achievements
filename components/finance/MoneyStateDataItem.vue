@@ -21,7 +21,6 @@ const onChange = (newValue: string | number, field: string) => {
       <AppInputBordered
         :modelValue="item.dateLabel"
         placeholder="Дата"
-        class=""
         @change="onChange($event, 'dateLabel')"
       />
     </div>
@@ -43,7 +42,19 @@ const onChange = (newValue: string | number, field: string) => {
         @change="onChange($event, 'expense')"
       />
     </div>
-    <div class="money-state-data-item__input">
+    <div class="money-state-data-item__input --free-money">
+      <div
+        v-if="dynamic"
+        :class="[
+          'money-state-data-item__dynamic',
+          {
+            '--growth': dynamic > 0,
+            '--drop': dynamic < 0,
+          },
+        ]"
+      >
+        {{ dynamic }}
+      </div>
       <AppInputBordered
         :modelValue="item.freeMoney"
         placeholder="Свободные деньги"
@@ -87,6 +98,34 @@ const onChange = (newValue: string | number, field: string) => {
     .number {
       :deep(.input__input) {
         min-width: 120px;
+      }
+    }
+
+    &.--free-money {
+      position: relative;
+    }
+  }
+
+  &__dynamic {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -20px;
+    font-size: 0.75rem;
+
+    &.--growth {
+      color: $color-green;
+
+      &::before {
+        content: "🡅 ";
+      }
+    }
+
+    &.--drop {
+      color: $color-red;
+
+      &::before {
+        content: "🡇 ";
       }
     }
   }

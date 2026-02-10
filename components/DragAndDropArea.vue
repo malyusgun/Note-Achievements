@@ -1,16 +1,23 @@
 <script setup lang="ts">
+import type { TFinanceMoneyChangeDirection } from "~/types";
+
 type TDragAndDropArea = (object & {
   id: string;
 })[];
 
 const items = defineModel<TDragAndDropArea>();
+const emits = defineEmits(["changeOrder"]);
 
-const targetItemId = ref<string>();
+const targetItemId = ref<string>("");
 const topSiblingDist = ref<number>(0);
 const bottomSiblingDist = ref<number>(0);
 let dragIterations = 0;
 
-const setSiblingsDist = (target: Element, direction: "up" | "down" | null) => {
+const setSiblingsDist = (
+  target: Element,
+  direction: TFinanceMoneyChangeDirection | null
+) => {
+  const targetRect = target.getBoundingClientRect();
   const topSibling = target.previousElementSibling;
   const bottomSibling = target.nextElementSibling;
   let topOffset;
@@ -20,14 +27,7 @@ const setSiblingsDist = (target: Element, direction: "up" | "down" | null) => {
     topSiblingDist.value = -9999;
     topOffset = 0;
   } else {
-    console.log(topSibling, target, bottomSibling);
-    topOffset =
-      target.getBoundingClientRect().top -
-      topSibling.getBoundingClientRect().top;
-    console.log(
-      target.getBoundingClientRect().top,
-      topSibling.getBoundingClientRect().top
-    );
+    topOffset = targetRect.top - topSibling.getBoundingClientRect().top;
   }
 
   if (!bottomSibling) {
@@ -35,37 +35,29 @@ const setSiblingsDist = (target: Element, direction: "up" | "down" | null) => {
     bottomOffset = 0;
   } else {
     bottomOffset =
-      bottomSibling.getBoundingClientRect().bottom -
-      target.getBoundingClientRect().bottom;
-    console.log(
-      bottomSibling.getBoundingClientRect().bottom,
-      target.getBoundingClientRect().bottom
-    );
+      bottomSibling.getBoundingClientRect().bottom - targetRect.bottom;
   }
-  console.log("1 bottomOffset, topOffset: ", bottomOffset, topOffset);
+
   if (direction === "up") {
     topOffset += bottomOffset;
   } else if (direction === "down") {
     bottomOffset += topOffset;
   }
-  console.log("2 bottomOffset: ", bottomOffset);
+
+  const isUp = direction === "up";
   if (topSibling)
-    topSiblingDist.value = (topOffset / -2) * (direction === "down" ? -1 : 1);
+    topSiblingDist.value = (topOffset / 2) * (direction && !isUp ? 1 : -1);
   if (bottomSibling)
-    bottomSiblingDist.value =
-      (bottomOffset / 2) * (direction === "up" ? -1 : 1);
-  console.log(topSiblingDist.value, bottomSiblingDist.value);
+    bottomSiblingDist.value = (bottomOffset / 2) * (isUp ? -1 : 1);
 };
 const onDragStart = (e: DragEvent, id: string) => {
-  console.log("e onDragStart: ", e);
   targetItemId.value = id;
 
   const target = e.target as Element;
-
   setSiblingsDist(target, null);
 };
 const onDrag = (e: DragEvent) => {
-  if (dragIterations !== 10) {
+  if (dragIterations !== 40) {
     dragIterations++;
     return;
   } else {
@@ -84,9 +76,9 @@ const onDrag = (e: DragEvent) => {
         items.value[targetIndex - 1],
       ];
       nextTick(() => {
-        console.log("-----up-------");
-        const target = document.getElementById(targetItemId.value!)!;
+        const target = document.getElementById(targetItemId.value)!;
         setSiblingsDist(target, "up");
+        emits("changeOrder", targetItemId.value, items.value, targetIndex - 1);
       });
     }
   }
@@ -103,29 +95,26 @@ const onDrag = (e: DragEvent) => {
         items.value[targetIndex],
       ];
       nextTick(() => {
-        console.log("-----down-------");
-        const target = document.getElementById(targetItemId.value!)!;
-        console.log(target);
+        const target = document.getElementById(targetItemId.value)!;
         setSiblingsDist(target, "down");
+        emits("changeOrder", targetItemId.value, items.value, targetIndex);
       });
     }
   }
 };
 const onDragEnd = (e: DragEvent) => {
-  console.log("e DragEvent: ", e);
+  // console.log("e DragEvent: ", e);
 };
 const onMouseUp = (e: MouseEvent) => {
-  console.log("e MouseEvent: ", e);
+  // console.log("e MouseEvent: ", e);
 };
 </script>
 
 <template>
-  {{ topSiblingDist }}
-  {{ bottomSiblingDist }}
   <ul class="drag-and-drop-area">
     <TransitionGroup name="list">
       <li
-        v-for="item of items"
+        v-for="(item, index) of items"
         :key="item.id"
         :id="item.id"
         class="drag-and-drop-area__item"
@@ -135,7 +124,7 @@ const onMouseUp = (e: MouseEvent) => {
         @pointerup="onMouseUp"
         draggable="true"
       >
-        <slot name="item" :item="item" />
+        <slot name="item" :item="item" :index="index" />
       </li>
     </TransitionGroup>
   </ul>

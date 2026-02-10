@@ -11,7 +11,7 @@ chartTwoAxlesComponent.value = financesStateHistory.value.chartType || "bar";
 const chartData = computed(() => {
   const history = financesStateHistory.value;
   if (!history.items) return null;
-  console.log("history: ", history);
+
   return {
     labels: history.items.map((item) => item.dateLabel),
     datasets: [

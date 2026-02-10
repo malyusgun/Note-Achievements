@@ -2,7 +2,9 @@ import type {
   IFinanceStateHistory,
   IFinanceStateItem,
   TChartTwoAxlesComponent,
+  TFinanceMoneyChangeDirection,
 } from "~/types";
+import { useFinancesUpdater } from "~/helpers";
 
 export const useFinancesStore = defineStore("financesStore", () => {
   const financesStateHistory = ref<IFinanceStateHistory>(
@@ -24,37 +26,29 @@ export const useFinancesStore = defineStore("financesStore", () => {
   const editFinancesStateHistory = (
     targetItem: Partial<IFinanceStateItem> & { id: string }
   ) => {
-    let targetIndex = -1;
-    let lastItem: IFinanceStateItem;
+    const financesUpdater = useFinancesUpdater();
     financesStateHistory.value.items = financesStateHistory.value.items.map(
-      (item, index) => {
-        if (item.id === targetItem.id) {
-          targetIndex = index;
+      (item, index) => financesUpdater(item, targetItem, index)
+    );
 
-          if (targetItem.freeMoney) return { ...item, ...targetItem };
+    localStorage.setItem(
+      "finances",
+      JSON.stringify(financesStateHistory.value)
+    );
+  };
 
-          lastItem = {
-            ...item,
-            ...targetItem,
-            freeMoney:
-              (lastItem?.freeMoney || 0) +
-              (targetItem.income || item.income || 0) -
-              (targetItem.expense || item.expense || 0),
-          };
-          return lastItem;
-        }
-
-        if (targetIndex !== -1 && index > targetIndex) {
-          const newFreeMoney =
-            lastItem.freeMoney! + (item.income || 0) - (item.expense || 0);
-
-          lastItem = { ...item, freeMoney: newFreeMoney };
-          return lastItem;
-        }
-
-        lastItem = item;
-        return item;
-      }
+  const changeFinancesStateHistoryOrder = (
+    targetItem: Partial<IFinanceStateItem> & {
+      id: string;
+    },
+    newState: IFinanceStateItem[],
+    targetIndex: number
+  ) => {
+    financesStateHistory.value.items = newState;
+    console.log("newState, targetIndex: ", newState, targetIndex);
+    const financesUpdater = useFinancesUpdater(targetIndex);
+    financesStateHistory.value.items = financesStateHistory.value.items.map(
+      (item, index) => financesUpdater(item, targetItem, index)
     );
 
     localStorage.setItem(
@@ -91,6 +85,7 @@ export const useFinancesStore = defineStore("financesStore", () => {
     financesStateHistory,
     addFinancesStateItem,
     editFinancesStateHistory,
+    changeFinancesStateHistoryOrder,
     deleteFinancesStateItem,
     toggleChartTwoAxlesComponent,
   };

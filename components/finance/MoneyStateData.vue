@@ -3,7 +3,7 @@ import { Button, ToggleSwitch } from "@featherui";
 import { v4 as uuidv4 } from "uuid";
 import type { IMoneyStateDataProps } from "~/types/props";
 import DragAndDropArea from "~/components/DragAndDropArea.vue";
-import type { IFinanceStateItem } from "~/types";
+import type { IFinanceStateItem, TFinanceMoneyChangeDirection } from "~/types";
 
 const financesStore = useFinancesStore();
 const userStore = useUserStore();
@@ -18,7 +18,20 @@ const deleteModalDescription = computed(
     `Вы собираетесь удалить элемент с датой "${itemToDelete.value?.dateLabel}"`
 );
 const data = computed(() => props.data);
-const items = computed(() => data.value.items);
+const itemsDynamicsChangesFreeMoney = computed(() => {
+  const items = data.value.items;
+  if (!items[0]) return [];
+
+  const result: (null | number)[] = [null];
+  let lastFreeMoneyValue: number = items[0].freeMoney || 0;
+
+  items.slice(1).forEach((item) => {
+    result.push((item.freeMoney || 0) - lastFreeMoneyValue);
+    lastFreeMoneyValue = item.freeMoney || 0;
+  });
+
+  return result;
+});
 const mainTheme = computed(() => userStore.mainTheme);
 
 const addItem = () => {
@@ -35,6 +48,16 @@ const addItem = () => {
 const onUpdateItem = (newValue: string | number, field: string, id: string) => {
   financesStore.editFinancesStateHistory({ id, [field]: newValue });
 };
+const onChangeFinanceMoneyOrder = (
+  itemId: string,
+  newStateHistory: IFinanceStateItem[],
+  targetIndex: number
+) =>
+  financesStore.changeFinancesStateHistoryOrder(
+    { id: itemId },
+    newStateHistory,
+    targetIndex
+  );
 const onDeleteItem = () => {
   financesStore.deleteFinancesStateItem(itemToDelete.value!.id);
   deleteModal.value = false;
@@ -53,10 +76,16 @@ const openDeleteModal = (item: IFinanceStateItem) => {
       <h3 class="money-state-data__title">Расходы</h3>
       <h3 class="money-state-data__title">Свободные</h3>
     </div>
-    <DragAndDropArea v-model="data.items" class="money-state-data__list">
-      <template #item="{ item }">
+
+    <DragAndDropArea
+      v-model="data.items"
+      class="money-state-data__list"
+      @changeOrder="onChangeFinanceMoneyOrder"
+    >
+      <template #item="{ item, index }">
         <FinanceMoneyStateDataItem
           :item="item as IFinanceStateItem"
+          :dynamic="itemsDynamicsChangesFreeMoney[index]!"
           :mainTheme="mainTheme"
           @updateItem="onUpdateItem"
           @openDeleteModal="openDeleteModal"
@@ -64,28 +93,21 @@ const openDeleteModal = (item: IFinanceStateItem) => {
         />
       </template>
     </DragAndDropArea>
-    <!--    <ul class="money-state-data__list">-->
-    <!--      <li class="money-state-data__item">-->
-    <!--        <FinanceMoneyStateDataItem-->
-    <!--          v-for="item in items"-->
-    <!--          :key="item.id"-->
-    <!--          :item="item"-->
-    <!--          :mainTheme="mainTheme"-->
-    <!--          @updateItem="onUpdateItem"-->
-    <!--          @deleteItem="onDeleteItem"-->
-    <!--        />-->
-    <!--      </li>-->
-    <!--    </ul>-->
+
     <div class="money-state-data__footer">
       <Button label="Добавить запись" @click="addItem" :theme="mainTheme">
         <AppIcon name="badge" :size="20" />
       </Button>
-      <ToggleSwitch
-        negativeTheme="grey"
-        :theme="mainTheme"
-        :modelValue="chartTwoAxlesComponent === 'bar'"
-        @update:modelValue="$emit('onToggleComponent')"
-      />
+      <div class="money-state-data__mode-container">
+        <span class="money-state-data__mode">Line mode</span>
+        <ToggleSwitch
+          :negativeTheme="mainTheme === 'blue' ? 'green' : 'blue'"
+          :theme="mainTheme"
+          :modelValue="chartTwoAxlesComponent === 'bar'"
+          @update:modelValue="$emit('onToggleComponent')"
+        />
+        <span class="money-state-data__mode">Bar mode</span>
+      </div>
     </div>
 
     <ConfirmDeleteModal
@@ -111,7 +133,18 @@ const openDeleteModal = (item: IFinanceStateItem) => {
   &__footer {
     margin: 30px 0;
     display: flex;
+    align-items: center;
     gap: 50px;
+  }
+
+  &__mode-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__mode {
+    font-size: 1rem;
   }
 }
 </style>

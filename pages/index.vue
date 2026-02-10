@@ -73,7 +73,6 @@ const contrastColor = computed(() => userStore.contrastColor);
 
 <style scoped lang="scss">
 .home {
-  height: 100vh;
   overflow-y: auto;
   padding: 20px 40px;
 }

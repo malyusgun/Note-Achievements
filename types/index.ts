@@ -83,3 +83,5 @@ export interface IFinanceStateItem {
 export type TChartTwoAxlesComponent = "line" | "bar";
 
 export type TFinanceStateCategory = "income" | "expense" | "freeMoney";
+
+export type TFinanceMoneyChangeDirection = "up" | "down";
