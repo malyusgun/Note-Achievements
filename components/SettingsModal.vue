@@ -72,7 +72,7 @@ const deleteWorkspace = () => {
           :key="color"
           :class="`settings__color bg-${color}`"
           :style="`${mainTheme === color ? `border-color: ${contrastColor}` : ''}`"
-          @click="workspacesStore.setMainTheme(color)"
+          @click="userStore.setMainTheme(color)"
         ></button>
         <div class="settings__dark-theme">
           <span>Тёмная тема:</span>
@@ -80,7 +80,7 @@ const deleteWorkspace = () => {
             negativeTheme="grey"
             :theme="mainTheme"
             :modelValue="colorMode.value === 'dark'"
-            @click="workspacesStore.toggleColorMode()"
+            @click="userStore.toggleColorMode()"
           />
         </div>
       </section>
