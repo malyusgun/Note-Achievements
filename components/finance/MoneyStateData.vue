@@ -39,7 +39,7 @@ const addItem = () => {
     id: uuidv4(),
     income: null,
     expense: null,
-    freeMoney: null,
+    savings: null,
     dateLabel: "",
   };
   financesStore.addFinancesStateItem(newItem);
@@ -74,7 +74,7 @@ const openDeleteModal = (item: IFinanceStateItem) => {
       <h3 class="money-state-data__title">Даты</h3>
       <h3 class="money-state-data__title">Доходы</h3>
       <h3 class="money-state-data__title">Расходы</h3>
-      <h3 class="money-state-data__title">Свободные</h3>
+      <h3 class="money-state-data__title">Сбережения</h3>
     </div>
 
     <DragAndDropArea

@@ -56,11 +56,11 @@ const onChange = (newValue: string | number, field: string) => {
         {{ dynamic }}
       </div>
       <AppInputBordered
-        :modelValue="item.freeMoney"
-        placeholder="Свободные деньги"
+        :modelValue="item.savings"
+        placeholder="Сбережения деньги"
         type="number"
         class="number"
-        @change="onChange($event, 'freeMoney')"
+        @change="onChange($event, 'savings')"
       />
     </div>
     <Button

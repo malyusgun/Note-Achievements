@@ -26,9 +26,9 @@ const chartData = computed(() => {
         data: history.items.map((item) => item.expense),
       },
       {
-        label: "Свободные",
+        label: "Сбережения",
         backgroundColor: "#09f",
-        data: history.items.map((item) => item.freeMoney),
+        data: history.items.map((item) => item.savings),
       },
     ],
   };

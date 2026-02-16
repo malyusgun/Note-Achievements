@@ -76,12 +76,12 @@ export interface IFinanceStateItem {
   id: string;
   income: number | null;
   expense: number | null;
-  freeMoney: number | null;
+  savings: number | null;
   dateLabel: string;
 }
 
 export type TChartTwoAxlesComponent = "line" | "bar";
 
-export type TFinanceStateCategory = "income" | "expense" | "freeMoney";
+export type TFinanceStateCategory = "income" | "expense" | "savings";
 
 export type TFinanceMoneyChangeDirection = "up" | "down";
