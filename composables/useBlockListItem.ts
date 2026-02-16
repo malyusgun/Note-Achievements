@@ -22,7 +22,7 @@ export const useBlockListItem = (
     const currentItem = item.value;
     if (!currentItem.children) return currentItem.points;
     if (!currentItem.showChildren)
-      return `${countItemPoints(currentItem)}/${currentItem.points}`;
+      return `${countItemPoints(currentItem, true)}/${currentItem.points}`;
 
     const current = currentItem.children.reduce((acc, child) => {
       if (!child.checked) return acc;

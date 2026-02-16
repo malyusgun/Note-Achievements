@@ -14,8 +14,7 @@ const emit = defineEmits(["saveChanges", "deleteItem"]);
 const itemData = computed({
   get: () => props.item,
   set: () => {
-    // Read-only computed, changes are made directly to props.item
-    // This is safe because parent already cloned the item
+    // Read-only computed
   },
 });
 
@@ -23,6 +22,9 @@ const childrenPoints = computed(() => {
   if (!itemData.value?.children) return 0;
   return itemData.value.children.reduce((acc, child) => acc + child.points, 0);
 });
+const arePointsDefined = computed(
+  () => itemData.value && typeof itemData.value?.points === "number"
+);
 
 watch(
   [() => itemData.value?.showChildren, childrenPoints],
@@ -56,9 +58,6 @@ const onChangeShowChildren = (newValue: boolean) => {
   if (!itemData.value) return;
 
   itemData.value.showChildren = newValue;
-  if (newValue) {
-    itemData.value.points = childrenPoints.value;
-  }
 };
 
 const onToggleTracker = () => {
@@ -184,9 +183,10 @@ const deleteItem = () => {
           </ul>
         </section>
 
-        <section v-if="itemData?.points" class="settings__common common">
+        <section class="settings__common common">
           <AppInputBordered
-            v-model="itemData.points"
+            v-if="arePointsDefined"
+            v-model="itemData!.points"
             label="Вес:"
             type="number"
             :disabled="itemData?.showChildren"
