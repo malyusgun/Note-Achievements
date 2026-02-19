@@ -45,8 +45,9 @@ export const useFinancesStore = defineStore("financesStore", () => {
     targetIndex: number
   ) => {
     financesStateHistory.value.items = newState;
-    console.log("newState, targetIndex: ", newState, targetIndex);
+
     const financesUpdater = useFinancesUpdater(targetIndex);
+
     financesStateHistory.value.items = financesStateHistory.value.items.map(
       (item, index) => financesUpdater(item, targetItem, index)
     );

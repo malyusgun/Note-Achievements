@@ -80,6 +80,8 @@ export interface IFinanceStateItem {
   dateLabel: string;
 }
 
+export type TChartCircularComponent = "radar" | "doughnut" | "polarArea";
+
 export type TChartTwoAxlesComponent = "line" | "bar";
 
 export type TFinanceStateCategory = "income" | "expense" | "savings";

@@ -23,11 +23,11 @@ const itemsDynamicsChangesFreeMoney = computed(() => {
   if (!items[0]) return [];
 
   const result: (null | number)[] = [null];
-  let lastFreeMoneyValue: number = items[0].freeMoney || 0;
+  let lastFreeMoneyValue: number = items[0].savings || 0;
 
   items.slice(1).forEach((item) => {
-    result.push((item.freeMoney || 0) - lastFreeMoneyValue);
-    lastFreeMoneyValue = item.freeMoney || 0;
+    result.push((item.savings || 0) - lastFreeMoneyValue);
+    lastFreeMoneyValue = item.savings || 0;
   });
 
   return result;

@@ -45,6 +45,11 @@ export interface IConfirmDeleteModalProps {
   description: string;
 }
 
+export interface ICircularProps {
+  component: "radar" | "doughnut" | "polarArea";
+  chartData: IChartData;
+}
+
 export interface ITwoAxlesProps {
   component: "line" | "bar";
   chartData: IChartData;

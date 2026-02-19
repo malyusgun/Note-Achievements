@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { TChartTwoAxlesComponent } from "~/types";
+import type { TChartCircularComponent, TChartTwoAxlesComponent } from "~/types";
 
 const financesStore = useFinancesStore();
 
+const chartCircularComponent = ref<TChartCircularComponent>("radar");
 const chartTwoAxlesComponent = ref<TChartTwoAxlesComponent>("bar");
 
 const financesStateHistory = computed(() => financesStore.financesStateHistory);
@@ -59,6 +60,10 @@ const onToggleChartTwoAxlesComponent = () => {
 
     <section class="finance__spending-categories">
       <h2 class="finance__title">Расходы по категориям</h2>
+      <ChartCircular
+        :component="chartCircularComponent"
+        :chartData="chartData"
+      />
     </section>
   </article>
 </template>

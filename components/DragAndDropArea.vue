@@ -102,12 +102,6 @@ const onDrag = (e: DragEvent) => {
     }
   }
 };
-const onDragEnd = (e: DragEvent) => {
-  // console.log("e DragEvent: ", e);
-};
-const onMouseUp = (e: MouseEvent) => {
-  // console.log("e MouseEvent: ", e);
-};
 </script>
 
 <template>
@@ -120,8 +114,6 @@ const onMouseUp = (e: MouseEvent) => {
         class="drag-and-drop-area__item"
         @dragstart="onDragStart($event, item.id)"
         @drag="onDrag"
-        @dragend="onDragEnd"
-        @pointerup="onMouseUp"
         draggable="true"
       >
         <slot name="item" :item="item" :index="index" />
