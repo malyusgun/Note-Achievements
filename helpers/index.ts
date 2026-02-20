@@ -25,9 +25,9 @@ export const useFinancesUpdater = (targetIndexInit: number = -1) => {
         ...item,
         ...targetItem,
         savings:
-          (lastItem?.savings || 0) +
-          (targetItem.income || item.income || 0) -
-          (targetItem.expense || item.expense || 0),
+          (lastItem?.savings ?? 0) +
+          (targetItem.income ?? item.income ?? 0) -
+          (targetItem.expense ?? item.expense ?? 0),
       };
       return lastItem;
     }

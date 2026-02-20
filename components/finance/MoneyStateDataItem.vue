@@ -10,7 +10,7 @@ let timerId: number;
 const onChange = (newValue: string | number, field: string) => {
   clearTimeout(timerId);
   timerId = setTimeout(() => {
-    emit("updateItem", newValue, field, props.item.id);
+    emit("updateItem", newValue || 0, field, props.item.id);
   }, 300);
 };
 </script>
@@ -89,6 +89,10 @@ const onChange = (newValue: string | number, field: string) => {
   }
 
   &__input {
+    &:first-child {
+    }
+
+    min-width: 250px;
     width: 25% !important;
 
     > * {
@@ -97,7 +101,7 @@ const onChange = (newValue: string | number, field: string) => {
 
     .number {
       :deep(.input__input) {
-        min-width: 120px;
+        min-width: 125px;
       }
     }
 

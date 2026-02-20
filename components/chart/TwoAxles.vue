@@ -41,7 +41,6 @@ const chartOptions = {
   <div class="two-axles">
     <component
       :is="charts[component]"
-      id="my-chart-id"
       :options="chartOptions"
       :data="chartData"
     />

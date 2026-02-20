@@ -1,6 +1,8 @@
 import type {
+  IFinancesExpensesHistory,
   IFinanceStateHistory,
   IFinanceStateItem,
+  TChartCircularComponent,
   TChartTwoAxlesComponent,
   TFinanceMoneyChangeDirection,
 } from "~/types";
@@ -9,6 +11,9 @@ import { useFinancesUpdater } from "~/helpers";
 export const useFinancesStore = defineStore("financesStore", () => {
   const financesStateHistory = ref<IFinanceStateHistory>(
     JSON.parse(localStorage.getItem("finances") || "{}")
+  );
+  const financesExpensesHistory = ref<IFinancesExpensesHistory>(
+    JSON.parse(localStorage.getItem("financesExpenses") || "{}")
   );
 
   const addFinancesStateItem = (newItem: IFinanceStateItem) => {
@@ -58,6 +63,28 @@ export const useFinancesStore = defineStore("financesStore", () => {
     );
   };
 
+  const toggleChartTwoAxlesComponent = (newState: TChartTwoAxlesComponent) => {
+    financesStateHistory.value = {
+      ...financesStateHistory.value,
+      chartType: newState,
+    };
+    localStorage.setItem(
+      "finances",
+      JSON.stringify(financesStateHistory.value)
+    );
+  };
+
+  const changeChartCircularComponent = (newState: TChartCircularComponent) => {
+    financesExpensesHistory.value = {
+      ...financesExpensesHistory.value,
+      chartType: newState,
+    };
+    localStorage.setItem(
+      "financesExpenses",
+      JSON.stringify(financesExpensesHistory.value)
+    );
+  };
+
   const deleteFinancesStateItem = (itemId: string) => {
     financesStateHistory.value.items = financesStateHistory.value.items.filter(
       (item) => {
@@ -71,23 +98,14 @@ export const useFinancesStore = defineStore("financesStore", () => {
     );
   };
 
-  const toggleChartTwoAxlesComponent = (newState: TChartTwoAxlesComponent) => {
-    financesStateHistory.value = {
-      ...financesStateHistory.value,
-      chartType: newState,
-    };
-    localStorage.setItem(
-      "finances",
-      JSON.stringify(financesStateHistory.value)
-    );
-  };
-
   return {
     financesStateHistory,
+    financesExpensesHistory,
     addFinancesStateItem,
     editFinancesStateHistory,
     changeFinancesStateHistoryOrder,
-    deleteFinancesStateItem,
     toggleChartTwoAxlesComponent,
+    changeChartCircularComponent,
+    deleteFinancesStateItem,
   };
 });

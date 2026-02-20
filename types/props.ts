@@ -1,5 +1,5 @@
 import type {
-  IChartData,
+  ITwoAxlesChartData,
   IFinanceStateHistory,
   IFinanceStateItem,
   IWorkspaceBlock,
@@ -7,6 +7,7 @@ import type {
   IWorkspaceData,
   TMainTheme,
   TSecondTheme,
+  ICircularChartData,
 } from "~/types/index";
 
 export interface IMenuItemProps {
@@ -47,12 +48,12 @@ export interface IConfirmDeleteModalProps {
 
 export interface ICircularProps {
   component: "radar" | "doughnut" | "polarArea";
-  chartData: IChartData;
+  chartData: ICircularChartData;
 }
 
 export interface ITwoAxlesProps {
   component: "line" | "bar";
-  chartData: IChartData;
+  chartData: ITwoAxlesChartData;
 }
 
 export interface IMoneyStateDataProps {

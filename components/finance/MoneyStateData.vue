@@ -120,12 +120,15 @@ const openDeleteModal = (item: IFinanceStateItem) => {
 
 <style scoped lang="scss">
 .money-state-data {
+  overflow-x: auto;
+
   &__header {
     display: flex;
     justify-content: space-between;
   }
 
   &__title {
+    min-width: 250px;
     width: 25%;
     text-align: center;
   }

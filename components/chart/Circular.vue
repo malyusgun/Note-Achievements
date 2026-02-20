@@ -31,10 +31,9 @@ const chartOptions = {
 </script>
 
 <template>
-  <div class="one-axis">
+  <div class="circular">
     <component
       :is="charts[component]"
-      id="my-chart-id"
       :options="chartOptions"
       :data="chartData"
     />
@@ -42,7 +41,7 @@ const chartOptions = {
 </template>
 
 <style scoped lang="scss">
-.one-axis {
+.circular {
   max-width: 60%;
   margin: auto;
   padding: 10px;

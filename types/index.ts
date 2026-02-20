@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import type { ITwoAxlesProps } from "~/types/props";
 
 export type TMainTheme =
   | "blue"
@@ -56,21 +57,63 @@ export interface IWorkspaceBlockListItemData {
   };
 }
 
-export interface IChartData {
+export interface ITwoAxlesChartData {
   labels: string[];
-  datasets: IChartDataset[];
+  datasets: ITwoAxlesChartDataset[];
 }
 
-export interface IChartDataset {
+export interface ITwoAxlesChartDataset {
   label?: string;
   backgroundColor?: string;
   data: (number | null)[];
+}
+
+export interface ICircularChartData {
+  labels: string[];
+  datasets: ICircularChartDataset[];
+}
+
+export interface ICircularChartDataset {
+  label: string;
+  data: number;
+  backgroundColor: string;
+  borderColor: string;
+  pointBackgroundColor: string;
+  pointBorderColor: string;
+  pointHoverBackgroundColor: string;
+  pointHoverBorderColor: string;
+  fill: boolean;
 }
 
 export interface IFinanceStateHistory {
   items: IFinanceStateItem[];
   chartType: TChartTwoAxlesComponent;
 }
+
+export interface IFinancesExpensesHistory {
+  items: TFinancesExpensesDataItem[];
+  chartType: TChartCircularComponent;
+}
+
+export type TFinancesExpensesHistoryCategory =
+  | "food"
+  | "publicCatering"
+  | "housing"
+  | "forHome"
+  | "health"
+  | "beauty"
+  | "transport"
+  | "medicines"
+  | "education"
+  | "clothesAndFootwear"
+  | "entertainment"
+  | "presents"
+  | "other";
+
+export type TFinancesExpensesDataItem = Record<
+  TFinancesExpensesHistoryCategory,
+  number
+>;
 
 export interface IFinanceStateItem {
   id: string;
