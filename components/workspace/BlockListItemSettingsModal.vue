@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import type {
-  IWorkspaceBlockListItemData,
-  IWorkspaceBlockListItemSettingsModalProps,
-} from "~/types";
+import type { IWorkspaceBlockListItemData } from "~/types";
 import { Button, Modal, ToggleSwitch } from "@featherui";
 import { v4 as uuidv4 } from "uuid";
+import type { IWorkspaceBlockListItemSettingsModalProps } from "~/types/props";
 
 const props = defineProps<IWorkspaceBlockListItemSettingsModalProps>();
 

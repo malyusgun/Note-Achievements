@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import type { ITwoAxlesProps } from "~/types/props";
 
 export type TMainTheme =
   | "blue"
@@ -16,14 +17,7 @@ export type TMainTheme =
 
 export type TSecondTheme = "white" | "black";
 
-export interface IMenuItemProps {
-  icon: string;
-  name: string;
-  link?: string;
-  theme: TMainTheme;
-  contrastColor: TSecondTheme;
-  currentPath: string;
-}
+export type TDataOperation = "add" | "edit" | "delete";
 
 export interface IInputProps {
   label?: string;
@@ -47,19 +41,6 @@ export interface IWorkspaceBlock {
   list: IWorkspaceBlockListItem[];
 }
 
-export interface IWorkspaceBlockProps {
-  workspaceData: IWorkspaceData;
-  block: IWorkspaceBlock;
-  contrastColor: TSecondTheme;
-}
-
-export interface IWorkspaceBlockListProps {
-  workspaceId: string;
-  blockId: string;
-  list: IWorkspaceBlockListItem[];
-  mainTheme: TMainTheme;
-}
-
 export interface IWorkspaceBlockListItem extends IWorkspaceBlockListItemData {
   showChildren?: boolean;
   children?: IWorkspaceBlockListItemData[];
@@ -76,16 +57,75 @@ export interface IWorkspaceBlockListItemData {
   };
 }
 
-export interface IWorkspaceBlockListItemProps {
-  item: IWorkspaceBlockListItem;
-  mainTheme: TMainTheme;
+export interface ITwoAxlesChartData {
+  labels: string[];
+  datasets: ITwoAxlesChartDataset[];
 }
 
-export interface IWorkspaceBlockListItemSettingsModalProps {
-  item: IWorkspaceBlockListItem | null;
-  mainTheme?: TMainTheme;
+export interface ITwoAxlesChartDataset {
+  label?: string;
+  backgroundColor?: string;
+  data: (number | null)[];
 }
 
-export interface IConfirmDeleteModalProps {
-  description: string;
+export interface ICircularChartData {
+  labels: string[];
+  datasets: ICircularChartDataset[];
 }
+
+export interface ICircularChartDataset {
+  data: number[];
+  backgroundColor: string | string[];
+  label?: string;
+  borderColor?: string;
+  pointBackgroundColor?: string;
+  pointBorderColor?: string;
+  pointHoverBackgroundColor?: string;
+  pointHoverBorderColor?: string;
+  fill?: boolean;
+}
+
+export interface IFinanceStateHistory {
+  items: IFinanceStateItem[];
+  chartType: TChartTwoAxlesComponent;
+}
+
+export interface IFinancesExpensesHistory {
+  items: TFinancesExpensesDataItem[];
+  chartType: TChartCircularComponent;
+}
+
+export type TFinancesExpensesHistoryCategory =
+  | "food"
+  | "publicCatering"
+  | "housing"
+  | "forHome"
+  | "health"
+  | "beauty"
+  | "transport"
+  | "medicines"
+  | "education"
+  | "clothesAndFootwear"
+  | "entertainment"
+  | "presents"
+  | "other";
+
+export type TFinancesExpensesDataItem = Partial<
+  Record<TFinancesExpensesHistoryCategory, number>
+> & { id: string };
+
+export interface IFinanceStateItem {
+  id: string;
+  income: number | null;
+  expense: number | null;
+  savings: number | null;
+  dateLabel: string;
+}
+
+export type TChartCircularComponent = "radar" | "doughnut" | "polarArea";
+
+export type TChartTwoAxlesComponent = "line" | "bar";
+
+export type TFinanceStateCategory = "income" | "expense" | "savings";
+
+export type TFinanceMoneyChangeDirection = "up" | "down";

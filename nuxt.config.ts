@@ -1,5 +1,6 @@
 import { resolve } from "pathe";
 import svgLoader from "vite-svg-loader";
+import visualizer from "rollup-plugin-visualizer";
 
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
@@ -15,7 +16,7 @@ export default defineNuxtConfig({
   css: ["~/assets/scss/index.scss"],
 
   vite: {
-    plugins: [svgLoader()],
+    plugins: [svgLoader(), visualizer({ open: true })],
     css: {
       preprocessorOptions: {
         scss: {

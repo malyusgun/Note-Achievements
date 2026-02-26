@@ -2,12 +2,12 @@
 const emit = defineEmits(["openWorkspaceCreator", "openSettings"]);
 
 const route = useRoute();
-const mainStore = useMainStore();
-
+const workspacesStore = useWorkspacesStore();
+const userStore = useUserStore();
 const routePath = computed(() => route.path);
-const workspaces = computed(() => mainStore.workspaces);
-const mainTheme = computed(() => mainStore.mainTheme);
-const contrastColor = computed(() => mainStore.contrastColor);
+const workspaces = computed(() => workspacesStore.workspaces);
+const mainTheme = computed(() => userStore.mainTheme);
+const contrastColor = computed(() => userStore.contrastColor);
 </script>
 
 <template>

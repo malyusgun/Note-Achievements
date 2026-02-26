@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import type {
-  IWorkspaceBlockListItem,
-  IWorkspaceBlockListProps,
-  IWorkspaceData,
-} from "~/types";
+import type { IWorkspaceBlockListItem, IWorkspaceData } from "~/types";
+import type { IWorkspaceBlockListProps } from "~/types/props";
 
-const mainStore = useMainStore();
+const workspacesStore = useWorkspacesStore();
 
 const props = defineProps<IWorkspaceBlockListProps>();
 
@@ -13,7 +10,7 @@ const activeSettingsItem = ref<IWorkspaceBlockListItem | null>(null);
 const settingsActive = ref<boolean>(false);
 
 const workspace = computed(() =>
-  mainStore.workspaces.find(
+  workspacesStore.workspaces.find(
     (workspace: IWorkspaceData) => workspace.workspaceId === props.workspaceId
   )
 );
@@ -40,7 +37,7 @@ const saveItemChanges = (
         console.warn(`Parent item not found for child ${newData.itemId}`);
         return;
       }
-      mainStore.updateBlockListItemChild(
+      workspacesStore.updateBlockListItemChild(
         workspace.value.workspaceId,
         props.blockId,
         parentItem.itemId,
@@ -48,7 +45,7 @@ const saveItemChanges = (
         newData
       );
     } else {
-      mainStore.updateBlockListItem(
+      workspacesStore.updateBlockListItem(
         workspace.value.workspaceId,
         props.blockId,
         newData.itemId,
@@ -67,7 +64,7 @@ const deleteItem = (itemId: string) => {
   }
 
   try {
-    mainStore.deleteBlockListItem(
+    workspacesStore.deleteBlockListItem(
       workspace.value.workspaceId,
       props.blockId,
       itemId

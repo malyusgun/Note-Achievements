@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import type {
-  IWorkspaceBlockListItem,
-  IWorkspaceBlockListItemProps,
-} from "~/types";
+import type { IWorkspaceBlockListItem } from "~/types";
 import { Button, Checkbox, Slider } from "@featherui";
+import type { IWorkspaceBlockListItemProps } from "~/types/props";
 
 const props = defineProps<IWorkspaceBlockListItemProps>();
 const emit = defineEmits(["openItemSettings", "saveItemChanges"]);

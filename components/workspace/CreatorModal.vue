@@ -4,8 +4,9 @@ import { Modal, Button } from "@featherui";
 import icons from "~/assets/icons";
 import type { IWorkspaceData } from "~/types";
 
-const mainStore = useMainStore();
-const { mainTheme, contrastColor } = storeToRefs(mainStore);
+const workspacesStore = useWorkspacesStore();
+const userStore = useUserStore();
+const { mainTheme, contrastColor } = storeToRefs(userStore);
 
 const workspaceCreatorModal = defineModel();
 
@@ -50,7 +51,7 @@ const createWorkspace = () => {
     ],
   };
 
-  mainStore.addWorkspace(workspaceData);
+  workspacesStore.addWorkspace(workspaceData);
 
   workspaceCreatorModal.value = false;
 };

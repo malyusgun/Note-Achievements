@@ -5,8 +5,6 @@ onMounted(() => {
   isLoader.value = false;
 });
 
-const mainStore = useMainStore();
-
 const workspaceCreatorModal = ref(false);
 const settingsModal = ref(false);
 
@@ -44,6 +42,9 @@ const openSettings = () => {
 
   &__content {
     flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 20px 40px;
   }
 }
 </style>
