@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { Button, ToggleSwitch } from "@featherui";
+import { Button } from "@featherui";
 import { v4 as uuidv4 } from "uuid";
 import type { IMoneyStateDataProps } from "~/types/props";
 import DragAndDropArea from "~/components/DragAndDropArea.vue";
 import type { IFinanceStateItem, TFinanceMoneyChangeDirection } from "~/types";
 
 const financesStore = useFinancesStore();
-const userStore = useUserStore();
 const props = defineProps<IMoneyStateDataProps>();
 defineEmits(["onToggleComponent"]);
 
@@ -32,7 +31,6 @@ const itemsDynamicsChangesFreeMoney = computed(() => {
 
   return result;
 });
-const mainTheme = computed(() => userStore.mainTheme);
 
 const addItem = () => {
   const newItem = {
@@ -98,16 +96,6 @@ const openDeleteModal = (item: IFinanceStateItem) => {
       <Button label="Добавить запись" @click="addItem" :theme="mainTheme">
         <AppIcon name="badge" :size="20" />
       </Button>
-      <div class="money-state-data__mode-container">
-        <span class="money-state-data__mode">Line mode</span>
-        <ToggleSwitch
-          :negativeTheme="mainTheme === 'blue' ? 'green' : 'blue'"
-          :theme="mainTheme"
-          :modelValue="chartTwoAxlesComponent === 'bar'"
-          @update:modelValue="$emit('onToggleComponent')"
-        />
-        <span class="money-state-data__mode">Bar mode</span>
-      </div>
     </div>
 
     <ConfirmDeleteModal
@@ -135,19 +123,6 @@ const openDeleteModal = (item: IFinanceStateItem) => {
 
   &__footer {
     margin: 30px 0;
-    display: flex;
-    align-items: center;
-    gap: 50px;
-  }
-
-  &__mode-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  &__mode {
-    font-size: 1rem;
   }
 }
 </style>

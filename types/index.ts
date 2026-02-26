@@ -74,15 +74,15 @@ export interface ICircularChartData {
 }
 
 export interface ICircularChartDataset {
-  label: string;
-  data: number;
-  backgroundColor: string;
-  borderColor: string;
-  pointBackgroundColor: string;
-  pointBorderColor: string;
-  pointHoverBackgroundColor: string;
-  pointHoverBorderColor: string;
-  fill: boolean;
+  data: number[];
+  backgroundColor: string | string[];
+  label?: string;
+  borderColor?: string;
+  pointBackgroundColor?: string;
+  pointBorderColor?: string;
+  pointHoverBackgroundColor?: string;
+  pointHoverBorderColor?: string;
+  fill?: boolean;
 }
 
 export interface IFinanceStateHistory {
@@ -110,10 +110,9 @@ export type TFinancesExpensesHistoryCategory =
   | "presents"
   | "other";
 
-export type TFinancesExpensesDataItem = Record<
-  TFinancesExpensesHistoryCategory,
-  number
->;
+export type TFinancesExpensesDataItem = Partial<
+  Record<TFinancesExpensesHistoryCategory, number>
+> & { id: string };
 
 export interface IFinanceStateItem {
   id: string;

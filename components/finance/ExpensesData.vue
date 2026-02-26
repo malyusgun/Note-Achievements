@@ -1,6 +1,12 @@
 <script setup lang="ts">
+import { Button, Slider } from "@featherui";
 import ExpensesDataItem from "~/components/finance/ExpensesDataItem.vue";
-import type { ICircularChartData, IFinancesExpensesHistory } from "~/types";
+import type {
+  ICircularChartData,
+  IFinancesExpensesHistory,
+  TChartCircularComponent,
+} from "~/types";
+import { v4 as uuidv4 } from "uuid";
 
 interface IProps {
   data: IFinancesExpensesHistory;
@@ -10,30 +16,40 @@ interface IProps {
 const props = defineProps<IProps>();
 defineEmits(["onChangeComponent"]);
 
+const userStore = useUserStore();
+const financesStore = useFinancesStore();
+
+const mainTheme = computed(() => userStore.mainTheme);
+const items = computed(() => financesStore.financesExpensesHistory.items);
 const result = computed(() => {
-  const datasets = props.circularChartData?.datasets;
+  const data = props.circularChartData?.datasets?.[0]?.data || [];
 
   return {
-    food:
-      datasets?.find((item) => item.label === "Супермаркеты / еда")?.data || 0,
-    publicCatering:
-      datasets?.find((item) => item.label === "Общепит")?.data || 0,
-    housing: datasets?.find((item) => item.label === "Жильё")?.data || 0,
-    forHome: datasets?.find((item) => item.label === "Для дома")?.data || 0,
-    health: datasets?.find((item) => item.label === "Здоровье")?.data || 0,
-    beauty: datasets?.find((item) => item.label === "Красота")?.data || 0,
-    transport: datasets?.find((item) => item.label === "Транспорт")?.data || 0,
-    medicines: datasets?.find((item) => item.label === "Лекарства")?.data || 0,
-    education:
-      datasets?.find((item) => item.label === "Образование")?.data || 0,
-    clothesAndFootwear:
-      datasets?.find((item) => item.label === "Одежда / обувь")?.data || 0,
-    entertainment:
-      datasets?.find((item) => item.label === "Развлечения")?.data || 0,
-    presents: datasets?.find((item) => item.label === "Подарки")?.data || 0,
-    other: datasets?.find((item) => item.label === "Прочее")?.data || 0,
+    id: "0",
+    food: data[0] || 0,
+    publicCatering: data[1] || 0,
+    housing: data[2] || 0,
+    forHome: data[3] || 0,
+    health: data[4] || 0,
+    beauty: data[5] || 0,
+    transport: data[6] || 0,
+    medicines: data[7] || 0,
+    education: data[8] || 0,
+    clothesAndFootwear: data[9] || 0,
+    entertainment: data[10] || 0,
+    presents: data[11] || 0,
+    other: data[12] || 0,
   };
 });
+
+const addItem = () => {
+  const id = uuidv4();
+  financesStore.addFinancesExpensesItem({ id });
+};
+
+const onUpdateItem = (newValue: string | number, field: string, id: string) => {
+  financesStore.editFinancesExpensesHistory({ id, [field]: newValue });
+};
 </script>
 
 <template>
@@ -48,7 +64,7 @@ const result = computed(() => {
       <h3 class="expenses-data__title">Транспорт</h3>
       <h3 class="expenses-data__title">Лекарства</h3>
       <h3 class="expenses-data__title">Образование</h3>
-      <h3 class="expenses-data__title">Одежда / обувь</h3>
+      <h3 class="expenses-data__title">Одежда/обувь</h3>
       <h3 class="expenses-data__title">Развлечения</h3>
       <h3 class="expenses-data__title">Подарки</h3>
       <h3 class="expenses-data__title">Прочее</h3>
@@ -57,6 +73,25 @@ const result = computed(() => {
     <ExpensesDataItem :item="result" class="expenses-data__result" />
 
     <div class="expenses-data__horizontal-line"></div>
+
+    <ExpensesDataItem
+      v-for="item of items"
+      :key="item.id"
+      :item="item"
+      @updateItem="onUpdateItem"
+      class="expenses-data__item"
+    />
+
+    <div class="expenses-data__footer">
+      <Button
+        label="Добавить запись"
+        @click="addItem"
+        :theme="mainTheme"
+        class="expenses-data__add-button"
+      >
+        <AppIcon name="badge" :size="20" />
+      </Button>
+    </div>
   </div>
 </template>
 
@@ -70,9 +105,10 @@ const result = computed(() => {
   }
 
   &__title {
-    min-width: 150px;
+    min-width: 100px;
     width: 25%;
     text-align: center;
+    font-size: 16px;
   }
 
   &__horizontal-line {
@@ -84,6 +120,21 @@ const result = computed(() => {
 
   &__result {
     pointer-events: none;
+  }
+
+  &__add-button {
+    margin-bottom: 20px;
+  }
+
+  &__item {
+    margin-bottom: 10px;
+  }
+
+  &__footer {
+    margin: 30px 0;
+    display: flex;
+    align-items: center;
+    gap: 50px;
   }
 }
 </style>

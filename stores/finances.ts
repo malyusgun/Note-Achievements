@@ -4,7 +4,7 @@ import type {
   IFinanceStateItem,
   TChartCircularComponent,
   TChartTwoAxlesComponent,
-  TFinanceMoneyChangeDirection,
+  TFinancesExpensesDataItem,
 } from "~/types";
 import { useFinancesUpdater } from "~/helpers";
 
@@ -28,6 +28,20 @@ export const useFinancesStore = defineStore("financesStore", () => {
     );
   };
 
+  const addFinancesExpensesItem = (
+    newItem: Partial<TFinancesExpensesDataItem> & { id: string }
+  ) => {
+    if (!financesExpensesHistory.value.items)
+      financesExpensesHistory.value.items = [];
+
+    financesExpensesHistory.value.items.push(newItem);
+
+    localStorage.setItem(
+      "financesExpenses",
+      JSON.stringify(financesExpensesHistory.value)
+    );
+  };
+
   const editFinancesStateHistory = (
     targetItem: Partial<IFinanceStateItem> & { id: string }
   ) => {
@@ -39,6 +53,21 @@ export const useFinancesStore = defineStore("financesStore", () => {
     localStorage.setItem(
       "finances",
       JSON.stringify(financesStateHistory.value)
+    );
+  };
+
+  const editFinancesExpensesHistory = (
+    targetItem: Partial<TFinancesExpensesDataItem> & { id: string }
+  ) => {
+    financesExpensesHistory.value.items =
+      financesExpensesHistory.value.items.map((item) => {
+        if (targetItem.id !== item.id) return item;
+        return { ...item, ...targetItem };
+      });
+
+    localStorage.setItem(
+      "financesExpenses",
+      JSON.stringify(financesExpensesHistory.value)
     );
   };
 
@@ -102,7 +131,9 @@ export const useFinancesStore = defineStore("financesStore", () => {
     financesStateHistory,
     financesExpensesHistory,
     addFinancesStateItem,
+    addFinancesExpensesItem,
     editFinancesStateHistory,
+    editFinancesExpensesHistory,
     changeFinancesStateHistoryOrder,
     toggleChartTwoAxlesComponent,
     changeChartCircularComponent,

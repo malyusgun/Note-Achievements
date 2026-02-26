@@ -5,7 +5,7 @@ import type { IMoneyStateDataItemProps } from "~/types/props";
 const props = defineProps<IMoneyStateDataItemProps>();
 const emit = defineEmits(["updateItem", "openDeleteModal"]);
 
-let timerId: number;
+let timerId = 0;
 
 const onChange = (newValue: string | number, field: string) => {
   clearTimeout(timerId);

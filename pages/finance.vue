@@ -4,12 +4,15 @@ import type {
   TChartTwoAxlesComponent,
   TFinancesExpensesHistoryCategory,
 } from "~/types";
+import { ToggleSwitch, Slider } from "@featherui";
 
 const financesStore = useFinancesStore();
+const userStore = useUserStore();
 
 const chartTwoAxlesComponent = ref<TChartTwoAxlesComponent>("bar");
 const chartCircularComponent = ref<TChartCircularComponent>("radar");
 
+const mainTheme = computed(() => userStore.mainTheme);
 const financesStateHistory = computed(() => financesStore.financesStateHistory);
 const financesExpensesHistory = computed(
   () => financesStore.financesExpensesHistory
@@ -17,6 +20,24 @@ const financesExpensesHistory = computed(
 chartTwoAxlesComponent.value = financesStateHistory.value.chartType || "bar";
 chartCircularComponent.value =
   financesExpensesHistory.value.chartType || "radar";
+
+const circularModeSliderOptions = [
+  {
+    label: "Radar",
+    value: "radar",
+    color: "red",
+  },
+  {
+    label: "Doughnut",
+    value: "doughnut",
+    color: "green",
+  },
+  {
+    label: "PolarArea",
+    value: "polarArea",
+    color: "blue",
+  },
+];
 
 const twoAxlesChartData = computed(() => {
   const history = financesStateHistory.value;
@@ -116,22 +137,49 @@ const circularChartData = computed(() => {
     },
   ];
 
+  const keys = Object.keys(history.items[0]!);
+  const datasetsData: number[] = [];
+
+  for (const key of keys) {
+    if (key === "id") continue;
+    let length = 0;
+    datasetsData.push(
+      history.items.reduce((acc, cur) => {
+        const value: number | undefined =
+          cur[key as TFinancesExpensesHistoryCategory];
+        if (typeof value === "number") length++;
+        return acc + (value || 0);
+      }, 0) / length
+    );
+  }
+
+  if (!history.chartType || history.chartType === "radar") {
+    return {
+      labels: data.map((item) => item.label),
+      datasets: [
+        {
+          label: "Среднее",
+          data: datasetsData,
+          backgroundColor: "rgba(0, 145, 255, 0.2)",
+          borderColor: "rgba(0, 145, 255)",
+          pointBackgroundColor: "rgba(0, 145, 255)",
+          pointBorderColor: "white",
+          pointHoverBackgroundColor: "white",
+          pointHoverBorderColor: "rgba(0, 145, 255)",
+          fill: true,
+        },
+      ],
+    };
+  }
+
   return {
     labels: data.map((item) => item.label),
-    datasets: data.map((item) => ({
-      label: item.label,
-      data: history.items.reduce(
-        (acc, i) => acc + i[item.field as TFinancesExpensesHistoryCategory],
-        0
-      ),
-      backgroundColor: item.color.replace(")", ", 0.2)"),
-      borderColor: item.color,
-      pointBackgroundColor: item.color,
-      pointBorderColor: "white",
-      pointHoverBackgroundColor: "white",
-      pointHoverBorderColor: item.color,
-      fill: true,
-    })),
+    datasets: [
+      {
+        data: datasetsData,
+        backgroundColor: data.map((item) => item.color),
+      },
+    ],
   };
 });
 
@@ -150,30 +198,58 @@ const onChangeChartCircularComponent = (newValue: TChartCircularComponent) => {
   <article class="finance">
     <section class="finance__money-state">
       <h2 class="finance__title">Доходы и расходы</h2>
+
+      <div class="finance__mode-container">
+        <span class="finance__mode">Line mode</span>
+        <ToggleSwitch
+          :negativeTheme="mainTheme === 'blue' ? 'green' : 'blue'"
+          :theme="mainTheme"
+          :modelValue="chartTwoAxlesComponent === 'bar'"
+          @update:modelValue="onToggleChartTwoAxlesComponent"
+        />
+        <span class="finance__mode">Bar mode</span>
+      </div>
+
       <ChartTwoAxles
         v-if="twoAxlesChartData"
         :component="chartTwoAxlesComponent"
         :chartData="twoAxlesChartData"
       />
+
       <FinanceMoneyStateData
+        :mainTheme="mainTheme"
         :data="financesStateHistory"
-        :chartTwoAxlesComponent="chartTwoAxlesComponent"
-        @onToggleComponent="onToggleChartTwoAxlesComponent"
       />
     </section>
 
     <section class="finance__expenses-categories">
       <h2 class="finance__title">Расходы по категориям</h2>
+
+      <div class="finance__mode-container">
+        <Slider
+          max="2"
+          isSmooth
+          width="200"
+          isValueEqualOption
+          backgroundColor="green"
+          theme="blue"
+          :options="circularModeSliderOptions"
+          :modelValue="financesExpensesHistory.chartType"
+          @update:modelValue="onChangeChartCircularComponent"
+        />
+      </div>
+
       <ChartCircular
         v-if="circularChartData"
         :component="chartCircularComponent"
         :chartData="circularChartData"
+        class="finance__circular-chart"
       />
+
       <FinanceExpensesData
         :data="financesExpensesHistory"
         :circularChartData="circularChartData"
         :chartCircularComponent="chartCircularComponent"
-        @onChangeComponent="onChangeChartCircularComponent"
       />
     </section>
   </article>
@@ -185,6 +261,21 @@ const onChangeChartCircularComponent = (newValue: TChartCircularComponent) => {
     margin: 30px;
     text-align: center;
     font-size: 30px;
+  }
+
+  &__mode-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__mode {
+    font-size: 1rem;
+  }
+
+  &__circular-chart {
+    max-width: 30%;
+    margin-bottom: 20px;
   }
 }
 </style>

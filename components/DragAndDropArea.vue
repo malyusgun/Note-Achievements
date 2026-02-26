@@ -12,7 +12,12 @@ const targetItemId = ref<string>("");
 const topSiblingDist = ref<number>(0);
 const bottomSiblingDist = ref<number>(0);
 let dragIterations = 0;
-
+document.addEventListener("dragover", (event) => {
+  event.preventDefault();
+});
+document.addEventListener("dragenter", (event) => {
+  event.preventDefault();
+});
 const setSiblingsDist = (
   target: Element,
   direction: TFinanceMoneyChangeDirection | null
@@ -111,11 +116,16 @@ const onDrag = (e: DragEvent) => {
         v-for="(item, index) of items"
         :key="item.id"
         :id="item.id"
-        class="drag-and-drop-area__item"
-        @dragstart="onDragStart($event, item.id)"
-        @drag="onDrag"
-        draggable="true"
+        class="drag-and-drop-area__item item"
       >
+        <button
+          class="item__drag"
+          @dragstart="onDragStart($event, item.id)"
+          @drag="onDrag"
+          draggable="true"
+        >
+          <AppIcon name="vertical-dots" />
+        </button>
         <slot name="item" :item="item" :index="index" />
       </li>
     </TransitionGroup>
@@ -132,5 +142,24 @@ const onDrag = (e: DragEvent) => {
 .list-enter-active,
 .list-leave-active {
   transition: all 0.5s ease;
+}
+
+.item {
+  position: relative;
+
+  &__drag {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    width: 20px;
+    height: 32px;
+    background-color: #fff;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
 }
 </style>

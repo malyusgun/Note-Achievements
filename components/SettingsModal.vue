@@ -14,7 +14,7 @@ const settingsModal = defineModel();
 const deleteModal = ref<boolean>(false);
 const deleteWorkspaceData = ref<IWorkspaceData | null>(null);
 
-let timerId: number = 0;
+let timerId = 0;
 const colors: TMainTheme[] = [
   "blue",
   "sky",

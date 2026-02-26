@@ -57,8 +57,8 @@ export interface ITwoAxlesProps {
 }
 
 export interface IMoneyStateDataProps {
+  mainTheme: TMainTheme;
   data: IFinanceStateHistory;
-  chartTwoAxlesComponent: "line" | "bar";
 }
 
 export interface IMoneyStateDataItemProps {

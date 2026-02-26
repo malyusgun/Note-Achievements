@@ -4,17 +4,27 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
   BarElement,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
   RadialLinearScale,
+  ArcElement,
 } from "chart.js";
 import type { ICircularProps } from "~/types/props";
 import { Radar, Doughnut, PolarArea } from "vue-chartjs";
 
-ChartJS.register(Title, Tooltip, Legend, CategoryScale, RadialLinearScale);
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  RadialLinearScale,
+  Filler,
+  ArcElement
+);
 ChartJS.defaults.borderColor = "#888";
 ChartJS.defaults.color = "#888";
 const props = defineProps<ICircularProps>();
