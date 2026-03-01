@@ -1,4 +1,4 @@
-import './style.css';
+import './style.css'
 import { defineComponent as h, openBlock as n, createElementBlock as s, createElementVNode as t, createStaticVNode as J1, normalizeStyle as b, mergeModels as F, useCssVars as o1, useModel as N, watch as X, computed as u, normalizeClass as Z, renderSlot as W, withModifiers as l1, createBlock as P, resolveDynamicComponent as n1, unref as A, createCommentVNode as T, Fragment as j, renderList as Y, toDisplayString as O, withDirectives as E, vModelText as L1, ref as S, vShow as Q, createVNode as y, withCtx as R, vModelCheckbox as h2, createTextVNode as f1, Transition as f2, mergeProps as t1, watchEffect as v2, withKeys as m1, resolveComponent as m2 } from "vue";
 const g2 = ["width", "height"], w2 = ["fill"], $2 = ["fill"], _2 = ["fill"], b2 = ["fill"], k2 = /* @__PURE__ */ h({
   __name: "Age18Icon",
@@ -3986,22 +3986,26 @@ const y7 = (l) => {
   emits: ["update:modelValue"],
   setup(l) {
     o1((d) => ({
-      "7b3e5ec2": a.value,
-      "1a3b2308": _.value,
-      "0f6951e5": r.value,
-      "636defca": d.width
+      "2397281f": a.value,
+      "220945fc": _.value,
+      "5fd16d36": r.value,
+      c0c33eca: d.width
     }));
     const e = l, o = N(l, "modelValue"), i = u({
       get() {
-        return typeof o.value == "string" && e.options ? e.options.findIndex((d) => d.value == o.value) ?? o.value : o.value;
+        if (typeof o.value == "string" && e.options) {
+          const d = e.options.findIndex((m) => m.label == o.value);
+          return d > -1 ? d : o.value;
+        } else
+          return o.value;
       },
       set(d) {
         var m;
-        e.options ? o.value = ((m = e.options.find(($) => $.value == d || $.label == d)) == null ? void 0 : m.value) ?? e.options[d].value : o.value = d;
+        e.options ? o.value = ((m = e.options.find(($) => $.value == d || $.label == d)) == null ? void 0 : m.label) || d : o.value = d;
       }
     });
     X([o], () => {
-      o.value !== i.value && (i.value = typeof o.value == "string" && e.options.findIndex((d) => d.value === o.value) || o.value);
+      o.value != i.value && (i.value = typeof o.value == "string" && e.options.findIndex((d) => d.label == o.value) || o.value);
     });
     const a = u(() => {
       switch (e.size) {
@@ -4064,7 +4068,7 @@ const y7 = (l) => {
       ], 6);
     };
   }
-}), K7 = /* @__PURE__ */ G(Y7, [["__scopeId", "data-v-7d17e82a"]]), J7 = { style: { width: "max-content" } }, Q7 = /* @__PURE__ */ h({
+}), K7 = /* @__PURE__ */ G(Y7, [["__scopeId", "data-v-46c00435"]]), J7 = { style: { width: "max-content" } }, Q7 = /* @__PURE__ */ h({
   __name: "Button",
   props: {
     label: {},
