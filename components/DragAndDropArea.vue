@@ -134,6 +134,8 @@ const onDrag = (e: DragEvent) => {
 
 <style scoped lang="scss">
 .drag-and-drop-area {
+  padding-left: 25px;
+
   &__item {
   }
 }
@@ -150,6 +152,7 @@ const onDrag = (e: DragEvent) => {
   &__drag {
     position: absolute;
     top: 50%;
+    left: -25px;
     transform: translateY(-50%);
     z-index: 100;
     width: 20px;

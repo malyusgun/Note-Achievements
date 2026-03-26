@@ -92,8 +92,12 @@ const onChange = (newValue: string | number, field: string) => {
     &:first-child {
     }
 
-    min-width: 250px;
+    min-width: 150px;
     width: 25% !important;
+
+    @media (min-width: 1600px) {
+      min-width: 250px;
+    }
 
     > * {
       margin: 0 auto;

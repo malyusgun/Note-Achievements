@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Button, Slider } from "@featherui";
+import { Button } from "@featherui";
 import ExpensesDataItem from "~/components/finance/ExpensesDataItem.vue";
 import type {
   ICircularChartData,
   IFinancesExpensesHistory,
-  TChartCircularComponent,
+  TFinancesExpensesDataItem,
 } from "~/types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -13,7 +13,7 @@ interface IProps {
   circularChartData: ICircularChartData | null;
 }
 
-const props = defineProps<IProps>();
+defineProps<IProps>();
 defineEmits(["onChangeComponent"]);
 
 const userStore = useUserStore();
@@ -22,23 +22,22 @@ const financesStore = useFinancesStore();
 const mainTheme = computed(() => userStore.mainTheme);
 const items = computed(() => financesStore.financesExpensesHistory.items);
 const result = computed(() => {
-  const data = props.circularChartData?.datasets?.[0]?.data || [];
+  const data = (items.value || []).reduce(
+    (acc, item: TFinancesExpensesDataItem, index) => {
+      Object.keys(item).forEach((k) => {
+        if (k === "id") return;
+        const key = k as keyof TFinancesExpensesDataItem;
+        (acc[key] as any) =
+          (((acc[key] as number) || 0) + (item[key] as number)) / (index + 1);
+      });
+      return acc;
+    },
+    {} as TFinancesExpensesDataItem
+  );
 
   return {
+    ...data,
     id: "0",
-    food: data[0] || 0,
-    publicCatering: data[1] || 0,
-    housing: data[2] || 0,
-    forHome: data[3] || 0,
-    health: data[4] || 0,
-    beauty: data[5] || 0,
-    transport: data[6] || 0,
-    medicines: data[7] || 0,
-    education: data[8] || 0,
-    clothesAndFootwear: data[9] || 0,
-    entertainment: data[10] || 0,
-    presents: data[11] || 0,
-    other: data[12] || 0,
   };
 });
 

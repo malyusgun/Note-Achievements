@@ -28,7 +28,10 @@ export const useFinancesUpdater = (targetIndexInit: number = -1) => {
     if (item.id === targetItem.id) {
       targetIndex = index;
 
-      if (targetItem.savings) return { ...item, ...targetItem };
+      if (targetItem.savings) {
+        lastItem = { ...item, ...targetItem };
+        return lastItem;
+      }
 
       lastItem = {
         ...item,

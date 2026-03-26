@@ -190,6 +190,7 @@ const onToggleChartTwoAxlesComponent = () => {
 };
 const onChangeChartCircularComponent = (newValue: TChartCircularComponent) => {
   chartCircularComponent.value = newValue;
+  console.log("newValue: ", newValue);
   financesStore.changeChartCircularComponent(chartCircularComponent.value);
 };
 </script>
@@ -227,6 +228,7 @@ const onChangeChartCircularComponent = (newValue: TChartCircularComponent) => {
 
       <div class="finance__mode-container">
         <Slider
+          v-if="circularChartData"
           max="2"
           isSmooth
           width="200"

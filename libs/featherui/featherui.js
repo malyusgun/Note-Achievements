@@ -1,5 +1,5 @@
 import './style.css'
-import { defineComponent as h, openBlock as n, createElementBlock as s, createElementVNode as t, createStaticVNode as J1, normalizeStyle as b, mergeModels as F, useCssVars as o1, useModel as N, watch as X, computed as u, normalizeClass as Z, renderSlot as W, withModifiers as l1, createBlock as P, resolveDynamicComponent as n1, unref as A, createCommentVNode as T, Fragment as j, renderList as Y, toDisplayString as O, withDirectives as E, vModelText as L1, ref as S, vShow as Q, createVNode as y, withCtx as R, vModelCheckbox as h2, createTextVNode as f1, Transition as f2, mergeProps as t1, watchEffect as v2, withKeys as m1, resolveComponent as m2 } from "vue";
+import { defineComponent as h, openBlock as n, createElementBlock as s, createElementVNode as t, createStaticVNode as J1, normalizeStyle as b, mergeModels as F, useCssVars as o1, useModel as N, watch as Y, computed as u, normalizeClass as Z, renderSlot as W, withModifiers as l1, createBlock as P, resolveDynamicComponent as n1, unref as A, createCommentVNode as T, Fragment as j, renderList as X, toDisplayString as O, withDirectives as E, vModelText as L1, ref as S, vShow as Q, createVNode as y, withCtx as R, vModelCheckbox as h2, createTextVNode as f1, Transition as f2, mergeProps as t1, watchEffect as v2, withKeys as m1, resolveComponent as m2 } from "vue";
 const g2 = ["width", "height"], w2 = ["fill"], $2 = ["fill"], _2 = ["fill"], b2 = ["fill"], k2 = /* @__PURE__ */ h({
   __name: "Age18Icon",
   props: {
@@ -3584,7 +3584,7 @@ const y7 = (l) => {
       c508e738: g.value
     }));
     const o = l, i = document.querySelector("body"), a = e, C = N(l, "visible");
-    X(C, () => {
+    Y(C, () => {
       C.value ? (window.blockPopupActions = !0, i.style.overflowY = "hidden", i.style.paddingRight = o.paddingRightOnActive) : (window.blockPopupActions = !1, i.style.overflowY = "auto", i.style.paddingRight = "0", a("onClose"));
     });
     const v = u(() => o.headerAllowWrap ? "normal" : "nowrap"), w = u(() => V(o.theme, o.darknessTheme)), g = u(() => p1(o.theme, o.darknessTheme)), _ = u(
@@ -3672,7 +3672,7 @@ const y7 = (l) => {
     const o = l, i = N(l, "modelValue"), a = e;
     o.active && (i.value = o.active);
     const C = u(() => o.active);
-    X(C, () => i.value = C.value), X(i, () => a("update", i));
+    Y(C, () => i.value = C.value), Y(i, () => a("update", i));
     const v = u(() => V(o.theme, o.darknessTheme)), w = u(() => V(o.negativeTheme, o.darknessNegativeTheme)), g = u(() => {
       if (!(o != null && o.size))
         return {
@@ -3817,7 +3817,7 @@ const y7 = (l) => {
         }
       ])
     }, [
-      (n(!0), s(j, null, Y(m.options, (k, L) => (n(), s("button", {
+      (n(!0), s(j, null, X(m.options, (k, L) => (n(), s("button", {
         key: k.label,
         class: Z([
           "button",
@@ -3899,7 +3899,7 @@ const y7 = (l) => {
     const C = a.offsetWidth - a.clientWidth;
     a.remove();
     const v = e, w = N(l, "visible");
-    X(w, () => {
+    Y(w, () => {
       w.value ? (window.blockPopupActions = !0, i.style.overflowY = "hidden", i.style.paddingRight = o.paddingRightOnActive || C + "px") : (window.blockPopupActions = !1, i.style.overflowY = "auto", i.style.paddingRight = "0", v("onClose"));
     });
     const g = u(() => `calc(${o.headerHeight} + 20px + 8px`), _ = u(() => V(o.theme, o.darknessTheme)), r = u(() => p1(o.theme, o.darknessTheme)), p = u(
@@ -3986,28 +3986,24 @@ const y7 = (l) => {
   emits: ["update:modelValue"],
   setup(l) {
     o1((d) => ({
-      "2397281f": a.value,
-      "220945fc": _.value,
-      "5fd16d36": r.value,
-      c0c33eca: d.width
+      "46e4c40f": a.value,
+      "17b3f1ec": _.value,
+      75049955: r.value,
+      "56badaab": d.width
     }));
     const e = l, o = N(l, "modelValue"), i = u({
       get() {
         if (typeof o.value == "string" && e.options) {
-          const d = e.options.findIndex((m) => m.label == o.value);
-          return d > -1 ? d : o.value;
+          const d = e.options.findIndex((m) => m.value == o.value || m.label == o.value);
+          return d > -1 ? d : +o.value;
         } else
           return o.value;
       },
       set(d) {
         var m;
-        e.options ? o.value = ((m = e.options.find(($) => $.value == d || $.label == d)) == null ? void 0 : m.label) || d : o.value = d;
+        e.options ? o.value = ((m = e.options.find(($) => $.value == d || $.label == d)) == null ? void 0 : m.label) || e.options[d].value || e.options[d].label : o.value = d;
       }
-    });
-    X([o], () => {
-      o.value != i.value && (i.value = typeof o.value == "string" && e.options.findIndex((d) => d.label == o.value) || o.value);
-    });
-    const a = u(() => {
+    }), a = u(() => {
       switch (e.size) {
         case "small":
           return "10px";
@@ -4058,7 +4054,7 @@ const y7 = (l) => {
             class: "marksList",
             style: b(`width: ${d.width ?? 200}px; padding: 0 ${f.value};`)
           }, [
-            (n(!0), s(j, null, Y(d.options, (k) => (n(), s("li", {
+            (n(!0), s(j, null, X(d.options, (k) => (n(), s("li", {
               key: String(k.label),
               class: "mark",
               style: b(`color: ${A(V)(k.color ?? "black", k.darknessColor ?? "500") ?? "white"}; font-size: ${C.value}`)
@@ -4068,7 +4064,7 @@ const y7 = (l) => {
       ], 6);
     };
   }
-}), K7 = /* @__PURE__ */ G(Y7, [["__scopeId", "data-v-46c00435"]]), J7 = { style: { width: "max-content" } }, Q7 = /* @__PURE__ */ h({
+}), K7 = /* @__PURE__ */ G(Y7, [["__scopeId", "data-v-cc1cbdf7"]]), J7 = { style: { width: "max-content" } }, Q7 = /* @__PURE__ */ h({
   __name: "Button",
   props: {
     label: {},
@@ -4213,7 +4209,7 @@ const y7 = (l) => {
         ]),
         style: b(w.value)
       }, [
-        (n(!0), s(j, null, Y(r.items, (f, d) => (n(), s("li", {
+        (n(!0), s(j, null, X(r.items, (f, d) => (n(), s("li", {
           key: f.label,
           style: b(`height: ${v.value}px; background-color: ${A(V)(f.theme ?? "white", f.darknessTheme ?? "500")};
         color: ${_(f)}; border-color: ${C.value};`),
@@ -4267,7 +4263,7 @@ const y7 = (l) => {
     const e = l, o = N(l, "modelValue"), i = u(() => V(e.theme, e.darknessTheme)), a = u(() => p1(e.theme, e.darknessTheme)), C = S(), v = S(), w = S(), g = S(), _ = u(() => e.parentSelector), r = S(document.querySelector(e.parentSelector));
     return r.value || setTimeout(() => {
       r.value = document.querySelector(e.parentSelector);
-    }, 0), X(_, () => r.value = document.querySelector(e.parentSelector)), X(
+    }, 0), Y(_, () => r.value = document.querySelector(e.parentSelector)), Y(
       r,
       () => {
         var p;
@@ -4366,7 +4362,7 @@ const y7 = (l) => {
       return p ? p.getBoundingClientRect().left - o.table.getBoundingClientRect().left + +w.value : 0;
     }, _ = u(() => o.columns[o.indexColumnToFilter].type === "text");
     return (r, p) => (n(), s("tr", null, [
-      (n(!0), s(j, null, Y(r.columns, (f, d) => (n(), s("th", {
+      (n(!0), s(j, null, X(r.columns, (f, d) => (n(), s("th", {
         key: f.name,
         style: b(`position: relative; padding: calc(${r.initGap} / 2 + ${r.additionalHeightFromSize}) ${r.initGap}`),
         class: Z([
@@ -4523,7 +4519,7 @@ const y7 = (l) => {
     const o = l, i = N(l, "modelValue"), a = e;
     o.active && (i.value = o.active);
     const C = u(() => o.active);
-    X(C, () => i.value = C.value), X(i, () => a("update", i));
+    Y(C, () => i.value = C.value), Y(i, () => a("update", i));
     const v = u(() => V(o.theme, o.darknessTheme)), w = u(() => V(o.activeTheme, o.darknessActiveTheme)), g = u(
       () => o.disabled ? "#62708c" : s1(o.activeTheme, o.darknessActiveTheme)
     ), _ = u(() => V(o.textColor, o.darknessTextColor)), r = u(
@@ -4729,7 +4725,7 @@ const y7 = (l) => {
     const o = l, i = N(l, "modelValue"), a = e;
     o.selected && (i.value = o.selected);
     const C = u(() => o.selected);
-    X(C, () => i.value = C.value), X(i, () => a("update", i));
+    Y(C, () => i.value = C.value), Y(i, () => a("update", i));
     const v = S(!1), w = S(""), g = u(() => bl(o.options, o.groups, w.value)), _ = u(
       () => o.options.filter(
         (M) => !M.group && (w.value ? (M.label ?? M.value).toLowerCase().startsWith(w.value.toLowerCase()) : !0)
@@ -4754,7 +4750,7 @@ const y7 = (l) => {
           id: "select"
         }, [
           x[3] || (x[3] = t("option", { value: "" }, null, -1)),
-          (n(!0), s(j, null, Y(M.options, (c) => (n(), s("option", {
+          (n(!0), s(j, null, X(M.options, (c) => (n(), s("option", {
             key: c.value,
             selected: i.value === c.value
           }, O(c.label ?? c.value), 9, yl))), 128))
@@ -4831,7 +4827,7 @@ const y7 = (l) => {
                   color: "#62708c"
                 }, null, 8, ["size"])
               ])) : T("", !0),
-              (n(!0), s(j, null, Y(g.value, (c) => (n(), s("div", {
+              (n(!0), s(j, null, X(g.value, (c) => (n(), s("div", {
                 key: c.name,
                 class: "group"
               }, [
@@ -4853,7 +4849,7 @@ const y7 = (l) => {
                     color: D((c == null ? void 0 : c.iconRightColor) ?? c.nameColor, M.darknessTheme ?? "700", $.value)
                   }, null, 8, ["size", "color"])) : T("", !0)
                 ], 4),
-                (n(!0), s(j, null, Y(c.items, (B) => (n(), P(H1, {
+                (n(!0), s(j, null, X(c.items, (B) => (n(), P(H1, {
                   onClick: l1((i1) => H(B.value), ["prevent"]),
                   key: B.value,
                   width: M.width,
@@ -4881,7 +4877,7 @@ const y7 = (l) => {
                   _: 2
                 }, 1032, ["onClick", "width", "option", "fontSizeNumber", "textColor", "class", "style"]))), 128))
               ]))), 128)),
-              (n(!0), s(j, null, Y(_.value, (c) => (n(), P(H1, {
+              (n(!0), s(j, null, X(_.value, (c) => (n(), P(H1, {
                 onClick: l1((B) => H(c.value), ["prevent"]),
                 key: c.value,
                 width: M.width,
@@ -4935,7 +4931,7 @@ const y7 = (l) => {
     const o = l, i = N(l, "modelValue"), a = e;
     o.value && (i.value = o.value);
     const C = u(() => o.value);
-    X(C, () => i.value = C.value ?? i.value), X(i, () => a("update", i));
+    Y(C, () => i.value = C.value ?? i.value), Y(i, () => a("update", i));
     const v = S(), w = u(() => V(o.theme, o.darknessTheme)), g = u(() => o.offTheme ? V(o.offTheme, o.darknessTheme) : null), _ = u(() => V(o.offTheme ?? o.theme, "200")), r = u(() => e1(o.size, ["10px", "20px", "30px", "40px"])), p = (f) => {
       if (i.value > f) {
         i.value = f;
@@ -4947,7 +4943,7 @@ const y7 = (l) => {
       class: "list",
       style: b(`gap: ${f.gap}`)
     }, [
-      (n(!0), s(j, null, Y(Array(f.count).keys(), (m) => (n(), s("li", {
+      (n(!0), s(j, null, X(Array(f.count).keys(), (m) => (n(), s("li", {
         key: m,
         class: "item",
         style: b(`width: ${r.value}; height: ${r.value}`)
@@ -5042,7 +5038,7 @@ const y7 = (l) => {
       "58c42579": p.value
     }));
     const o = l, i = S(), a = N(l, "modelValue"), C = e, v = u(() => o.value);
-    X(v, () => a.value = v.value, { immediate: !0 }), X(a, () => C("update", a));
+    Y(v, () => a.value = v.value, { immediate: !0 }), Y(a, () => C("update", a));
     const w = u(
       () => o.width && o.width.includes("%") ? i.value.clientWidth * parseInt(o.width) / 100 : parseInt(o.width || "300")
     ), g = u(() => `${a.value / o.max * 100}%`), _ = u(() => {
@@ -5140,7 +5136,7 @@ const y7 = (l) => {
     const o = l, i = N(l, "modelValue"), a = e;
     o.value && (i.value = o.value);
     const C = u(() => o.value);
-    X(C, () => i.value = C.value ?? i.value), X(i, () => a("update", i));
+    Y(C, () => i.value = C.value ?? i.value), Y(i, () => a("update", i));
     const v = S(!1), w = S(), g = u(() => 270), _ = u(() => o.max - o.min), r = u(() => Sl(w.value)), p = u(() => xl(w.value)), f = u(() => o.width ?? Pl(o.size)), d = u(() => {
       const c = o.size;
       return c === "normal" || c === "small" ? "small" : c === "large" ? "large" : "huge";
@@ -5579,7 +5575,7 @@ const y7 = (l) => {
       const $ = a.value, k = Math.min($, 5), L = o.value;
       return L - 2 < 2 ? C.value.slice(0, k + 1) : L + 2 > $ ? C.value.slice(-k) : k === 5 ? [L - 2, L - 1, L, L + 1, L + 2] : C.value;
     }), r = u(() => e1(e.size, ["7", "10", "15", "18"])), p = u(() => e1(e.size, ["12px", "16px", "26px", "32px"])), f = u(() => `${+r.value * 2.5}px`), d = u(() => V(e.theme, e.darknessTheme)), m = u(() => s1(e.theme, e.darknessTheme));
-    return X(i, ($, k) => {
+    return Y(i, ($, k) => {
       $ > k ? o.value = Math.round(o.value * k / $) ?? 1 : o.value = Math.ceil((k * (o.value - 1) + +$) / $);
     }), ($, k) => (n(), s("section", a8, [
       y(k1, {
@@ -5612,7 +5608,7 @@ const y7 = (l) => {
         ]),
         _: 1
       }, 8, ["textColor", "color", "disable"]),
-      (n(!0), s(j, null, Y(_.value, (L) => (n(), P(k1, {
+      (n(!0), s(j, null, X(_.value, (L) => (n(), P(k1, {
         key: L,
         onClick: (H) => o.value = L,
         textColor: m.value,
@@ -5787,7 +5783,7 @@ const y7 = (l) => {
           }, null, 8, ["filterValue", "isFilterPopup", "isRegisterSensitive", "table", "columns", "sortState", "indexColumnToFilter", "types", "initGap", "additionalHeightFromSize", "theme", "themeColor", "secondaryColor", "color", "showAllLines", "center", "fontSize", "isEditMode"])
         ]),
         t("tbody", null, [
-          (n(!0), s(j, null, Y(D.value, (K, u1) => {
+          (n(!0), s(j, null, X(D.value, (K, u1) => {
             var _1, R1;
             return n(), s("tr", {
               key: u1,
@@ -5798,7 +5794,7 @@ const y7 = (l) => {
                 }))
               })
             }, [
-              (n(!0), s(j, null, Y(K, (V1, d1) => {
+              (n(!0), s(j, null, X(K, (V1, d1) => {
                 var b1, O1, F1, W1, U1;
                 return n(), s("td", {
                   key: d1,
@@ -5973,7 +5969,7 @@ const y7 = (l) => {
           class: "list",
           style: b(`transform: ${f.value};`)
         }, [
-          (n(!0), s(j, null, Y(d.items, ($, k) => (n(), s("li", {
+          (n(!0), s(j, null, X(d.items, ($, k) => (n(), s("li", {
             key: k,
             class: "item",
             style: b(`padding: ${d.padding ?? 0}; min-width: ${r.value}`)
@@ -5988,7 +5984,7 @@ const y7 = (l) => {
           class: "list",
           style: b(`transform: ${f.value};`)
         }, [
-          (n(!0), s(j, null, Y(Array(i.value).keys(), ($) => (n(), s("li", {
+          (n(!0), s(j, null, X(Array(i.value).keys(), ($) => (n(), s("li", {
             key: $,
             class: "item",
             style: b(`padding: ${d.padding ?? 0}; min-width: ${r.value}`)
@@ -6002,7 +5998,7 @@ const y7 = (l) => {
           class: "list",
           style: b(`transform: ${f.value};`)
         }, [
-          (n(!0), s(j, null, Y(d.items, ($, k) => (n(), s("li", {
+          (n(!0), s(j, null, X(d.items, ($, k) => (n(), s("li", {
             key: k,
             class: "item",
             style: b(`padding: ${d.padding ?? 0}; min-width: ${r.value}`)
@@ -6023,7 +6019,7 @@ const y7 = (l) => {
         _: 1
       }, 8, ["width", "borderRadius", "textColor", "color", "disable"]),
       d.buttonsBelow ? (n(), s("div", $8, [
-        (n(!0), s(j, null, Y(Array(i.value - 1).keys(), ($) => (n(), P(I1, {
+        (n(!0), s(j, null, X(Array(i.value - 1).keys(), ($) => (n(), P(I1, {
           key: $,
           width: p.value,
           borderRadius: "50%",
@@ -6118,7 +6114,7 @@ const y7 = (l) => {
         document.body.appendChild(v);
       }
     };
-    X(
+    Y(
       () => e.position,
       () => {
         c();
@@ -6129,7 +6125,7 @@ const y7 = (l) => {
     );
     const B = () => C.value = !1;
     let i1;
-    return X(C, () => {
+    return Y(C, () => {
       C.value ? (w.value.classList.add("active"), g.value = !0, v == null || v.appendChild(w.value), v.style[U.value[0]] = "20px", i1 = setTimeout(() => C.value = !1, e.duration * 1e3)) : e.duration && (w.value.classList.remove("active"), setTimeout(() => {
         v.children.length < 2 && (v.style[U.value[0]] = "-100%"), v == null || v.removeChild(w.value), g.value = !1;
       }, 100), clearTimeout(i1));
@@ -6312,7 +6308,7 @@ const y7 = (l) => {
       34324739: $.value
     }));
     const e = l, o = N(l, "modelValue"), i = S([]);
-    X(
+    Y(
       i,
       () => {
         o.value = i.value.join("");
@@ -6339,7 +6335,7 @@ const y7 = (l) => {
         ref: a
       }, [
         E(t("div", I8, [
-          (n(!0), s(j, null, Y(C.value, (M, x) => {
+          (n(!0), s(j, null, X(C.value, (M, x) => {
             var U;
             return n(), s("div", {
               key: x,
@@ -6351,7 +6347,7 @@ const y7 = (l) => {
               ]),
               style: b(`gap: ${H.inputsGap};`)
             }, [
-              (n(!0), s(j, null, Y(M, (z, c) => (n(), s("input", {
+              (n(!0), s(j, null, X(M, (z, c) => (n(), s("input", {
                 key: c,
                 onInput: (B) => L(B.target, x, +c),
                 onKeydown: [
@@ -6377,7 +6373,7 @@ const y7 = (l) => {
           [Q, C.value]
         ]),
         E(t("div", B8, [
-          (n(!0), s(j, null, Y(w.value, (M, x) => {
+          (n(!0), s(j, null, X(w.value, (M, x) => {
             var U;
             return n(), s("div", {
               key: x,
@@ -6389,7 +6385,7 @@ const y7 = (l) => {
               ]),
               style: b(`gap: ${H.inputsGap};`)
             }, [
-              (n(!0), s(j, null, Y(M, (z, c) => (n(), s("input", {
+              (n(!0), s(j, null, X(M, (z, c) => (n(), s("input", {
                 key: c,
                 onInput: (B) => L(B.target, x, +c),
                 onKeydown: [
@@ -7021,7 +7017,7 @@ const y7 = (l) => {
     })), (e, o) => {
       const i = m2("TreeItems", !0);
       return n(), s("ul", null, [
-        (n(!0), s(j, null, Y(e.items, (a) => (n(), s("li", {
+        (n(!0), s(j, null, X(e.items, (a) => (n(), s("li", {
           key: a.label,
           class: Z([
             "item",
@@ -7122,7 +7118,7 @@ const y7 = (l) => {
     }, w = () => {
       e != null && e.items && v(e.items);
     };
-    X(
+    Y(
       [o],
       () => {
         o.value && w();
